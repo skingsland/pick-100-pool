@@ -2,26 +2,26 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', [])
+angular.module('myApp.controllers', ['simpleLoginTools'])
    .controller('HomeCtrl', ['$scope', 'syncData', function($scope, syncData) {
-      syncData('syncedValue').$bind($scope, 'syncedValue');
+//      syncData('syncedValue').$bind($scope, 'syncedValue');
    }])
 
-  .controller('ChatCtrl', ['$scope', 'syncData', function($scope, syncData) {
-      $scope.newMessage = null;
-
-      // constrain number of messages by limit into syncData
-      // add the array into $scope.messages
-      $scope.messages = syncData('messages', 10);
-
-      // add new messages to the list
-      $scope.addMessage = function() {
-         if( $scope.newMessage ) {
-            $scope.messages.$add({text: $scope.newMessage});
-            $scope.newMessage = null;
-         }
-      };
-   }])
+//  .controller('ChatCtrl', ['$scope', 'syncData', function($scope, syncData) {
+//      $scope.newMessage = null;
+//
+//      // constrain number of messages by limit into syncData
+//      // add the array into $scope.messages
+//      $scope.messages = syncData('messages', 10);
+//
+//      // add new messages to the list
+//      $scope.addMessage = function() {
+//         if( $scope.newMessage ) {
+//            $scope.messages.$add({text: $scope.newMessage});
+//            $scope.newMessage = null;
+//         }
+//      };
+//   }])
 
    .controller('LoginCtrl', ['$scope', 'loginService', '$location', function($scope, loginService, $location) {
       $scope.email = null;
@@ -39,7 +39,7 @@ angular.module('myApp.controllers', [])
          }
          else {
             loginService.login($scope.email, $scope.pass, function(err, user) {
-               $scope.err = err? err + '' : null;
+               $scope.err = err ? err + '' : null;
                if( !err ) {
                   cb && cb(user);
                }
@@ -79,7 +79,8 @@ angular.module('myApp.controllers', [])
       }
    }])
 
-   .controller('AccountCtrl', ['$scope', 'loginService', 'changeEmailService', 'firebaseRef', 'syncData', '$location', 'FBURL', function($scope, loginService, changeEmailService, firebaseRef, syncData, $location, FBURL) {
+   .controller('AccountCtrl', ['$scope', 'loginService', 'changeEmailService', 'firebaseRef', 'syncData',
+                       function($scope, loginService, changeEmailService, firebaseRef, syncData) {
       $scope.syncAccount = function() {
          $scope.user = {};
          syncData(['users', $scope.auth.user.uid]).$bind($scope, 'user').then(function(unBind) {

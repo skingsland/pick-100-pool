@@ -30,6 +30,9 @@ angular.module('simpleLoginTools', [])
  * </code>
  */
   .service('waitForAuth', function($rootScope, $q, $timeout) {
+    var def = $q.defer();
+    var subs = [];
+
     function fn(err) {
       if($rootScope.auth) {
         $rootScope.auth.error = err instanceof Error? err.toString() : null;
@@ -41,10 +44,10 @@ angular.module('simpleLoginTools', [])
       });
     }
 
-    var def = $q.defer(), subs = [];
     subs.push($rootScope.$on('$firebaseSimpleLogin:login', fn));
     subs.push($rootScope.$on('$firebaseSimpleLogin:logout', fn));
     subs.push($rootScope.$on('$firebaseSimpleLogin:error', fn));
+
     return def.promise;
   })
 
@@ -77,10 +80,10 @@ angular.module('simpleLoginTools', [])
  * A directive that shows elements only when the given authentication state is in effect
  *
  * <code>
- *    <div ng-show-auth="login">{{auth.user.id}} is logged in</div>
- *    <div ng-show-auth="logout">Logged out</div>
- *    <div ng-show-auth="error">An error occurred: {{auth.error}}</div>
- *    <div ng-show-auth="logout,error">This appears for logout or for error condition!</div>
+ *    <div ng-show-auth="'login'">{{auth.user.id}} is logged in</div>
+ *    <div ng-show-auth="'logout'">Logged out</div>
+ *    <div ng-show-auth="'error'">An error occurred: {{auth.error}}</div>
+ *    <div ng-show-auth="['logout','error']">This appears for logout or for error condition!</div>
  * </code>
  */
   .directive('ngShowAuth', function ($rootScope) {
@@ -129,6 +132,7 @@ angular.module('simpleLoginTools', [])
       link: function(scope, el, attr) {
         var expState = getExpectedState(scope, attr.ngShowAuth);
         assertValidStates(expState);
+
         function fn() {
           var show = inList(loginState, expState);
           // sometimes if ngCloak exists on same element, they argue, so make sure that

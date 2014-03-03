@@ -1,8 +1,8 @@
 
 angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
 
-   .factory('loginService', ['$rootScope', '$firebaseSimpleLogin', 'firebaseRef', 'profileCreator', '$timeout',
-      function($rootScope, $firebaseSimpleLogin, firebaseRef, profileCreator, $timeout) {
+   .factory('loginService', ['$firebaseSimpleLogin', 'firebaseRef', 'profileCreator', '$timeout',
+      function($firebaseSimpleLogin, firebaseRef, profileCreator, $timeout) {
          var auth = null;
          return {
             init: function() {
@@ -63,7 +63,8 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
    .factory('profileCreator', ['firebaseRef', '$timeout', function(firebaseRef, $timeout) {
       return function(id, email, callback) {
          firebaseRef('users/'+id).set({email: email, name: firstPartOfEmail(email)}, function(err) {
-            //err && console.error(err);
+            err && console.error(err);
+
             if( callback ) {
                $timeout(function() {
                   callback(err);
@@ -72,14 +73,7 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
          });
 
          function firstPartOfEmail(email) {
-            return ucfirst(email.substr(0, email.indexOf('@'))||'');
-         }
-
-         function ucfirst (str) {
-            // credits: http://kevin.vanzonneveld.net
-            str += '';
-            var f = str.charAt(0).toUpperCase();
-            return f + str.substr(1);
+            return email.substr(0, email.indexOf('@'))||'';
          }
       }
    }]);
