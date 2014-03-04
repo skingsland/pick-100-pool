@@ -8,18 +8,19 @@ angular.module('myApp.controllers').controller('HeaderController',
 
         $scope.user = {};
 
+        // whenever a new user logs in, bind their user data to the $scope so we can show their username in the view
         $rootScope.$on('$firebaseSimpleLogin:login', function() {
+            $scope.user = {};
             syncData(['users', $scope.auth.user.uid]).$bind($scope, 'user').then(function(unBind) {
-                $scope.unBindAccount = unBind;
+                $scope.unBindUser = unBind;
             });
         });
-
 
         $scope.logout = function() {
             loginService.logout();
 
             // clear the old user's firebase and scope bindings
-            $scope.unBindAccount();
+            $scope.unBindUser();
             $scope.user = {};
         };
 
