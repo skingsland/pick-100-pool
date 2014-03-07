@@ -2,26 +2,10 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', ['simpleLoginTools'])
-   .controller('HomeCtrl', ['$scope', 'syncData', function($scope, syncData) {
-//      syncData('syncedValue').$bind($scope, 'syncedValue');
+angular.module('myApp.controllers', ['simpleLoginTools', 'firebase'])
+   .controller('HomeCtrl', [function() {
+        // TODO: do we even need this controller?
    }])
-
-//  .controller('ChatCtrl', ['$scope', 'syncData', function($scope, syncData) {
-//      $scope.newMessage = null;
-//
-//      // constrain number of messages by limit into syncData
-//      // add the array into $scope.messages
-//      $scope.messages = syncData('messages', 10);
-//
-//      // add new messages to the list
-//      $scope.addMessage = function() {
-//         if( $scope.newMessage ) {
-//            $scope.messages.$add({text: $scope.newMessage});
-//            $scope.newMessage = null;
-//         }
-//      };
-//   }])
 
    .controller('LoginCtrl', ['$scope', 'loginService', '$location', function($scope, loginService, $location) {
       $scope.email = null;
@@ -79,6 +63,7 @@ angular.module('myApp.controllers', ['simpleLoginTools'])
       }
    }])
 
+    // TODO: get rid of this when I no longer need it for debugging
    .controller('AccountCtrl', ['$scope', 'loginService', 'changeEmailService', 'firebaseRef', 'syncData',
                        function($scope, loginService, changeEmailService, firebaseRef, syncData) {
       $scope.syncAccount = function() {

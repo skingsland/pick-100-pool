@@ -30,7 +30,12 @@ angular.module('myApp.service.firebase', ['firebase'])
          limit && (ref = ref.limit(limit));
          return $firebase(ref);
       }
-   }]);
+   }])
+
+    .factory('tournamentRef', ['firebaseRef', 'FIREBASE_TOURNAMENT_NAME',
+                       function(firebaseRef,   FIREBASE_TOURNAMENT_NAME) {
+        return firebaseRef('tournaments', FIREBASE_TOURNAMENT_NAME);
+    }])
 
 function pathRef(args) {
    for(var i=0; i < args.length; i++) {

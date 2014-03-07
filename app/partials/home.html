@@ -1,9 +1,128 @@
-<h2>Home</h2>
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,300,400,600,700,800">
 
-<p class="status good" ng-show-auth="'login'">Hello! You are logged in.</p>
-<p class="status" ng-show-auth="'logout'">Not logged in</p>
-<p class="status error" ng-show-auth="'error'">{{auth.error}}</p>
+<style type="text/css">
+  /* Large desktop */
+  @media (min-width: 980px) {
+    body {
+     padding-top: 60px;
+    }
+   .linediv-l {
+     border-right: 1px white solid;
+    }
+   .linediv-r {
+     border-left: 1px white solid;
+   }
+  }
 
-<!--<input ng-model="syncedValue" type="text" /> <b>{{syncedValue}}</b>-->
+  /* Landscape phones and down */
+  @media (max-width: 480px) {
+   .copy {
+     padding: 2.5% 10%;
+   }
+   .linediv-l {
+     border-bottom: 1px white solid;
+   }
+   .linediv-r {
+     border-top: 1px white solid;
+   }
+  }
 
-<!--<p>Open <a ng-href="{{FBURL}}/syncedValue">Forge</a> or a <a target="_blank" href="#/">new window</a> to see this input update in real time:</p>-->
+  /* All form factors */
+
+  /* Main body and headings */
+  body{
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  }
+  .heading, .subheading {
+    font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+    text-align: center;
+  }
+  p.lead {
+    padding-top: 1.5%;
+    font-size: 24px;
+    line-height: 30px;
+  }
+  p {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  /* Marketing Copy and Footer */
+  .copy {
+    padding-top: 2.5%;
+    padding-bottom: 2.5%;
+    text-align: justify;
+  }
+  .asset {
+    padding: 2.5% 0%;
+  }
+  .footer {
+    color: #cccccc;
+    text-align: center;
+  }
+  .footer p {
+    font-size: 11px;
+  }
+  .footer a {
+    color: #ccccff;
+  }
+  /* http://support.addthis.com/customer/portal/questions/1136093-share-buttons-in-center-position */
+  div.addthis_toolbox {
+    width:180px;
+    margin: 0 auto;
+  }
+</style>
+
+<!-- We use row-fluid inside containers to achieve a resizable layout. -->
+<!-- blogs.endjin.com/2013/04/tips-for-implementing-responsive-designs-using-bootstrap/ -->
+<!-- http://stackoverflow.com/a/12270322 -->
+<div class="container">
+  <!-- Font and paired font of .heading/.subheading and body from Google Fonts -->
+  <!-- www.google.com/fonts/specimen/Ubuntu -->
+  <!-- www.google.com/fonts/specimen/Ubuntu#pairings -->
+  <div class="row-fluid heading">
+    <div class="span12">
+      <h1>March Madness Pick 13 Tournament Pool</h1>
+    </div>
+  </div>
+  <div class="row-fluid subheading">
+    <div class="span12">
+      <!-- Special typography from Bootstrap for lead paragraph. -->
+      <!-- http://twitter.github.io/bootstrap/base-css.html#typography -->
+      <p class="lead">An exciting twist on the typical March Madness Pool, where you only pick <strong>13</strong> teams.</p>
+    </div>
+  </div>
+
+  <!-- Beyond this part the marketing copy begins. -->
+  <!-- https://developer.mozilla.org/en-US/docs/Web/CSS/text-align -->
+  <!-- http://twitter.github.io/bootstrap/base-css.html#images -->
+  <!-- http://placehold.it -->
+  <div class="row-fluid section1">
+    <div class="span5 offset1 asset">
+      <img src="http://i.imgur.com/QKCV1mK.png" alt="Picture of Excel-based game">
+    </div>
+    <div class="span5 copy">
+      <ul>
+        <li>Tired of the same ol' March Madness pool every year?</li>
+        <li>Sick of picking every single game, when all you really care about is a handful of teams?</li>
+        <li>Wish you had a slick online bracket, instead of emailing MS Excel files back and forth?</li>
+      </ul>
+      <p>
+        Well then, <em>you</em> need to play the Pick 13 March Madness pool this year! It's easy; you just pick <strong>13</strong> teams, whose seeds add up to <strong>100</strong>. That's it!
+      </p>
+    </div>
+  </div>
+
+  <div class="row-fluid section2">
+    <div class="span5 offset1 copy copy-right">
+      <p>
+The rules for the game are simple:  Everyone picks 13 teams whose seeds add up to 100.  For example, if UNC is a # 1 seed and VCU is a #13 seed and you pick them, they combine to make 14, and you need to select 11 other teams whose seeds add up to 86.
+      </p>
+      <p>
+You earn points everytime one of your chosen teams wins a game.  If a team wins a game, you get the value of their seed plus a designated point amount, which ascends each round as follows: 1, 2, 4, 8, 16, 32.  So, if you picked VCU as a #13 seed and they win games in the first three rounds, you would get 13+1, 13+2, and 13+4.
+      </p>
+    </div>
+  </div>
+</div>

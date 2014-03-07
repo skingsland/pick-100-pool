@@ -9,9 +9,9 @@ angular.module('myApp.controllers').controller('HeaderController',
         $scope.user = {};
 
         // whenever a new user logs in, bind their user data to the $scope so we can show their username in the view
-        $rootScope.$on('$firebaseSimpleLogin:login', function() {
+        $rootScope.$on('$firebaseSimpleLogin:login', function(event, user) {
             $scope.user = {};
-            syncData(['users', $scope.auth.user.uid]).$bind($scope, 'user').then(function(unBind) {
+            syncData(['users', user.uid]).$bind($scope, 'user').then(function(unBind) {
                 $scope.unBindUser = unBind;
             });
         });
@@ -25,10 +25,10 @@ angular.module('myApp.controllers').controller('HeaderController',
         };
 
         $scope.navbarEntries = [
-//        {
-//          "title": "Pools",
-//          "link": "/pools"
-//        },
+        {
+          "title": "Pools",
+          "link": "/pools"
+        },
 //        {
 //          "title": "Brackets",
 //          "link": "/brackets"

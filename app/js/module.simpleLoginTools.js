@@ -80,18 +80,13 @@ angular.module('simpleLoginTools', [])
  * A directive that shows elements only when the given authentication state is in effect
  *
  * <code>
- *    <div ng-show-auth="'login'">{{auth.user.id}} is logged in</div>
+ *    <div ng-show-auth="'login'">{{auth.user.uid}} is logged in</div>
  *    <div ng-show-auth="'logout'">Logged out</div>
  *    <div ng-show-auth="'error'">An error occurred: {{auth.error}}</div>
  *    <div ng-show-auth="['logout','error']">This appears for logout or for error condition!</div>
  * </code>
  */
   .directive('ngShowAuth', function ($rootScope) {
-    var loginState = 'logout';
-    $rootScope.$on('$firebaseSimpleLogin:login',  function() { loginState = 'login'; });
-    $rootScope.$on('$firebaseSimpleLogin:logout', function() { loginState = 'logout'; });
-    $rootScope.$on('$firebaseSimpleLogin:error',  function() { loginState = 'error'; });
-
     function getExpectedState(scope, attr) {
       var expState = scope.$eval(attr);
       if( typeof(expState) !== 'string' && !angular.isArray(expState) ) {
@@ -128,23 +123,29 @@ angular.module('simpleLoginTools', [])
     }
 
     return {
-      restrict: 'A',
-      link: function(scope, el, attr) {
-        var expState = getExpectedState(scope, attr.ngShowAuth);
-        assertValidStates(expState);
+        restrict: 'A',
+        link: function (scope, el, attr) {
+            var expState = getExpectedState(scope, attr.ngShowAuth);
+            assertValidStates(expState);
 
-        function fn() {
-          var show = inList(loginState, expState);
-          // sometimes if ngCloak exists on same element, they argue, so make sure that
-          // this one always runs last for reliability
-          setTimeout(function() {
-            el.toggleClass('ng-cloak', !show);
-          }, 0);
+            function toggleDisplayStatus(loginState) {
+                var show = inList(loginState, expState);
+                // sometimes if ngCloak exists on same element, they argue, so make sure that
+                // this one always runs last for reliability
+                setTimeout(function () {
+                    el.toggleClass('ng-cloak', !show);
+                }, 0);
+            }
+
+            $rootScope.$on('$firebaseSimpleLogin:login', function (event, user) {
+                toggleDisplayStatus('login');
+            });
+            $rootScope.$on('$firebaseSimpleLogin:logout', function (event) {
+                toggleDisplayStatus('logout')
+            });
+            $rootScope.$on('$firebaseSimpleLogin:error', function (event, error) {
+                toggleDisplayStatus('error')
+            });
         }
-        fn();
-        $rootScope.$on('$firebaseSimpleLogin:login',  fn);
-        $rootScope.$on('$firebaseSimpleLogin:logout', fn);
-        $rootScope.$on('$firebaseSimpleLogin:error',  fn);
-      }
     };
-  });
+});

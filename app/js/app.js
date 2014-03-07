@@ -10,7 +10,6 @@ angular.module('myApp',
        'myApp.controllers',
        'simpleLoginTools',
        'routeSecurity'])
-   .run(['loginService', '$rootScope', 'FBURL', function(loginService, $rootScope, FBURL) {
+   .run(['loginService', '$rootScope', function(loginService, $rootScope) {
         $rootScope.auth = loginService.init();
-        $rootScope.FBURL = FBURL;
    }]);
