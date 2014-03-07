@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" ng-app="myApp">
 <head>
-  <title>angularFire-seed</title>
+  <title>March Madness Pick 13 Tournament Pool</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -12,14 +12,17 @@
 
   <header data-ng-include="'views/header.html'"></header>
 
-  <ul class="menu">
-    <li><a href="#/home">home</a></li>
-    <li><a href="#/chat">chat</a></li>
-    <li ng-show-auth="['logout','error']"><a href="#/login">login</a></li>
-    <li ng-show-auth="'login'"><a href="#/account">account</a></li>
-  </ul>
+  <!--<ul class="menu">-->
+    <!--<li><a href="#/home">home</a></li>-->
+    <!--<li ng-show-auth="['logout','error']"><a href="#/login">login</a></li>-->
+    <!--<li ng-show-auth="'login'"><a href="#/account">account</a></li>-->
+  <!--</ul>-->
 
-  <div ng-view></div>
+  <section class="content">
+    <section class="container">
+      <div ng-view></div>
+    </section>
+  </section>
 
   <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
@@ -46,5 +49,7 @@
   <script src="js/module.routeSecurity.js"></script>
 
   <script src="js/controllers/headerController.js"></script>
+  <script src="js/controllers/poolsController.js"></script>
+  <script src="js/services/poolService.js"></script>
 </body>
 </html>

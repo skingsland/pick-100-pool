@@ -1,0 +1,28 @@
+<div data-ng-controller="PoolsController" data-ng-init="findOnePool()">
+
+  <form class="form-horizontal">
+    <fieldset>
+      <legend>Your pool</legend>
+
+      <!-- Text input-->
+      <div class="form-group">
+        <label class="col-md-4 control-label" for="name">Name</label>
+        <div class="col-md-8">
+          <input id="name" name="name" data-ng-model="pool.name" type="text" placeholder="name of pool" class="form-control input-md" required autofocus>
+        </div>
+      </div>
+
+      <!-- Button -->
+      <div class="form-group">
+        <label class="col-md-4 control-label" for="createpool"></label>
+        <div class="col-md-4">
+          <button id="createpool" name="createpool" data-ng-click="createPool()" data-ng-show="!poolId" class="btn btn-primary">Create Pool</button>
+        </div>
+      </div>
+      <br>
+      <a href="#/pools">View all pools</a>
+    </fieldset>
+  </form>
+
+</div>
+

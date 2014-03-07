@@ -1,0 +1,15 @@
+<div data-ng-controller="PoolsController" data-ng-init="findPools()">
+  <h2>Pools</h2>
+  <h3>All Pools</h3>
+  <ul class="unstyled">
+    <li data-ng-repeat="pool in pools | orderByPriority">
+      <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
+      <span ng-show="pool.commissionerId === auth.user.uid">
+        (<a href="#/pools/{{ pool.$id }}/edit">Edit</a>)
+        (<a href="" data-ng-click="removePool(pool.$id)" >Remove</a>)
+      </span>
+    </li>
+  </ul> 
+  <br>
+  <a href="#/pools/create">Create a new pool</a>
+</div>
