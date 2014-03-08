@@ -4,7 +4,7 @@
   <ul class="unstyled">
     <li data-ng-repeat="pool in pools | orderByPriority">
       <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
-      <span ng-show="pool.commissionerId === auth.user.uid">
+      <span ng-show="pool.managerId === auth.user.uid">
         (<a href="#/pools/{{ pool.$id }}/edit">Edit</a>)
         (<a href="" data-ng-click="removePool(pool.$id)" >Remove</a>)
       </span>

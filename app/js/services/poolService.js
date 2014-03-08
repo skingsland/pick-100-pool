@@ -14,10 +14,10 @@ angular.module('myApp.services').service('poolService',
         };
 
         // TODO: rewrite this to use $firebase(poolsRef).$add().then(...)
-        this.create = function(pool, commissioner, cb) {
+        this.create = function(pool, manager, cb) {
             return poolsRef.push({
                 name: pool.name,
-                commissionerId: commissioner.uid,
+                managerId: manager.uid,
                 brackets: []
             }, cb).name();
         };
