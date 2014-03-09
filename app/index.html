@@ -10,17 +10,12 @@
 </head>
 <body ng-cloak>
 
-  <header data-ng-include="'views/header.html'"></header>
-
-  <!--<ul class="menu">-->
-    <!--<li><a href="#/home">home</a></li>-->
-    <!--<li ng-show-auth="['logout','error']"><a href="#/login">login</a></li>-->
-    <!--<li ng-show-auth="'login'"><a href="#/account">account</a></li>-->
-  <!--</ul>-->
+<header data-ng-include="'views/header.html'"></header>
 
   <section class="content">
     <section class="container">
-      <div ng-view></div>
+      <!-- Using ng-view, instead of ng-include, breaks email address auto-complete selection in the header login/register forms. -->
+      <div data-ng-view></div>
     </section>
   </section>
 
@@ -31,7 +26,9 @@
   <script src="//cdn.firebase.com/js/simple-login/1.2.5/firebase-simple-login.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular-route.js"></script>
-  <script src="//cdn.firebase.com/libs/angularfire/0.7.0/angularfire.js"></script>
+
+  <!--<script src="//cdn.firebase.com/libs/angularfire/0.7.0/angularfire.js"></script>-->
+  <script src="https://rawgithub.com/firebase/angularFire/master/angularfire.js"></script>
 
   <!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>-->
 
@@ -39,13 +36,14 @@
   <script src="js/config.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/directives.js"></script>
-  <script src="js/filters.js"></script>
   <script src="js/routes.js"></script>
   <script src="js/services.js"></script>
   <script src="js/service.login.js"></script>
   <script src="js/service.firebase.js"></script>
   <script src="js/service.changeEmail.js"></script>
   <script src="js/module.simpleLoginTools.js"></script>
+
+  <!-- Some part of the JS code in this file breaks email address autocomplete selection in the header login/register forms. -->
   <script src="js/module.routeSecurity.js"></script>
 
   <script src="js/controllers/headerController.js"></script>

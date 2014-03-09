@@ -7,8 +7,7 @@ angular.module('myApp.routes', ['ngRoute'])
    .config(['$routeProvider', function($routeProvider) {
       $routeProvider
           .when('/home', {
-             templateUrl: 'partials/home.html',
-             controller: 'HomeCtrl'
+             templateUrl: 'partials/home.html'
           })
           .when('/account', {
              authRequired: true, // must authenticate before viewing this page

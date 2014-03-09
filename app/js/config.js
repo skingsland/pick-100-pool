@@ -1,6 +1,5 @@
 'use strict';
 
-// Declare app level module which depends on filters, and services
 angular.module('myApp.config', [])
 
    // where to redirect users if they need to authenticate (see module.routeSecurity)

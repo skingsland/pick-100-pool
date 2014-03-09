@@ -4,12 +4,12 @@
 angular.module('myApp',
       ['myApp.config',
        'myApp.routes',
-       'myApp.filters',
        'myApp.services',
        'myApp.directives',
        'myApp.controllers',
        'simpleLoginTools',
-       'routeSecurity'])
+       'routeSecurity'
+    ])
    .run(['loginService', '$rootScope', function(loginService, $rootScope) {
         $rootScope.auth = loginService.init();
    }]);

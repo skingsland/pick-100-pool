@@ -3,10 +3,6 @@
 /* Controllers */
 
 angular.module('myApp.controllers', ['simpleLoginTools', 'firebase'])
-   .controller('HomeCtrl', [function() {
-        // TODO: do we even need this controller?
-   }])
-
    .controller('LoginCtrl', ['$scope', 'loginService', '$location', function($scope, loginService, $location) {
       $scope.email = null;
       $scope.pass = null;
@@ -42,7 +38,7 @@ angular.module('myApp.controllers', ['simpleLoginTools', 'firebase'])
                   // must be logged in before I can write to my profile
                   $scope.login(function() {
                      loginService.createProfile(user.uid, user.email);
-                     $location.path('/account');
+//                     $location.path('/account');
                   });
                }
             });

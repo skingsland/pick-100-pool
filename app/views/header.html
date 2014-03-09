@@ -32,7 +32,10 @@
 
         <li class="dropdown" ng-show-auth="['logout','error']" ng-controller="LoginCtrl">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Register <b class="caret"></b></a>
+
+          <!-- Using class="dropdown-menu" breaks email address auto-complete selection in the header login/register forms. -->
           <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
+
             <li>
               <div class="row">
                 <div class="col-md-12">
@@ -44,18 +47,15 @@
                     <!--</div>-->
                     <div class="form-group">
                       <label class="sr-only" for="registerEmail">Email address</label>
-                      <input ng-model="email" type="email" id="registerEmail" class="form-control" placeholder="Email address"
-                             required>
+                      <input ng-model="email" type="email" id="registerEmail" class="form-control" placeholder="Email address" required autocomplete="off">
                     </div>
                     <div class="form-group">
                       <label class="sr-only" for="registerPassword">Password</label>
-                      <input ng-model="pass" type="password" id="registerPassword" class="form-control" placeholder="Password"
-                             required>
+                      <input ng-model="pass" type="password" id="registerPassword" class="form-control" placeholder="Password" required autocomplete="off">
                     </div>
                     <div class="form-group">
                       <label class="sr-only" for="registerPasswordConfirm">Confirm password</label>
-                      <input ng-model="confirm" type="password" id="registerPasswordConfirm" class="form-control"
-                             placeholder="Confirm password" required>
+                      <input ng-model="confirm" type="password" id="registerPasswordConfirm" class="form-control" placeholder="Confirm password" required autocomplete="off">
                     </div>
                     <div class="form-group">
                       <button ng-click="createAccount(); $event.stopPropagation();" class="btn btn-success btn-block">Register</button>
@@ -78,13 +78,11 @@
                   <form class="form" role="form">
                     <div class="form-group">
                       <label class="sr-only" for="loginEmail">Email address</label>
-                      <input ng-model="email" type="email" class="form-control" id="loginEmail" placeholder="Email address"
-                             required>
+                      <input ng-model="email" type="email" class="form-control" id="loginEmail" placeholder="Email address" required autocomplete="off">
                     </div>
                     <div class="form-group">
                       <label class="sr-only" for="loginPassword">Password</label>
-                      <input ng-model="pass" type="password" class="form-control" id="loginPassword" placeholder="Password"
-                             required>
+                      <input ng-model="pass" type="password" class="form-control" id="loginPassword" placeholder="Password" required autocomplete="off">
                     </div>
                     <div class="form-group">
                       <button ng-click="login(); $event.stopPropagation();" class="btn btn-success btn-block">Log in</button>
