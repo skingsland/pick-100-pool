@@ -16,10 +16,8 @@ angular.module('myApp.controllers').controller('PoolsController',
                 var $pool = poolService.findById($scope.poolId);
                 $pool.$bind($scope, 'pool');
 
-                // Create a Firebase reference to the pool, instead of using $pool, since the $on('value', cb)
-                // event callback doesn't work. See: https://github.com/firebase/angularFire/issues/272
+                // using the pool's managerId property, look up the user and bind their data to the scope
                 $pool.$getRef().child('managerId').once('value', function(managerId) {
-                    // using the pool's managerId property, look up the user and bind their data to the scope
                     syncData(['users', managerId.val()]).$bind($scope, 'manager');
                 });
             }
@@ -38,4 +36,5 @@ angular.module('myApp.controllers').controller('PoolsController',
         $scope.removePool = function (poolId) {
             poolService.removePool(poolId);
         }
-    }])
+    }
+])
