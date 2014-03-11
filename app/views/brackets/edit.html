@@ -1,0 +1,45 @@
+<div data-ng-init="findOneBracket(); findTeams();">
+  <form class="form-horizontal" role="form">
+    <fieldset>
+      <legend>Your bracket</legend>
+
+      <div class="container">
+        <div class="row">
+          <div class="form-group pull-left">
+            <label class="col-md-3 control-label" for="name" style="text-align:left;">Name</label>
+            <div class="col-md-9">
+              <input id="name" name="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required autofocus>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <h4>Select Teams:</h4>
+          <div class="col-md-4" style="padding-left: 0;">
+            <div class="gridStyle" ng-grid="gridOptions"></div>
+          </div>
+          <div class="selectedItems col-md-3">
+            <h4>Your selected teams:</h4>
+            <ul class="unstyled">
+              <li data-ng-repeat="selectedTeam in selectedTeams">{{selectedTeam.seed}} - {{selectedTeam.full_name}}</li>
+            </ul>
+            Seed total: {{sumOfSeeds()}}
+          </div>
+        </div>
+      </div>
+
+      <div class="control-group">
+        <div class="controls">
+          <button data-ng-click="create()" data-ng-show="noBracket">Create Bracket</button>
+        </div>
+      </div>
+
+      <br/>
+      <a href="#/pools/{{ poolId }}/brackets">View all Brackets</a>
+
+    </fieldset>
+  </form>
+  <p data-ng-show="err" class="error">{{err}}</p>
+</div>

@@ -8,8 +8,10 @@ angular.module('myApp',
        'myApp.directives',
        'myApp.controllers',
        'simpleLoginTools',
-       'routeSecurity'
+       'routeSecurity',
+       'ngGrid',
     ])
    .run(['loginService', '$rootScope', function(loginService, $rootScope) {
         $rootScope.auth = loginService.init();
-   }]);
+   }
+]);

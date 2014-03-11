@@ -1,6 +1,19 @@
-  <div data-ng-controller="PoolsController" data-ng-init="findOnePool()">
-    <h2>{{ pool.name }}</h2>
+  <div data-ng-init="findOnePool()">
+    <h3>{{ pool.name }}</h3>
     <p><strong>Manager: </strong>{{ manager.name }}</p>
     <br>
+    <div data-ng-hide="bracketId">
+      <a href="#/pools/{{ pool.$id }}/brackets/create">Create a bracket</a>
+      <br>
+    </div>
     <a href="#/pools">View all pools</a>
+    <br>
+
+    <div data-ng-show="bracketId">
+      <h3>Your bracket</h3>
+      TODO: display user's bracket here
+    </div>
+    <br>
+    <h4>All brackets</h4>
+    TODO: display brackets here
   </div>

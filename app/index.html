@@ -5,10 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://rawgithub.com/angular-ui/ng-grid/2.0.8/ng-grid.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/app.css"/>
 </head>
-<body ng-cloak>
+<!-- using ng-cloak on the body element causes ng-grid directive to add an unwanted 100px empty column -->
+<body>
 
 <header data-ng-include="'views/header.html'"></header>
 
@@ -20,7 +22,7 @@
   </section>
 
   <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
   <script src="//cdn.firebase.com/js/client/1.0.5/firebase.js"></script>
   <script src="//cdn.firebase.com/js/simple-login/1.2.5/firebase-simple-login.js"></script>
@@ -30,7 +32,8 @@
   <!--<script src="//cdn.firebase.com/libs/angularfire/0.7.0/angularfire.js"></script>-->
   <script src="https://rawgithub.com/firebase/angularFire/master/angularfire.js"></script>
 
-  <!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.10.0/ui-bootstrap-tpls.min.js"></script>-->
+  <script src="https://rawgithub.com/angular-ui/ng-grid/2.0.8/ng-grid-2.0.8.min.js"></script>
+  <!--<script src="https://rawgithub.com/angular-ui/ng-grid/master/plugins/ng-grid-flexible-height.js"></script>-->
 
   <script src="js/app.js"></script>
   <script src="js/config.js"></script>
@@ -46,8 +49,11 @@
   <!-- Some part of the JS code in this file breaks email address autocomplete selection in the header login/register forms. -->
   <script src="js/module.routeSecurity.js"></script>
 
+  <script src="js/controllers/bracketsController.js"></script>
   <script src="js/controllers/headerController.js"></script>
   <script src="js/controllers/poolsController.js"></script>
+  <script src="js/services/bracketService.js"></script>
   <script src="js/services/poolService.js"></script>
+  <script src="js/services/teamService.js"></script>
 </body>
 </html>

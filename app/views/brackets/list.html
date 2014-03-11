@@ -1,0 +1,13 @@
+<div data-ng-init="findBrackets()">
+  <h2>Brackets</h2>
+  <h3>All Teams</h3>
+  <ul class="unstyled">
+    <li data-ng-repeat="bracket in brackets">
+      <a href="#/brackets/{{ bracket.$id }}">{{bracket.name}}</a>
+      (<a href="#/brackets/{{ bracket.$id }}/edit">Edit</a>)
+      (<a href="" data-ng-click="removeBracket('{{ bracket.$id }}')" >Remove</a>)
+    </li>
+  </ul>
+  <br>
+  <a href="#/brackets/create">Create a new Bracket</a>
+</div>

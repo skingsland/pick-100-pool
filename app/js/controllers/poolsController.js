@@ -9,8 +9,7 @@ angular.module('myApp.controllers').controller('PoolsController',
 
         $scope.findPools = function () {
             $scope.pools = poolService.findAll();
-        }
-
+        };
         $scope.findOnePool = function () {
             if(!!$scope.poolId) {
                 var $pool = poolService.findById($scope.poolId);
@@ -21,8 +20,7 @@ angular.module('myApp.controllers').controller('PoolsController',
                     syncData(['users', managerId.val()]).$bind($scope, 'manager');
                 });
             }
-        }
-
+        };
         $scope.createPool = function () {
             var poolId = poolService.create($scope.pool, $scope.auth.user, function (err) {
                 if(!err) {
@@ -31,10 +29,9 @@ angular.module('myApp.controllers').controller('PoolsController',
                     $scope.$apply();
                 }
             });
-        }
-
+        };
         $scope.removePool = function (poolId) {
             poolService.removePool(poolId);
-        }
+        };
     }
-])
+]);

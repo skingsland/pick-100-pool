@@ -1,6 +1,6 @@
-<div data-ng-controller="PoolsController" data-ng-init="findPools()">
-  <h2>Pools</h2>
-  <h3>All Pools</h3>
+<div data-ng-init="findPools()">
+  <h3>Pools</h3>
+  <h4>All Pools</h4>
   <ul class="unstyled">
     <li data-ng-repeat="pool in pools | orderByPriority">
       <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>

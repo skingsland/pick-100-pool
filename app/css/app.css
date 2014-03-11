@@ -3,40 +3,12 @@ body {
   padding-top: 50px;
 }
 
-
-/* COPIED FROM pick-13-pool app.css (i.e. Bootstrap 2) */
-/*
-.navbar .nav> li > a.brand {
-    padding-left: 20px;
-    margin-left: 0;
+/* for ng-grid directive */
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    height: 400px;
+    width: 300px;
 }
-
-.content {
-    margin-top: 50px;
-    width: 100%;
-}
-
-footer {
-   position:fixed;
-   left:0px;
-   bottom:0px;
-   height:30px;
-   width:100%;
-   background:#ddd;
-   -webkit-box-shadow: 0 8px 6px 6px black;
-     -moz-box-shadow: 0 8px 6px 6px black;
-          box-shadow: 0 8px 6px 6px black;
-}
-footer p{
-     padding: 5px 0 12px 10px;
-}
-
-.navlist li
-{
-  display: inline;
-  list-style-type: none;
-}
-*/
 
 
 .hide {
@@ -104,6 +76,37 @@ fieldset {
    padding: 25px;
 }
 
-[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
-    display: none !important;
+
+/* COPIED FROM pick-13-pool app.css (i.e. Bootstrap 2) */
+/*
+.navbar .nav> li > a.brand {
+    padding-left: 20px;
+    margin-left: 0;
 }
+
+.content {
+    margin-top: 50px;
+    width: 100%;
+}
+
+footer {
+   position:fixed;
+   left:0px;
+   bottom:0px;
+   height:30px;
+   width:100%;
+   background:#ddd;
+   -webkit-box-shadow: 0 8px 6px 6px black;
+     -moz-box-shadow: 0 8px 6px 6px black;
+          box-shadow: 0 8px 6px 6px black;
+}
+footer p{
+     padding: 5px 0 12px 10px;
+}
+
+.navlist li
+{
+  display: inline;
+  list-style-type: none;
+}
+*/

@@ -16,6 +16,15 @@ angular.module('myApp.service.firebase', ['firebase'])
       }
    }])
 
+    .factory('tournamentRef', ['firebaseRef', 'FIREBASE_TOURNAMENT_NAME',
+                       function(firebaseRef,   FIREBASE_TOURNAMENT_NAME) {
+        return firebaseRef('tournaments', FIREBASE_TOURNAMENT_NAME);
+    }])
+    .factory('usersRef', ['firebaseRef',
+                  function(firebaseRef) {
+        return firebaseRef('users');
+    }])
+
    // a simple utility to create $firebase objects from angularFire
    .service('syncData', ['$firebase', 'firebaseRef', function($firebase, firebaseRef) {
       /**
@@ -31,11 +40,6 @@ angular.module('myApp.service.firebase', ['firebase'])
          return $firebase(ref);
       }
    }])
-
-    .factory('tournamentRef', ['firebaseRef', 'FIREBASE_TOURNAMENT_NAME',
-                       function(firebaseRef,   FIREBASE_TOURNAMENT_NAME) {
-        return firebaseRef('tournaments', FIREBASE_TOURNAMENT_NAME);
-    }])
 
 function pathRef(args) {
    for(var i=0; i < args.length; i++) {
