@@ -14,8 +14,12 @@ angular.module('myApp.controllers').controller('BracketsController',
         $scope.gridOptions = {
             data: 'teams',
             selectedItems: $scope.selectedTeams,
-            columnDefs: [{field:'seed', displayName:'Seed', width:60},
-                         {field:'full_name', displayName:'Name'}],
+            columnDefs: [
+                {field:'seed', displayName:'Seed', width:60},
+                {field:'full_name', displayName:'Name'},
+                {field:'region', displayName:'Region', width:85},
+                {field:'conference', displayName:'Conference'}
+            ],
             sortInfo: {fields: ['seed'], directions: ['asc']}
 //            plugins: [new ngGridFlexibleHeightPlugin()]
         };
@@ -54,7 +58,9 @@ angular.module('myApp.controllers').controller('BracketsController',
         $scope.createBracket = function () {
             console.log('createBracket called, $scope.selectedTeams =', $scope.selectedTeams);
 
-            // TODO: create an array of all the $scope.selectedTeams.id values, and set as $scope.bracket.teams
+            $scope.bracket.teams = $scope.selectedTeams.map(function(selectedTeam) {
+                return selectedTeam.id;
+            });
 
             bracketService.create($scope.bracket, $scope.poolId, $scope.auth.user.uid).then(function (ref) {
                 if(!!ref) {
