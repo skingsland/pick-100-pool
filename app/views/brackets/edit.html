@@ -8,36 +8,63 @@
           <div class="form-group pull-left">
             <label class="col-md-3 control-label" for="name" style="text-align:left;">Name</label>
             <div class="col-md-9">
-              <input id="name" name="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required autofocus>
+              <input id="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required autofocus>
             </div>
           </div>
         </div>
-      </div>
-
-      <div class="container">
         <div class="row">
-          <h4>Select Teams:</h4>
+          <h4>Select {{requiredNumTeams}} teams whose seeds add up to {{requiredSumOfSeeds}}:</h4>
+          <br/>
           <div class="col-md-4" style="padding-left: 0;">
             <div class="gridStyle" ng-grid="gridOptions"></div>
           </div>
-          <div class="selectedItems col-md-3">
+          <div class="selectedItems col-md-6">
             <h4>Your selected teams:</h4>
             <ul class="unstyled">
-              <li data-ng-repeat="selectedTeam in selectedTeams">{{selectedTeam.seed}} - {{selectedTeam.full_name}}</li>
+              <li data-ng-repeat="selectedTeam in selectedTeams | orderBy:'seed'">{{selectedTeam.seed}} - {{selectedTeam.full_name}}</li>
             </ul>
-            Seed total: {{sumOfSeeds()}}
+            <div class="progress">
+              <div class="progress-bar"
+                   role="progressbar"
+                   aria-valuenow="{{selectedTeams.length}}"
+                   aria-valuemin="0"
+                   aria-valuemax="{{requiredNumTeams}}"
+                   ng-style="{width: 100 * selectedTeams.length/requiredNumTeams + '%'}"
+                   ng-class="{'progress-bar-success': selectedTeams.length === requiredNumTeams,
+                              'progress-bar-danger': selectedTeams.length > requiredNumTeams}">
+                <span style="min-width: 30px">Teams: {{selectedTeams.length}} / {{requiredNumTeams}}</span>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar"
+                   role="progressbar"
+                   aria-valuenow="{{sumOfSeeds}}"
+                   aria-valuemin="0"
+                   aria-valuemax="{{requiredSumOfSeeds}}"
+                   ng-style="{width: 100 * sumOfSeeds/requiredSumOfSeeds + '%'}"
+                   ng-class="{'progress-bar-success': sumOfSeeds === requiredSumOfSeeds,
+                              'progress-bar-danger': sumOfSeeds > requiredSumOfSeeds}">
+                <span style="min-width: 30px">Seeds: {{sumOfSeeds}} / {{requiredSumOfSeeds}}</span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="control-group">
-        <div class="controls">
-          <button data-ng-click="create()" data-ng-show="noBracket">Create Bracket</button>
+        <br/>
+        <div class="col-md-1">
+          <button type="button" class="btn btn-default">
+            <a href="#/pools/{{ poolId }}/brackets">View all Brackets</a>
+          </button>
+        </div>
+        <div class="col-md-1 col-md-offset-1" style="padding-right: 0" data-ng-show="!bracketId">
+          <button data-ng-click="createBracket()"
+                  ng-disabled="!bracket.name || selectedTeams.length !== requiredNumTeams || sumOfSeeds !== requiredSumOfSeeds"
+                  ng-class="{'btn-success': selectedTeams.length <= requiredNumTeams && sumOfSeeds <= requiredSumOfSeeds,
+                             'btn-danger': selectedTeams.length > requiredNumTeams || sumOfSeeds > requiredSumOfSeeds}"
+                  class="btn pull-right">
+            Create Bracket
+          </button>
         </div>
       </div>
-
-      <br/>
-      <a href="#/pools/{{ poolId }}/brackets">View all Brackets</a>
 
     </fieldset>
   </form>
