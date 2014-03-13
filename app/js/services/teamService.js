@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('myApp.services').service('teamService',
-           ['$firebase', 'tournamentRef',
-    function($firebase,   tournamentRef) {
-        var teamsRef = tournamentRef.child('teams');
+           ['tournamentRef',
+    function(tournamentRef) {
+        var allTeams = tournamentRef.$child('teams');
 
         this.findAll = function() {
-            // TODO: sort this by seed (and region?)
-            return $firebase(teamsRef);
+            return allTeams;
+        };
+        this.findById = function(teamId) {
+            return allTeams.$child(teamId);
         };
     }
 ]);

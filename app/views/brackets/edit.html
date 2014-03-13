@@ -1,7 +1,7 @@
-<div data-ng-init="findOneBracket(); findTeams();">
+<div data-ng-init="findAllTeams().then(findOneBracket);">
   <form class="form-horizontal" role="form">
     <fieldset>
-      <legend style="margin-bottom: 0">Your bracket</legend>
+      <legend style="margin-bottom: 0">{{isNewBracket ? 'Create' : 'Update'}} your bracket</legend>
 
       <div class="container">
         <div class="row">
@@ -13,13 +13,13 @@
           </div>
         </div>
         <div class="row">
-          <h4>Select {{requiredNumTeams}} teams whose seeds add up to {{requiredSumOfSeeds}}:</h4>
+          <h4>Select <strong>{{requiredNumTeams}}</strong> teams whose seeds add up to <strong>{{requiredSumOfSeeds}}</strong>:</h4>
           <br/>
           <div class="col-md-5">
             <div class="gridStyle" ng-grid="gridOptions"></div>
           </div>
           <div class="selectedItems col-md-6">
-            <h4>Your selected teams:</h4>
+            <h4>Your {{selectedTeams.length}} selected teams:</h4>
             <ul class="unstyled">
               <li data-ng-repeat="selectedTeam in selectedTeams | orderBy:'seed'">{{selectedTeam.seed}} - {{selectedTeam.full_name}}</li>
             </ul>
@@ -57,13 +57,12 @@
               <a href="#/pools/{{ poolId }}/brackets">View all Brackets</a>
             </button>
           </div>
-          <div class="col-md-2 col-md-offset-1" data-ng-show="!bracketId">
-            <button data-ng-click="createBracket()"
+          <div class="col-md-2 col-md-offset-1">
+            <button data-ng-click="saveBracket()"
                     ng-disabled="!bracket.name || selectedTeams.length !== requiredNumTeams || sumOfSeeds !== requiredSumOfSeeds"
-                    ng-class="{'btn-success': selectedTeams.length <= requiredNumTeams && sumOfSeeds <= requiredSumOfSeeds,
-                               'btn-danger': selectedTeams.length > requiredNumTeams || sumOfSeeds > requiredSumOfSeeds}"
-                    class="btn pull-right">
-              Create Bracket
+                    ng-class="{'btn-danger': selectedTeams.length > requiredNumTeams || sumOfSeeds > requiredSumOfSeeds}"
+                    class="btn pull-right btn-success">
+              {{isNewBracket ? 'Create' : 'Update'}} bracket
             </button>
           </div>
         </div>

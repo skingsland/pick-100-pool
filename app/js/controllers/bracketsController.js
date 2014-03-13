@@ -1,14 +1,15 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('BracketsController',
-           ['$scope', '$routeParams', '$location', 'bracketService', 'teamService', 'syncData', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
-    function($scope,   $routeParams,   $location,   bracketService,   teamService,   syncData,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
+           ['$scope', '$routeParams', '$location', '$q', '$timeout', 'poolService', 'bracketService', 'teamService', 'syncData', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
+    function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   syncData,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
         $scope.requiredNumTeams = NUMBER_OF_TEAMS_PER_BRACKET;
         $scope.requiredSumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
         $scope.sumOfSeeds = 0;
 
         $scope.poolId = $routeParams.poolId;
         $scope.bracketId = $routeParams.bracketId;
+        $scope.isNewBracket = !$scope.bracketId;
 
         $scope.selectedTeams = [];
         $scope.gridOptions = {
@@ -23,52 +24,82 @@ angular.module('myApp.controllers').controller('BracketsController',
             sortInfo: {fields: ['seed'], directions: ['asc']}
 //            plugins: [new ngGridFlexibleHeightPlugin()]
         };
-        $scope.findTeams = function () {
-            return teamService.findAll().$on('value', function(teamsSnapshot) {
-                var individualTeams = teamsSnapshot.snapshot.value;
+        $scope.findAllTeams = function () {
+            var deferred = $q.defer();
 
-                $scope.teams = Object.keys(individualTeams).map(function (key) {
-                    return individualTeams[key];
+            teamService.findAll().$on('value', function(teamsSnapshot) {
+                var allTeams = teamsSnapshot.snapshot.value;
+
+                // we don't want to just return the direct children of /teams, because each team is stored as a key-value pair,
+                // where the key is the team id, and the value is the team object (which *also* includes its id).
+                $scope.teams = Object.keys(allTeams).map(function (key) {
+                    return allTeams[key];
                 });
+
+                deferred.resolve();
             });
+            return deferred.promise;
         };
         $scope.$watchCollection('selectedTeams', function(selectedTeamsNewValue) {
-            $scope.sumOfSeeds = calculateSumOfSeeds(selectedTeamsNewValue);
-            // TODO: provide other convenience status variables for the view to use?
-        });
-        function calculateSumOfSeeds(selectedTeams) {
-            // add up the seeds of all the selected teams
-            return selectedTeams.reduce(function(accum, currentValue) {
+            // calculate the sum of the seeds of all the selected teams, for visual feedback to the user
+            $scope.sumOfSeeds = selectedTeamsNewValue.reduce(function (accum, currentValue) {
                 return accum + parseInt(currentValue.seed, 10);
             }, 0);
-        }
-
+        });
+        $scope.findOnePool = function () {
+            $scope.pool = poolService.findById($scope.poolId);
+        };
         $scope.findBrackets = function () {
             $scope.brackets = bracketService.findAll();
         };
         $scope.findOneBracket = function () {
-            if(!!$scope.bracketId) {
+            // are we editing an existing bracket? If so, we will have a bracketId.
+            if ($scope.bracketId) {
                 var $bracket = bracketService.findById($scope.bracketId);
                 $bracket.$bind($scope, 'bracket');
 
-                // TODO: fetch the bracket's selected teams
-                $scope.selectedTeams = [];
+                // need to use a timeout, with a 0 delay, to ensure that ng-grid has finished loading the grid before we select rows
+                $timeout(function() {
+                    // get an array of all teams in the bracket, so we can select them in the grid
+                    $bracket.$child('teams').$getRef().once('value', function (bracketTeamsSnapshot) {
+                        var bracketTeamsArray = bracketTeamsSnapshot.val();
+
+                        angular.forEach($scope.teams, function (team, index) {
+                            // is the team in the bracket? if so, select it
+                            if (bracketTeamsArray.indexOf(team.id) >= 0) {
+                                // need to use the ng-grid API to directly select the row for each team in the bracket, because
+                                // ng-grid doesn't support auto-updating the grid if we were to update $scope.selectedTeams manually
+                                $scope.gridOptions.selectItem(index, true);
+                            }
+                        });
+                    });
+                }, 0);
+            } else {
+                // create a new bracket object for the scope, since we're not editing an existing bracket
+                $scope.bracket = {poolId: $scope.poolId, ownerId: $scope.auth.user.uid};
             }
         };
-        $scope.createBracket = function () {
-            console.log('createBracket called, $scope.selectedTeams =', $scope.selectedTeams);
-
+        $scope.saveBracket = function () {
+            // update the bracket being created/saved with the user's selected teams
             $scope.bracket.teams = $scope.selectedTeams.map(function(selectedTeam) {
                 return selectedTeam.id;
             });
 
-            bracketService.create($scope.bracket, $scope.poolId, $scope.auth.user.uid).then(function (ref) {
-                if(!!ref) {
-                    $scope.bracket = null;
-                    $location.path('/pools/' + poolId + '/brackets/' + bracketId);
-                    $scope.$apply();
-                }
-            });
+            if ($scope.isNewBracket) {
+                bracketService.create($scope.bracket).then(function (bracketId) {
+                    if(!!bracketId) {
+                        // after the bracket was successfully created, send the user back to the pool overview page,
+                        // where they can see their bracket at the top of the page
+                        $location.path('/pools/' + $scope.poolId);
+                    }
+                });
+            } else {
+                $scope.bracket.$save().then(function () {
+                    // after the bracket was successfully updated, send the user back to the pool overview page,
+                    // where they can see their bracket at the top of the page
+                    $location.path('/pools/' + $scope.poolId);
+                });
+            }
         };
         $scope.removeBracket = function (bracketId) {
             bracketService.removeBracket(bracketId);

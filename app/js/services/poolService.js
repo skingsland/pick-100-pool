@@ -1,21 +1,19 @@
 'use strict';
 
 angular.module('myApp.services').service('poolService',
-           ['$firebase', 'tournamentRef',
-    function($firebase,   tournamentRef) {
-        var poolsRef = tournamentRef.child('pools');
+           ['tournamentRef',
+    function(tournamentRef) {
+        var allPools = tournamentRef.$child('pools');
 
         this.findAll = function() {
-          return $firebase(poolsRef);
+            return allPools;
         };
-
         this.findById = function(poolId) {
-          return $firebase(poolsRef).$child(poolId);
+            return allPools.$child(poolId);
         };
-
-        // TODO: rewrite this to use $firebase(poolsRef).$add().then(...)
+        // TODO: rewrite this to use allPools.$add().then(...)
         this.create = function(pool, manager, cb) {
-            return poolsRef.push({
+            return allPools.$getRef().push({
                 name: pool.name,
                 managerId: manager.uid,
                 brackets: []
@@ -26,4 +24,4 @@ angular.module('myApp.services').service('poolService',
             this.findById(poolId).$remove();
         };
     }
-])
+]);

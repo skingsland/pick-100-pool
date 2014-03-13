@@ -1,31 +1,33 @@
 'use strict';
 
 angular.module('myApp.services').service('bracketService',
-           ['$firebase', 'tournamentRef', 'usersRef',
-    function($firebase,   tournamentRef,   usersRef) {
-        var poolsRef = tournamentRef.child('pools');
-        var bracketsRef = tournamentRef.child('brackets');
+           ['$q', 'tournamentRef', 'usersRef',
+    function($q,   tournamentRef,   usersRef) {
+        var allPools = tournamentRef.$child('pools');
+        var allBrackets = tournamentRef.$child('brackets');
 
-        this.findAll = function () {
-            return $firebase(bracketsRef);
+        this.findAll = function() {
+            return allBrackets;
         };
 
         this.findById = function(bracketId) {
-          return $firebase(bracketsRef).$child(bracketId);
+          return allBrackets.$child(bracketId);
         };
 
-        this.create = function(bracket, poolId, ownerId) {
-             // add the bracket primarily to the list of brackets
-            return $firebase(bracketsRef)
-                .$add({name: bracket.name, teams: bracket.teams, poolId: poolId, ownerId: ownerId})
-                .then(function (ref) {
-                    // TODO: is this right? Or should it be ref.$id?
-                    var bracketId = ref.name();
+        this.create = function(bracket) {
+            var deferred = $q.defer();
 
-                    // add the bracket id to the list of brackets for the pool, and for the user
-                    $firebase(poolsRef).$child(poolId).$child('brackets').$add(bracketId);
-                    $firebase(usersRef).$child(ownerId).$child('brackets').$add(bracketId);
-                });
+             // first add the bracket to the list of ALL brackets
+            allBrackets.$add(bracket).then(function (newBracketRef) {
+                var bracketId = newBracketRef.name();
+
+                // add the bracket id to the list of brackets for the pool, and for the user
+                allPools.$child(bracket.poolId).$child('brackets').$add(bracketId);
+                usersRef.$child(bracket.ownerId).$child('brackets').$add(bracketId);
+
+                deferred.resolve(bracketId);
+            });
+            return deferred.promise;
         };
 
         /*

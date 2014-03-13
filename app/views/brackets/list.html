@@ -1,11 +1,13 @@
-<div data-ng-init="findBrackets()">
-  <h2>Brackets</h2>
-  <h3>All Teams</h3>
+<div data-ng-init="findOnePool(); findBrackets();">
+  <h3>{{pool.name}} Brackets</h3>
+  <h4>All Brackets</h4>
   <ul class="unstyled">
-    <li data-ng-repeat="bracket in brackets">
-      <a href="#/brackets/{{ bracket.$id }}">{{bracket.name}}</a>
-      (<a href="#/brackets/{{ bracket.$id }}/edit">Edit</a>)
-      (<a href="" data-ng-click="removeBracket('{{ bracket.$id }}')" >Remove</a>)
+    <li data-ng-repeat="bracket in brackets | orderByPriority">
+      <a href="#/pools/{{ poolId }}/brackets/{{ bracket.$id }}">{{bracket.name}}</a>
+      <span ng-show="bracket.ownerId === auth.user.uid">
+        (<a href="#/pools/{{ poolId }}/brackets/{{ bracket.$id }}/edit">Edit</a>)
+        (<a href="" data-ng-click="removeBracket('{{ bracket.$id }}')" >Remove</a>)
+      </span>
     </li>
   </ul>
   <br>
