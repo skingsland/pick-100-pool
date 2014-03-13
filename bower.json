@@ -15,7 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular-loading-bar": "~0.3.0",
     "angular-route": "~1.2.14",
     "angular": "~1.2.14",
     "angularfire": "~0.7.0",
