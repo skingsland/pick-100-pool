@@ -24,30 +24,12 @@
               <li data-ng-repeat="selectedTeam in selectedTeams | orderBy:'seed'">{{selectedTeam.seed}} - {{selectedTeam.full_name}}</li>
             </ul>
             <br/>
-            <div class="progress">
-              <div class="progress-bar"
-                   role="progressbar"
-                   aria-valuenow="{{selectedTeams.length}}"
-                   aria-valuemin="0"
-                   aria-valuemax="{{requiredNumTeams}}"
-                   ng-style="{width: 100 * selectedTeams.length/requiredNumTeams + '%'}"
-                   ng-class="{'progress-bar-success': selectedTeams.length === requiredNumTeams,
-                              'progress-bar-danger': selectedTeams.length > requiredNumTeams}">
-                <span>Teams: {{selectedTeams.length}} / {{requiredNumTeams}}</span>
-              </div>
-            </div>
-            <div class="progress">
-              <div class="progress-bar"
-                   role="progressbar"
-                   aria-valuenow="{{sumOfSeeds}}"
-                   aria-valuemin="0"
-                   aria-valuemax="{{requiredSumOfSeeds}}"
-                   ng-style="{width: 100 * sumOfSeeds/requiredSumOfSeeds + '%'}"
-                   ng-class="{'progress-bar-success': sumOfSeeds === requiredSumOfSeeds,
-                              'progress-bar-danger': sumOfSeeds > requiredSumOfSeeds}">
-                <span>Seeds: {{sumOfSeeds}} / {{requiredSumOfSeeds}}</span>
-              </div>
-            </div>
+            <progressbar value="selectedTeams.length" max="requiredNumTeams" type="{{teamsProgressBarType}}">
+              <b>Teams: {{selectedTeams.length}} / {{requiredNumTeams}}</b>
+            </progressbar>
+            <progressbar value="sumOfSeeds" max="requiredSumOfSeeds" type="{{seedsProgressBarType}}">
+              <b>Seeds: {{sumOfSeeds}} / {{requiredSumOfSeeds}}</b>
+            </progressbar>
           </div>
         </div>
         <br/>

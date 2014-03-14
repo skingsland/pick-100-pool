@@ -2,8 +2,8 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', ['simpleLoginTools', 'firebase'])
-   .controller('LoginCtrl', ['$scope', 'loginService', '$location', function($scope, loginService, $location) {
+angular.module('myApp.controllers', ['simpleLoginTools', 'firebase', 'ui.bootstrap'])
+   .controller('LoginCtrl', ['$scope', 'loginService', function($scope, loginService) {
       $scope.email = null;
       $scope.pass = null;
       $scope.confirm = null;

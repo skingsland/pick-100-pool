@@ -45,6 +45,20 @@ angular.module('myApp.controllers').controller('BracketsController',
             $scope.sumOfSeeds = selectedTeamsNewValue.reduce(function (accum, currentValue) {
                 return accum + parseInt(currentValue.seed, 10);
             }, 0);
+
+            function calculateTeamsProgressBarType(selectedTeams) {
+                if (selectedTeams.length < $scope.requiredNumTeams) return 'default';
+                if (selectedTeams.length === $scope.requiredNumTeams) return 'success';
+                return 'danger';
+            }
+            $scope.teamsProgressBarType = calculateTeamsProgressBarType(selectedTeamsNewValue);
+
+            function calculateSeedsProgressBarType(sumOfSeeds) {
+                if (sumOfSeeds < $scope.requiredSumOfSeeds) return 'default';
+                if (sumOfSeeds === $scope.requiredSumOfSeeds) return 'success';
+                return 'danger';
+            }
+            $scope.seedsProgressBarType = calculateSeedsProgressBarType($scope.sumOfSeeds);
         });
         $scope.findOnePool = function () {
             $scope.pool = poolService.findById($scope.poolId);
