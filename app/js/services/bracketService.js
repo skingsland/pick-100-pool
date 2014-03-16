@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.services').service('bracketService',
-           ['$q', 'tournamentRef', 'usersRef',
-    function($q,   tournamentRef,   usersRef) {
+           ['$q', 'tournamentRef',
+    function($q,   tournamentRef) {
         var allPools = tournamentRef.$child('pools');
         var allBrackets = tournamentRef.$child('brackets');
 
@@ -14,6 +14,12 @@ angular.module('myApp.services').service('bracketService',
           return allBrackets.$child(bracketId);
         };
 
+        this.findBracketIdsByPool = function(poolId) {
+            var pool = allPools.$child(poolId);
+            return pool.$child('brackets');
+        };
+
+
         this.create = function(bracket) {
             var deferred = $q.defer();
 
@@ -22,8 +28,14 @@ angular.module('myApp.services').service('bracketService',
                 var bracketId = newBracketRef.name();
 
                 // add the bracket id to the list of brackets for the pool, and for the user
-                allPools.$child(bracket.poolId).$child('brackets').$add(bracketId);
-                usersRef.$child(bracket.ownerId).$child('brackets').$add(bracketId);
+                var pool = allPools.$child(bracket.poolId);
+                // key the bracket by the owner's user id, to allow for easy lookup of the current user's bracket in the pool
+                pool.$child('brackets').$child(bracket.ownerId).$set(bracketId);
+
+                // TODO: saving the bracket in the user record is not useful if we don't know what tournament it belongs to,
+                // (because we can't load teams without that), and maybe which pool as well?
+//                var user = userService.findById(bracket.ownerId);
+//                user.$child('brackets').$add(bracketId);
 
                 deferred.resolve(bracketId);
             });

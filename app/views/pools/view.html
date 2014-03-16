@@ -1,19 +1,16 @@
-  <div data-ng-init="findOnePool()">
-    <h3>{{ pool.name }}</h3>
-    <p><strong>Manager: </strong>{{ manager.name }}</p>
-    <br>
-    <div data-ng-hide="bracketId">
-      <a href="#/pools/{{ pool.$id }}/brackets/create">Create a bracket</a>
-      <br>
-    </div>
-    <a href="#/pools">View all pools</a>
-    <br>
+<div data-ng-init="findOnePool(); findBrackets();" ng-cloak>
+  <h1>{{ pool.name }}</h1>
+  <p><strong>Manager: </strong>{{ manager.name }}</p>
+  <p><a href="#/pools">View all pools</a></p>
 
-    <div data-ng-show="bracketId">
-      <h3>Your bracket</h3>
-      TODO: display user's bracket here
-    </div>
-    <br>
-    <h4>All brackets</h4>
-    TODO: display brackets here
+  <div data-ng-hide="currentUserBrackets">
+    <p><a href="#/pools/{{ pool.$id }}/brackets/create">Create a bracket</a></p>
   </div>
+
+  <div ng-repeat="bracketId in currentUserBrackets" class="currentUserBracket">
+    <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
+    <p><a class="btn btn-primary" href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Edit your bracket</a></p>
+  </div>
+
+  <div ng-repeat="bracketId in bracketIds" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
+</div>

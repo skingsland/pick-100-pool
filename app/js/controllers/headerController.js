@@ -25,14 +25,10 @@ angular.module('myApp.controllers').controller('HeaderController',
         };
 
         $scope.navbarEntries = [
-        {
-          "title": "Pools",
-          "link": "/pools"
-        },
-//        {
-//          "title": "Brackets",
-//          "link": "/brackets"
-//        }
+            {
+              "title": "Pools",
+              "link": "/pools"
+            }
         ];
 
         $scope.$on('$routeChangeSuccess', function() {

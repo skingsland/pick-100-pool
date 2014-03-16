@@ -9,7 +9,7 @@
   <link href="css/app.css" rel="stylesheet"/>
 
   <!-- use latest unreleased version 2.0.8, because 2.0.7 hasn't been updated and isn't getting bug fixes -->
-  <link href="https://rawgithub.com/angular-ui/ng-grid/2.0.8/ng-grid.min.css" rel="stylesheet">
+  <link href="/app/css/thirdParty/ng-grid-2.0.8.min.css" rel="stylesheet">
 </head>
 <!-- using ng-cloak on the body element causes ng-grid directive to add an unwanted 100px empty column -->
 <body>
@@ -32,12 +32,12 @@
   <script src="/bower_components/angular-route/angular-route.js"></script>
   <script src="/app/js/thirdParty/ui-bootstrap-progressbar-tpls-0.10.0.min.js"></script>
 
-  <!--<script src="/bower_components/angularfire/angularfire.min.js"></script>-->
-  <!-- use master version (which corresponds to 0.7.1pre), because it has bug fixes -->
-  <script src="https://rawgithub.com/firebase/angularFire/master/angularfire.js"></script>
+  <!-- use the latest commit from master (as of 3/6/2014), because it has bug fixes -->
+  <script src="/app/js/thirdParty/angularfire-0.7.1-pre2.js"></script>
 
-  <!-- use latest unreleased version 2.0.8, because 2.0.7 hasn't been updated and isn't getting bug fixes -->
-  <script src="https://rawgithub.com/angular-ui/ng-grid/2.0.8/ng-grid-2.0.8.min.js"></script>
+  <!-- use latest commit from 2.0.8 branch, because 2.0.7 release hasn't been updated in 9 months and isn't getting bug fixes -->
+  <script src="/app/js/thirdParty/ng-grid-2.0.8.debug.js"></script>
+  <script src="/app/js/thirdParty/ng-grid-layout.js"></script>
   <!-- allows ng-grid to dynamically change the height of the grid to fit all the elements in it. Might come in handy? -->
   <!--<script src="https://rawgithub.com/angular-ui/ng-grid/master/plugins/ng-grid-flexible-height.js"></script>-->
 

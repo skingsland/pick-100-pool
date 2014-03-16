@@ -1,4 +1,4 @@
-<div data-ng-init="findAllTeams().then(getBracketForEditing);">
+<div data-ng-init="findAllTeams().then(getBracketForEditing);" data-ng-controller="BracketsController">
   <form class="form-horizontal" role="form">
     <fieldset>
       <legend style="margin-bottom: 0">{{isNewBracket ? 'Create' : 'Update'}} your bracket</legend>

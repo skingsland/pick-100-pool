@@ -25,21 +25,17 @@ angular.module('myApp.routes', ['ngRoute'])
           .when('/pools/:poolId/edit',  { templateUrl: 'views/pools/edit.html', controller: 'PoolsController', authRequired: true })
 
           .when('/pools/:poolId/brackets', {
-              templateUrl: 'views/brackets/list.html',
-              controller: 'BracketsController'
+              templateUrl: 'views/brackets/list.html'
           })
           .when('/pools/:poolId/brackets/create', {
               templateUrl: 'views/brackets/edit.html',
-              controller: 'BracketsController',
               authRequired: true
           })
           .when('/pools/:poolId/brackets/:bracketId', {
-              templateUrl: 'views/brackets/view.html',
-              controller: 'BracketsController'
+              templateUrl: 'views/brackets/view.html'
           })
           .when('/pools/:poolId/brackets/:bracketId/edit', {
               templateUrl: 'views/brackets/edit.html',
-              controller: 'BracketsController',
               authRequired: true
           })
           .otherwise({redirectTo: '/home'});

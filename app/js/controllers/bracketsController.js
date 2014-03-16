@@ -8,7 +8,11 @@ angular.module('myApp.controllers').controller('BracketsController',
         $scope.sumOfSeeds = 0;
 
         $scope.poolId = $routeParams.poolId;
-        $scope.bracketId = $routeParams.bracketId;
+
+        // the bracketId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /bracket/1)
+        if (!$scope.bracketId) {
+            $scope.bracketId = $routeParams.bracketId;
+        }
         $scope.isNewBracket = !$scope.bracketId;
 
         $scope.selectedTeams = [];
@@ -24,6 +28,8 @@ angular.module('myApp.controllers').controller('BracketsController',
             sortInfo: {fields: ['seed'], directions: ['asc']}
 //            plugins: [new ngGridFlexibleHeightPlugin()]
         };
+
+        var bracketGridLayoutPlugin = new ngGridLayoutPlugin();
         $scope.bracketGridOptions = {
             data: 'teamsWithScores',
             enableRowSelection: false,
@@ -31,7 +37,8 @@ angular.module('myApp.controllers').controller('BracketsController',
             columnDefs: buildColumnDefsForBracketGrid(),
             showFooter: true,
             footerRowHeight: 30,
-            footerTemplate: buildFooterTemplateForBracketGrid()
+            footerTemplate: buildFooterTemplateForBracketGrid(),
+            plugins: [bracketGridLayoutPlugin]
             // TODO fix sorting (this doesn't seem to have any effect, perhaps because the data is loaded after the grid renders)
 //            sortInfo: {fields: ['seed'], directions: ['asc']}
         };
@@ -139,6 +146,12 @@ angular.module('myApp.controllers').controller('BracketsController',
                     // TODO: set totalPoints on the team (maybe as a function, or a watch?)
                 });
             });
+
+            // when the bracket is being included from another page, we have to trigger a refresh of the layout otherwise
+            // the height and width that ng-grid calculates won't be correct
+            $timeout(function() {
+                bracketGridLayoutPlugin.updateGridLayout();
+            }, 0);
         };
 
         $scope.saveBracket = function () {
