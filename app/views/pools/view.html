@@ -2,8 +2,7 @@
   <h1>{{ pool.name }}</h1>
   <p><strong>Manager: </strong>{{ manager.name }}</p>
   <p><a href="#/pools">View all pools</a></p>
-
-  <div data-ng-hide="currentUserBrackets">
+  <div data-ng-show="!currentUserBrackets">
     <p><a href="#/pools/{{ pool.$id }}/brackets/create">Create a bracket</a></p>
   </div>
 

@@ -24,9 +24,6 @@ angular.module('myApp.routes', ['ngRoute'])
           .when('/pools/:poolId',       { templateUrl: 'views/pools/view.html', controller: 'PoolsController', authRequired: false })
           .when('/pools/:poolId/edit',  { templateUrl: 'views/pools/edit.html', controller: 'PoolsController', authRequired: true })
 
-          .when('/pools/:poolId/brackets', {
-              templateUrl: 'views/brackets/list.html'
-          })
           .when('/pools/:poolId/brackets/create', {
               templateUrl: 'views/brackets/edit.html',
               authRequired: true
