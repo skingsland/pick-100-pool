@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('BracketsController',
-           ['$scope', '$routeParams', '$location', '$q', '$timeout', 'poolService', 'bracketService', 'teamService', 'syncData', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
-    function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   syncData,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
+           ['$scope', '$routeParams', '$location', '$q', '$timeout', 'poolService', 'bracketService', 'teamService', 'userService', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
+    function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   userService,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
         $scope.requiredNumTeams = NUMBER_OF_TEAMS_PER_BRACKET;
         $scope.requiredSumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
         $scope.sumOfSeeds = 0;
@@ -12,7 +12,7 @@ angular.module('myApp.controllers').controller('BracketsController',
         $scope.isNewBracket = !$scope.bracketId;
 
         $scope.selectedTeams = [];
-        $scope.gridOptions = {
+        $scope.selectTeamsGridOptions = {
             data: 'teams',
             selectedItems: $scope.selectedTeams,
             columnDefs: [
@@ -24,6 +24,18 @@ angular.module('myApp.controllers').controller('BracketsController',
             sortInfo: {fields: ['seed'], directions: ['asc']}
 //            plugins: [new ngGridFlexibleHeightPlugin()]
         };
+        $scope.bracketGridOptions = {
+            data: 'teamsWithScores',
+            enableRowSelection: false,
+            headerRowHeight: 50, // allow room for the <br/>
+            columnDefs: buildColumnDefsForBracketGrid(),
+            showFooter: true,
+            footerRowHeight: 30,
+            footerTemplate: buildFooterTemplateForBracketGrid()
+            // TODO fix sorting (this doesn't seem to have any effect, perhaps because the data is loaded after the grid renders)
+//            sortInfo: {fields: ['seed'], directions: ['asc']}
+        };
+
         $scope.findAllTeams = function () {
             var deferred = $q.defer();
 
@@ -42,9 +54,7 @@ angular.module('myApp.controllers').controller('BracketsController',
         };
         $scope.$watchCollection('selectedTeams', function(selectedTeamsNewValue) {
             // calculate the sum of the seeds of all the selected teams, for visual feedback to the user
-            $scope.sumOfSeeds = selectedTeamsNewValue.reduce(function (accum, currentValue) {
-                return accum + parseInt(currentValue.seed, 10);
-            }, 0);
+            $scope.sumOfSeeds = getSumOfSeeds(selectedTeamsNewValue);
 
             function calculateTeamsProgressBarType(selectedTeams) {
                 if (selectedTeams.length < $scope.requiredNumTeams) return 'default';
@@ -66,16 +76,16 @@ angular.module('myApp.controllers').controller('BracketsController',
         $scope.findBrackets = function () {
             $scope.brackets = bracketService.findAll();
         };
-        $scope.findOneBracket = function () {
+        $scope.getBracketForEditing = function () {
             // are we editing an existing bracket? If so, we will have a bracketId.
             if ($scope.bracketId) {
-                var $bracket = bracketService.findById($scope.bracketId);
-                $bracket.$bind($scope, 'bracket');
+                var bracket = bracketService.findById($scope.bracketId);
+                bracket.$bind($scope, 'bracket');
 
-                // need to use a timeout, with a 0 delay, to ensure that ng-grid has finished loading the grid before we select rows
+                // need to use a timeout, with a 0 sec delay, to ensure that ng-grid has finished loading the grid before we select rows
                 $timeout(function() {
                     // get an array of all teams in the bracket, so we can select them in the grid
-                    $bracket.$child('teams').$getRef().once('value', function (bracketTeamsSnapshot) {
+                    bracket.$child('teams').$getRef().once('value', function (bracketTeamsSnapshot) {
                         var bracketTeamsArray = bracketTeamsSnapshot.val();
 
                         angular.forEach($scope.teams, function (team, index) {
@@ -83,7 +93,7 @@ angular.module('myApp.controllers').controller('BracketsController',
                             if (bracketTeamsArray.indexOf(team.id) >= 0) {
                                 // need to use the ng-grid API to directly select the row for each team in the bracket, because
                                 // ng-grid doesn't support auto-updating the grid if we were to update $scope.selectedTeams manually
-                                $scope.gridOptions.selectItem(index, true);
+                                $scope.selectTeamsGridOptions.selectItem(index, true);
                             }
                         });
                     });
@@ -93,6 +103,44 @@ angular.module('myApp.controllers').controller('BracketsController',
                 $scope.bracket = {poolId: $scope.poolId, ownerId: $scope.auth.user.uid};
             }
         };
+        $scope.getBracketWithScores = function () {
+            if (!$scope.bracketId) {
+                throw new Error('view bracket page requested without a bracketId!');
+            }
+            var bracket = bracketService.findById($scope.bracketId);
+            bracket.$bind($scope, 'bracket');
+
+            $scope.teamsWithScores = [];
+            $scope.totalPerRound = [];
+
+            bracket.$child('ownerId').$getRef().once('value', function(ownerId) {
+                userService.findById(ownerId.val()).$bind($scope, 'owner');
+            });
+
+            bracket.$child('teams').$on('child_added', function(teamSnapshot) {
+                var teamId = teamSnapshot.snapshot.value;
+                var teamRef = teamService.findById(teamId);
+                $scope.teamsWithScores.push(teamRef);
+
+                teamRef.$on('loaded', function(team) {
+                    $scope.sumOfSeeds += team.seed;
+                });
+
+                // watch for changes to the team's points, which will update when new games finish
+                teamRef.$child('rounds').$on('child_added', function(roundSnapshot) {
+                    var round = roundSnapshot.snapshot.name;
+                    var points = roundSnapshot.snapshot.value;
+
+                    if (!$scope.totalPerRound[round]) {
+                        $scope.totalPerRound[round] = 0;
+                    }
+                    $scope.totalPerRound[round] += points;
+
+                    // TODO: set totalPoints on the team (maybe as a function, or a watch?)
+                });
+            });
+        };
+
         $scope.saveBracket = function () {
             // update the bracket being created/saved with the user's selected teams
             $scope.bracket.teams = $scope.selectedTeams.map(function(selectedTeam) {
@@ -118,5 +166,47 @@ angular.module('myApp.controllers').controller('BracketsController',
         $scope.removeBracket = function (bracketId) {
             bracketService.removeBracket(bracketId);
         };
+
+        function getSumOfSeeds(teams) {
+            return teams.reduce(function (accum, currentValue) {
+                return accum + parseInt(currentValue.seed, 10);
+            }, 0);
+        }
+
+        function buildColumnDefsForBracketGrid() {
+            var columnDefs = [
+                {field:'full_name', displayName:'Picks'},
+                {field:'seed', displayName:'Seed', width:60}
+            ];
+            for (var i = 1; i <= 6; i++) {
+                var points = Math.pow(2, i - 1);
+
+                // TODO: apply style class with <span> to make the Round # stand out more than the 2nd line
+                columnDefs.push({field: 'rounds[' + i + ']',
+                                 displayName: 'Round ' + i + '<br/><small>Seed # + ' + points + ' point' + (points > 1 ? 's' : '') + '</small>'
+                });
+            }
+//                {field:'totalPoints', displayName:'Team Total'},
+            return columnDefs;
+        }
+
+        function buildFooterTemplateForBracketGrid() {
+            var footerTemplate = '<div class="ngFooterPanel" ng-style="footerStyle()">'
+                + '                   <div class="ngFooterCell col0 colt0">'
+                + '                       <span class="ngLabel">TOTALS:</span>'
+                + '                   </div>'
+                + '                   <div class="ngFooterCell col1 colt1">'
+                + '                       <span class="ngLabel">{{sumOfSeeds}}</span>'
+                + '                   </div>';
+
+            for (var i = 1; i <= 6; i++) {
+                footerTemplate += '   <div class="ngFooterCell col' + (i+1) + ' colt' + (i+1) + '">'
+                + '                       <span class="ngLabel">{{totalPerRound[' + i + ']}}</span>'
+                + '                   </div>';
+            }
+            footerTemplate += '   </div>';
+
+            return footerTemplate;
+        }
     }
 ]);

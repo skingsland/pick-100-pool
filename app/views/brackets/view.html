@@ -1,7 +1,6 @@
-<div data-ng-init="findOneBracket()">
+<div data-ng-init="findAllTeams().then(getBracketWithScores)" class="viewBracket">
   <h2>{{ bracket.name }}</h2>
-  <p><strong>Owner: </strong>{{ bracket.ownerId }}</p>
-  <p><strong>Pool: </strong>{{ bracket.poolId }}</p> 
-  <br>
-  <a href="#/brackets">View all brackets</a>
+  <span class="bracketOwner">by {{ owner.name }}</span>
+
+  <div class="bracketGrid" ng-grid="bracketGridOptions"></div>
 </div>

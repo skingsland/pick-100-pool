@@ -1,4 +1,4 @@
-<div data-ng-init="findAllTeams().then(findOneBracket);">
+<div data-ng-init="findAllTeams().then(getBracketForEditing);">
   <form class="form-horizontal" role="form">
     <fieldset>
       <legend style="margin-bottom: 0">{{isNewBracket ? 'Create' : 'Update'}} your bracket</legend>
@@ -16,7 +16,7 @@
           <h4>Select <strong>{{requiredNumTeams}}</strong> teams whose seeds add up to <strong>{{requiredSumOfSeeds}}</strong>:</h4>
           <br/>
           <div class="col-md-5">
-            <div class="gridStyle" ng-grid="gridOptions"></div>
+            <div class="selectTeamsGrid" ng-grid="selectTeamsGridOptions"></div>
           </div>
           <div class="selectedItems col-md-6">
             <h4>Your {{selectedTeams.length}} selected teams:</h4>

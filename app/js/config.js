@@ -10,5 +10,5 @@ angular.module('myApp.config', [])
 
    .constant('FBURL', 'https://pick13pool.firebaseio.com')
    .constant('FIREBASE_TOURNAMENT_NAME', 'MarchMadness2013')
-   .constant('NUMBER_OF_TEAMS_PER_BRACKET', 3)
-   .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 10)
+   .constant('NUMBER_OF_TEAMS_PER_BRACKET', 13)
+   .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 100)

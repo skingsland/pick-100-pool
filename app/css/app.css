@@ -3,12 +3,62 @@ body {
   padding-top: 50px;
 }
 
-/* for ng-grid directive */
-.gridStyle {
+/* for ng-grid directive on the create bracket page */
+.selectTeamsGrid {
     border: 1px solid rgb(212,212,212);
     height: 400px;
     width: 450px;
 }
+
+/* styles for the view-bracket module */
+.viewBracket h2 {
+    /* this allows the .bracketOwner to follow on the same line */
+    display: inline-block;
+}
+.viewBracket .bracketOwner {
+    margin-left: 15px;
+}
+.bracketGrid {
+    border: 1px solid rgb(212,212,212);
+    height: 474px;
+}
+.bracketGrid .ngHeaderText {
+    white-space: normal;
+}
+.bracketGrid .ngHeaderText small {
+    font-weight: normal;
+}
+.bracketGrid .ngCell {
+    text-align: right;
+}
+.bracketGrid .col0 {
+    text-align: left;
+}
+.bracketGrid .ngFooterPanel {
+    /* I have no idea why, but there is a 2px white gutter at the bottom of the footer panel, and this is the only way to get
+       rid of it. CSS Hack #2! */
+    margin-top: 2px;
+}
+.bracketGrid .ngFooterCell {
+    display: inline-block;
+    /* I can't find where this is happening, but for some reason ngFooterCell is getting a 4px right margin added to it,
+       which messes up the alignment between the footer and the rest of the table. So in my very first CSS hack every,
+       I am correcting for the extra space by explicitly removing it. */
+    margin-right: -4px;
+    /* This copies the same padding that the ngCell elements use in the grid. */
+    padding-right: 5px;
+    text-align: right;
+}
+.bracketGrid .ngFooterCell .ngLabel {
+    display: inline-block;
+    /* vertically aligns the text in the footer cells */
+    padding-top: 3px;
+    font-weight: bold;
+}
+.bracketGrid .ngFooterPanel .col0 {
+    text-align: center;
+}
+
 
 
 .hide {
