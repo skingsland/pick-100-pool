@@ -24,7 +24,7 @@ body {
 }
 .bracketGrid {
     border: 1px solid rgb(212,212,212);
-    height: 474px;
+    height: 409px;
 }
 .bracketGrid .ngHeaderText {
     white-space: normal;
@@ -64,11 +64,6 @@ body {
 }
 
 /* styles for the pool view page */
-.poolBracket .bracketGrid {
-    /* CSS hack: this is the minimum height possible to allow the bracket grid to render without scroll bars,
-       even though it results in an extra half-row of whitespace below the last row, just above the footer. */
-    height: 489px;
-}
 .currentUserBracket p {
     margin-top: 10px;
 }

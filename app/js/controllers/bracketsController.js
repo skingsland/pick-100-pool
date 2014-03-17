@@ -19,6 +19,7 @@ angular.module('myApp.controllers').controller('BracketsController',
         $scope.selectTeamsGridOptions = {
             data: 'teams',
             selectedItems: $scope.selectedTeams,
+            rowHeight: 25,
             columnDefs: [
                 {field:'seed', displayName:'Seed', width:60},
                 {field:'full_name', displayName:'Name'},
@@ -33,6 +34,7 @@ angular.module('myApp.controllers').controller('BracketsController',
             data: 'teamsWithScores',
             enableRowSelection: false,
             headerRowHeight: 50, // allow room for the <br/>
+            rowHeight: 25,
             columnDefs: buildColumnDefsForBracketGrid(),
             showFooter: true,
             footerRowHeight: 30,
@@ -117,6 +119,7 @@ angular.module('myApp.controllers').controller('BracketsController',
 
             $scope.teamsWithScores = [];
             $scope.totalPerRound = [];
+            $scope.sumOfPoints = 0;
 
             bracket.$child('ownerId').$getRef().once('value', function(ownerId) {
                 userService.findById(ownerId.val()).$bind($scope, 'owner');
@@ -125,23 +128,32 @@ angular.module('myApp.controllers').controller('BracketsController',
             bracket.$child('teams').$on('child_added', function(teamSnapshot) {
                 var teamId = teamSnapshot.snapshot.value;
                 var teamRef = teamService.findById(teamId);
-                $scope.teamsWithScores.push(teamRef);
 
+                // use $on('loaded') because we only need to get a team's seed # once; it will never change
                 teamRef.$on('loaded', function(team) {
                     $scope.sumOfSeeds += team.seed;
                 });
+                $scope.teamsWithScores.push(teamRef);
 
-                // watch for changes to the team's points, which will update when new games finish
+                // watch for changes to the team's points, which will update when new games finish by adding children to 'rounds'
                 teamRef.$child('rounds').$on('child_added', function(roundSnapshot) {
                     var round = roundSnapshot.snapshot.name;
                     var points = roundSnapshot.snapshot.value;
 
+                    // update the points-per-round, for column totals
                     if (!$scope.totalPerRound[round]) {
                         $scope.totalPerRound[round] = 0;
                     }
                     $scope.totalPerRound[round] += points;
 
-                    // TODO: set totalPoints on the team (maybe as a function, or a watch?)
+                    // update the points-per-team, for row totals
+                    if (!teamRef.totalPoints) {
+                        teamRef.totalPoints = 0;
+                    }
+                    teamRef.totalPoints += points;
+
+                    // update the grand total
+                    $scope.sumOfPoints += points;
                 });
             });
         };
@@ -183,15 +195,16 @@ angular.module('myApp.controllers').controller('BracketsController',
                 {field:'full_name', displayName:'Picks'},
                 {field:'seed', displayName:'Seed', width:60}
             ];
+
             for (var i = 1; i <= 6; i++) {
                 var points = Math.pow(2, i - 1);
 
-                // TODO: apply style class with <span> to make the Round # stand out more than the 2nd line
                 columnDefs.push({field: 'rounds[' + i + ']',
                                  displayName: 'Round ' + i + '<br/><small>Seed # + ' + points + ' point' + (points > 1 ? 's' : '') + '</small>'
                 });
             }
-//                {field:'totalPoints', displayName:'Team Total'},
+
+            columnDefs.push({field:'totalPoints', displayName:'Team Total'});
             return columnDefs;
         }
 
@@ -209,7 +222,11 @@ angular.module('myApp.controllers').controller('BracketsController',
                 + '                       <span class="ngLabel">{{totalPerRound[' + i + ']}}</span>'
                 + '                   </div>';
             }
-            footerTemplate += '   </div>';
+
+            footerTemplate += '       <div class="ngFooterCell col7 colt7">'
+            + '                           <span class="ngLabel">{{sumOfPoints}}</span>'
+            + '                       </div>'
+            + '                   </div>';
 
             return footerTemplate;
         }

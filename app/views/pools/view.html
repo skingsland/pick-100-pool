@@ -1,10 +1,9 @@
 <div data-ng-init="findOnePool(); findBrackets();" ng-cloak>
-  <h2>{{ pool.name }}</h2>
-  <p><strong>Manager: </strong>{{ manager.name }}</p>
-  <p><a href="#/pools">View all pools</a></p>
-  <div data-ng-show="!currentUserBrackets">
-    <p><a href="#/pools/{{ pool.$id }}/brackets/create">Create a bracket</a></p>
-  </div>
+        <h2 style="display: inline-block; padding-right: 30px">{{ pool.name }}</h2>
+        <strong>Manager: </strong>{{ manager.name }}
+        <br/>
+        <a class="btn btn-default" href="#/pools" style="margin-right: 20px">View all pools</a>
+        <a class="btn btn-primary" href="#/pools/{{ pool.$id }}/brackets/create" data-ng-show="!currentUserBrackets">Create a bracket</a>
 
   <div ng-repeat="bracketId in currentUserBrackets" class="currentUserBracket">
     <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
