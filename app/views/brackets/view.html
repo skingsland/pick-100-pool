@@ -2,4 +2,8 @@
   <h3>{{ bracket.name }}</h3>
   <span class="bracketOwner">by {{ owner.name }}</span>
   <div class="bracketGrid" ng-grid="bracketGridOptions"></div>
+
+  <p ng-show-auth="'login'" ng-show="auth.user.uid === bracket.ownerId" class="currentUserBracket">
+    <a class="btn btn-primary" href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Edit your bracket</a>
+  </p>
 </div>

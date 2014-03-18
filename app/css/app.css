@@ -63,8 +63,7 @@ body {
     text-align: center;
 }
 
-/* styles for the pool view page */
-.currentUserBracket p {
+p.currentUserBracket {
     margin-top: 10px;
 }
 

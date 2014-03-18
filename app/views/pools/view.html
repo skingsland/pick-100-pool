@@ -1,14 +1,15 @@
 <div data-ng-init="findOnePool(); findBrackets();">
-        <h2 style="display: inline-block; padding-right: 30px">{{ pool.name }}</h2>
-        <strong>Manager: </strong>{{ manager.name }}
-        <br/>
-        <a class="btn btn-default" href="#/pools" style="margin-right: 20px">View all pools</a>
-        <a class="btn btn-primary" href="#/pools/{{ pool.$id }}/brackets/create" data-ng-show="!currentUserBrackets">Create a bracket</a>
+  <h2 style="display: inline-block; padding-right: 30px">{{ pool.name }}</h2>
+  <strong>Manager: </strong>{{ manager.name }}
+  <br/>
+  <a class="btn btn-default" href="#/pools" style="margin-right: 20px">View all pools</a>
 
-  <div ng-repeat="bracketId in currentUserBrackets" class="currentUserBracket">
-    <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
-    <p><a class="btn btn-primary" href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Edit your bracket</a></p>
-  </div>
+  <a class="btn btn-primary" href="#/pools/{{ pool.$id }}/brackets/create"
+     data-ng-show="currentUserHasLoaded && !currentUserBracketId">
+    Create a bracket
+  </a>
 
-  <div ng-repeat="bracketId in bracketIds" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
+  <!-- TODO: use currentUserBracketId to display the current user's bracket at the top, and find a way to remove it from the pool.brackets list -->
+
+  <div ng-repeat="bracketId in pool.brackets" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
 </div>

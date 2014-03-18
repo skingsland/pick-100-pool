@@ -5,7 +5,8 @@ angular.module('myApp.controllers').controller('PoolsController',
     function($scope,   $routeParams,   $location,   poolService,   bracketService,   syncData,   waitForAuth) {
         $scope.poolId = $routeParams.poolId;
         $scope.pool = {};
-        $scope.currentUserBrackets = null;
+        // need to default this to true so the 'Create bracket' button will be hidden by default, instead of shown briefly
+        $scope.currentUserHasLoaded = false;
 
         $scope.findPools = function () {
             $scope.pools = poolService.findAll();
@@ -19,32 +20,18 @@ angular.module('myApp.controllers').controller('PoolsController',
                 $pool.$getRef().child('managerId').once('value', function(managerId) {
                     syncData(['users', managerId.val()]).$bind($scope, 'manager');
                 });
-            }
-        };
-        $scope.findBrackets = function() {
-            waitForAuth.then(function() {
-                var $brackets = bracketService.findBracketIdsByPool($scope.poolId);
-                $brackets.$on('value', function(bracketsSnapshot) {
-                    var brackets = bracketsSnapshot.snapshot.value;
 
-                    if ($scope.auth.user && brackets != null) {
-                        var userId = $scope.auth.user.uid;
-
-                        // does the user have a bracket in this pool? If so, save a reference to it
-                        if (brackets.hasOwnProperty(userId)) {
-                            //$scope.currentUserBracketId = brackets[userId];
-                            // an awful, awful hack: ng-init won't delay scope variable resolution long enough to pick up this value,
-                            // so I'm assigning it to an array and using ng-repeat instead (even though there can be one 1 user's bracket).
-                            $scope.currentUserBrackets = [brackets[userId]];
-
-                            // remove the current user's bracket from the list of all brackets,
-                            // so it's not displayed again in the list of all brackets
-                            delete brackets[userId];
+                // sets the bracketId for the currently-logged-in user, or null if there isn't one
+                $pool.$child('brackets').$getRef().once('value', function(brackets) {
+                    // we can't get the id of the currently-logged in user until their auth info has synced from firebase
+                    waitForAuth.then(function() {
+                        if ($scope.auth.user) {
+                            $scope.currentUserBracketId = brackets.val()[$scope.auth.user.uid];
                         }
-                    }
-                    $scope.bracketIds = brackets;
+                        $scope.currentUserHasLoaded = true;
+                    });
                 });
-            });
+            }
         };
         $scope.createPool = function () {
             var poolId = poolService.create($scope.pool, $scope.auth.user, function (err) {
