@@ -29,6 +29,5 @@
   },
   "_source": "git://github.com/firebase/angularFire.git",
   "_target": "~0.7.0",
-  "_originalSource": "angularfire",
-  "_direct": true
+  "_originalSource": "angularfire"
 }
