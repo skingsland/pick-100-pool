@@ -1,4 +1,4 @@
-<div data-ng-init="findAllTeams().then(getBracketWithScores)" class="viewBracket" data-ng-controller="BracketsController">
+<div data-ng-init="findAllTeams().then(getBracketWithScores)" class="viewBracket" data-ng-controller="ViewBracketController">
   <h3>{{ bracket.name }}</h3>
   <span class="bracketOwner">by {{ owner.name }}</span>
   <div class="bracketGrid" ng-grid="bracketGridOptions"></div>
