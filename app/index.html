@@ -11,14 +11,12 @@
   <!-- use latest unreleased version 2.0.8, because 2.0.7 hasn't been updated and isn't getting bug fixes -->
   <link href="css/thirdParty/ng-grid-2.0.8.min.css" rel="stylesheet">
 </head>
-<!-- using ng-cloak on the body element causes ng-grid directive to add an unwanted 100px empty column -->
-<body>
+<body data-ng-cloak>
 
 <header data-ng-include="'views/header.html'"></header>
 
   <section class="content">
     <section class="container">
-      <!-- Using ng-view, instead of ng-include, breaks email address auto-complete selection in the header login/register forms. -->
       <div data-ng-view></div>
     </section>
   </section>
@@ -50,10 +48,7 @@
   <script src="js/service.firebase.js"></script>
   <script src="js/service.changeEmail.js"></script>
   <script src="js/module.simpleLoginTools.js"></script>
-
-  <!-- Some part of the JS code in this file breaks email address autocomplete selection in the header login/register forms. -->
   <script src="js/module.routeSecurity.js"></script>
-
   <script src="js/controllers/bracketsController.js"></script>
   <script src="js/controllers/headerController.js"></script>
   <script src="js/controllers/poolsController.js"></script>
