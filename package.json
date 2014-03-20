@@ -1,0 +1,15 @@
+{
+  "name": "pick-13-pool",
+  "version": "0.0.1",
+  "description": "The web server for pick100pool.com, which has backend logic to download game info and calculate scores",
+  "main": "server.js",
+  "repository": "https://github.com/skingsland/pick-100-pool",
+  "author": "skingsland",
+  "dependencies": {
+    "express": "~3.2.4",
+    "restler": "~3.1.0",
+    "firebase": "~1.0.2",
+    "firebase-token-generator": "~0.1.4",
+    "q": "~1.0.0"
+  }
+}
