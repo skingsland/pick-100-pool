@@ -10,5 +10,6 @@ Deployment to heroku:
 
 * `git commit ...`
 * `git push heroku master`
+* `heroku logs --tail`
 
 https://devcenter.heroku.com/articles/git

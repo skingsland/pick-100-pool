@@ -53,30 +53,12 @@ function downloadGamesAndUpdateFirebase() {
         return deferred.promise;
     }
 
-    function getEventsUrlForDate(lastRunDate, currentDate) {
-        var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?game_date.in=%s,%s&conference=All+Conferences';
-
-        // the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
-        // Thus 08:00 is 4am Eastern Time, and 1am Western Time. Thus the latest starting PDT game should have finished.
-//        var startDateTime = '2014-03-21T08:00:00';
-        var startDateTime = lastRunDate;
-        // the day after the final game
-        var endDateTime = '2014-04-08T07:59:59';
-
-        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateTime, endDateTime);
-
-        console.log('lastRunDate =', lastRunDate, '| currentDate =', currentDate, '| eventsUrlForDate =', eventsUrlForDate);
-
-        return eventsUrlForDate;
-    }
-
     function downloadGamesFromAPI(lastRunDate) {
-        // strip off the milliseconds and the following "Z" (e.g. ".857Z"), by getting rid of the period (".") and everything after it
-        var currentDate = new Date().toISOString().replace(/\..+/, '');
+        var currentDate = convertDateToString(new Date());
 
         tournamentRef.update({last_run_date: currentDate});
 
-        var eventsUrlForDate = getEventsUrlForDate(lastRunDate, currentDate);
+        var eventsUrlForDate = getEventsUrlForDate(lastRunDate);
 
         var requestHeaders = {
             'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -105,6 +87,34 @@ function downloadGamesAndUpdateFirebase() {
         });
 
         return deferred.promise;
+    }
+
+    function convertDateToString(date) {
+        // strip off the milliseconds and the following "Z" (e.g. ".857Z"), by getting rid of the period (".") and everything after it
+        return date.toISOString().replace(/\..+/, '');
+    }
+
+    function getEventsUrlForDate(lastRunDateIsoString) {
+        var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?game_date.in=%s,%s&conference=All+Conferences';
+
+        // the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
+        // Thus 08:00 is 4am Eastern Time, and 1am Western Time. Thus the latest starting PDT game should have finished.
+//        var startDateTime = '2014-03-20T08:00:00';
+
+        // the start date is used to filter the game_date, but scores don't immediately appear after the game is finished,
+        // so we subtract a few hours from the last run date, to make sure we get all completed games
+        var lastRunDate = new Date(lastRunDateIsoString);
+        lastRunDate.setHours(lastRunDate.getHours() - 4);
+        var startDateIsoString = convertDateToString(lastRunDate);
+
+        // the day after the final game
+        var endDateTime = '2014-04-08T07:59:59';
+
+        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, endDateTime);
+
+        console.log('lastRunDate =', lastRunDateIsoString, '| startDateTime =', startDateIsoString, '| eventsUrlForDate =', eventsUrlForDate);
+
+        return eventsUrlForDate;
     }
 
     function updateFirebaseWithGameData(games) {
