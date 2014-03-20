@@ -4,12 +4,14 @@
   <br/>
   <a class="btn btn-default" href="#/pools" style="margin-right: 20px">View all pools</a>
 
-  <a class="btn btn-primary" href="#/pools/{{ pool.$id }}/brackets/create"
+  <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/create"
      data-ng-show="currentUserHasLoaded && !currentUserBracketId">
     Create a bracket
   </a>
 
   <!-- TODO: use currentUserBracketId to display the current user's bracket at the top, and find a way to remove it from the pool.brackets list -->
 
-  <div ng-repeat="bracketId in pool.brackets" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
+  <div ng-repeat="bracketId in pool.brackets" class="poolBracket">
+    <div ng-include="'views/brackets/view.html'"></div>
+  </div>
 </div>

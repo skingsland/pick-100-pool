@@ -1,6 +1,6 @@
 {
   "name": "angularfire",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "An officially supported AngularJS binding for Firebase.",
   "main": "angularfire.js",
   "repository": {
@@ -24,11 +24,12 @@
     "karma-script-launcher": "~0.1.0",
     "karma-firefox-launcher": "~0.1.0",
     "karma-html2js-preprocessor": "~0.1.0",
-    "karma-requirejs": "~0.1.0",
+    "karma-requirejs": "~0.2.0",
     "karma-coffee-preprocessor": "~0.1.0",
     "karma-phantomjs-launcher": "~0.1.0",
     "karma": "~0.10.4",
     "karma-chrome-launcher": "~0.1.0",
-    "protractor": "~0.12.1"
+    "protractor": "~0.12.1",
+    "lodash": "~2.4.1"
   }
 }
