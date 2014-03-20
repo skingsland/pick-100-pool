@@ -1,18 +1,16 @@
 {
-  "name": "pick-13-pool",
+  "name": "pick-100-pool",
   "version": "0.0.1",
   "homepage": "https://github.com/skingsland/pick-100-pool",
   "authors": [
-    "Stephen Kingsland"
+    "skingsland"
   ],
   "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "client/vendor"
   ],
   "dependencies": {
     "firebase": "~1.0.10",
