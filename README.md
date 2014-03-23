@@ -12,4 +12,13 @@ Deployment to heroku:
 * `git push heroku master`
 * `heroku logs --tail`
 
+Running the full app locally:
+
+* `foreman start`
+
+Running just the web server, without the back-end to fetch scores:
+
+* `npm install -g http-server`
+* `http-server client -p 5000`
+
 https://devcenter.heroku.com/articles/git

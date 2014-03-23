@@ -7,9 +7,7 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         $scope.poolId = $routeParams.poolId;
 
         // the bracketId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /bracket/1)
-        if (!$scope.bracketId) {
-            $scope.bracketId = $routeParams.bracketId;
-        }
+        $scope.bracketId = $scope.bracketId || $routeParams.bracketId;
 
         $scope.bracketGridOptions = {
             data: 'teamsWithScores',
@@ -24,7 +22,10 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 //            sortInfo: {fields: ['seed'], directions: ['asc']}
         };
 
-        $scope.findAllTeams = function () {
+        findAllTeams();
+        getBracketWithScores();
+
+        function findAllTeams () {
             var deferred = $q.defer();
 
             teamService.findAll().$on('value', function(teamsSnapshot) {
@@ -39,10 +40,11 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                 deferred.resolve();
             });
             return deferred.promise;
-        };
-        $scope.getBracketWithScores = function () {
+        }
+        function getBracketWithScores () {
             if (!$scope.bracketId) {
-                throw new Error('view bracket page requested without a bracketId!');
+                console.log(new Error('view bracket page requested without a bracketId!'));
+                return;
             }
             var bracket = bracketService.findById($scope.bracketId);
             bracket.$bind($scope, 'bracket');
@@ -75,7 +77,7 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             bracket.$child('total_bracket_points_for_round').$on('value', function(snapshot) {
                 $scope.sumOfPoints = getTotalPoints(snapshot.snapshot.value);
             })
-        };
+        }
 
         function getTotalPoints(totalPointsPerRound) {
             return _.reduce(totalPointsPerRound, function (memo, currentValue) {
@@ -84,8 +86,9 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         }
 
         function buildColumnDefsForBracketGrid() {
+            // ngGrid's minWidth property doesn't work, so set the exact width for the first columns
             var columnDefs = [
-                {field:'full_name', displayName:'Picks'},
+                {field:'full_name', displayName:'Picks', width:150},
                 {field:'seed', displayName:'Seed', width:60}
             ];
 

@@ -5,13 +5,17 @@
   <a class="btn btn-default" href="#/pools" style="margin-right: 20px">View all pools</a>
 
   <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/create"
-     data-ng-show="currentUserHasLoaded && !currentUserBracketId">
+     data-ng-show="model.currentUserHasLoaded && !model.currentUserBracketId">
     Create a bracket
   </a>
 
-  <!-- TODO: use currentUserBracketId to display the current user's bracket at the top, and find a way to remove it from the pool.brackets list -->
+  <!-- show the current logged-in user's bracket first, if they have one -->
+  <div ng-if="model.currentUserHasLoaded && model.currentUserBracketId">
+    <div ng-init="bracketId = model.currentUserBracketId" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
+  </div>
 
-  <div ng-repeat="bracketId in pool.brackets" class="poolBracket">
-    <div ng-include="'views/brackets/view.html'"></div>
+  <div ng-repeat="bracketId in pool.brackets">
+    <!-- exclude the bracket for the current logged in user, so it isn't shown twice -->
+    <div ng-if="bracketId !== model.currentUserBracketId" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 </div>

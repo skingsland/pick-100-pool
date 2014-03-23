@@ -1,6 +1,6 @@
 {
   "name": "pick-100-pool",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The web server for pick100pool.com, which has backend logic to download game info and calculate scores",
   "main": "server.js",
   "repository": "https://github.com/skingsland/pick-100-pool",
