@@ -4,14 +4,17 @@ var Q = require("q");
 var Firebase = require('firebase');
 var FirebaseTokenGenerator = require("firebase-token-generator");
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2014';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2014';
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
 var API_SITE = 'thescore';
 
+var FIREBASE_TOURNAMENT_ID = 'MarchMadness2014';
+var FIREBASE_TOURNAMENT_NAME = 'March Madness 2014';
+var TOURNAMENT_START_TIME = '2014-03-20T16:00:00'; // first game starts at 12:20pm EST; UTC is 4 hours later
+var TOURNAMENT_END_TIME = '2014-04-08T07:59:59'; // the day after the final game
+
 function downloadGamesAndUpdateFirebase() {
     // to turn on logging in the firebase client
-    //Firebase.enableLogging(true);
+//    Firebase.enableLogging(true);
 
     // this is basically a "global variable", because it's needed by several of the functions below
     var tournamentRef = getTournamentRef(loginToFirebase());
@@ -40,6 +43,9 @@ function downloadGamesAndUpdateFirebase() {
         tournamentRef.child('name').transaction(function (currentValue) {
             if (currentValue === null) return FIREBASE_TOURNAMENT_NAME;
         });
+        tournamentRef.child('start_time').transaction(function (currentValue) {
+            if (currentValue === null) return TOURNAMENT_START_TIME;
+        });
 
         return tournamentRef;
     }
@@ -53,12 +59,12 @@ function downloadGamesAndUpdateFirebase() {
         return deferred.promise;
     }
 
-    function downloadGamesFromAPI(lastRunDate) {
+    function downloadGamesFromAPI(lastRunDateIsoString) {
         var currentDate = convertDateToString(new Date());
 
         tournamentRef.update({last_run_date: currentDate});
 
-        var eventsUrlForDate = getEventsUrlForDate(lastRunDate);
+        var eventsUrlForDate = getEventsUrlForDate(lastRunDateIsoString);
 
         var requestHeaders = {
             'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -66,7 +72,7 @@ function downloadGamesAndUpdateFirebase() {
             'Accept-Language': 'en-US,en;q=0.8',
             'Connection': 'keep-alive',
             'Host': 'api.' + API_SITE + '.com',
-            'If-Modified-Since': 'Mon, 13 Jan 2014 00:13:29 GMT',
+            'If-Modified-Since': new Date(lastRunDateIsoString).toUTCString(),
             'Origin': 'http://www.' + API_SITE + '.com',
             'Referer': 'http://www.' + API_SITE + '.com/ncaab/events/day/' + currentDate + '/Top%2025',
             'User-Agent':
@@ -96,21 +102,27 @@ function downloadGamesAndUpdateFirebase() {
 
     function getEventsUrlForDate(lastRunDateIsoString) {
         var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?game_date.in=%s,%s&conference=All+Conferences';
+        var startDateIsoString;
 
         // the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
         // Thus 08:00 is 4am Eastern Time, and 1am Western Time. Thus the latest starting PDT game should have finished.
 //        var startDateTime = '2014-03-20T08:00:00';
 
-        // the start date is used to filter the game_date, but scores don't immediately appear after the game is finished,
-        // so we subtract a few hours from the last run date, to make sure we get all completed games
-        var lastRunDate = new Date(lastRunDateIsoString);
-        lastRunDate.setHours(lastRunDate.getHours() - 4);
-        var startDateIsoString = convertDateToString(lastRunDate);
+        if (lastRunDateIsoString) {
+            var lastRunDate = new Date(lastRunDateIsoString);
 
-        // the day after the final game
-        var endDateTime = '2014-04-08T07:59:59';
+            // the start date is used to filter the game_date (which is the date and time the game STARTED),
+            // but scores don't immediately appear after the game is finished,
+            // so we subtract a few hours from the last run date to make sure we get ALL completed games.
+            lastRunDate.setHours(lastRunDate.getHours() - 3);
+            startDateIsoString = convertDateToString(lastRunDate);
+        } else {
+            // else if the last run date is null, it means this is the first time we're downloading scores for this tournament.
+            // So download scores for all games in the tournament, starting just before the tourny began.
+            startDateIsoString = TOURNAMENT_START_TIME;
+        }
 
-        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, endDateTime);
+        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, TOURNAMENT_END_TIME);
 
         console.log('lastRunDate =', lastRunDateIsoString, '| startDateTime =', startDateIsoString, '| eventsUrlForDate =', eventsUrlForDate);
 
