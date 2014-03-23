@@ -9,6 +9,9 @@ var API_SITE = 'thescore';
 
 var FIREBASE_TOURNAMENT_ID = 'MarchMadness2014';
 var FIREBASE_TOURNAMENT_NAME = 'March Madness 2014';
+
+// the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
+// Thus 08:00 is 4am Eastern Time, and 1am Western Time. Thus the latest starting PDT game should have finished.
 var TOURNAMENT_START_TIME = '2014-03-20T16:00:00'; // first game starts at 12:20pm EST; UTC is 4 hours later
 var TOURNAMENT_END_TIME = '2014-04-08T07:59:59'; // the day after the final game
 
@@ -104,10 +107,6 @@ function downloadGamesAndUpdateFirebase() {
         var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?game_date.in=%s,%s&conference=All+Conferences';
         var startDateIsoString;
 
-        // the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
-        // Thus 08:00 is 4am Eastern Time, and 1am Western Time. Thus the latest starting PDT game should have finished.
-//        var startDateTime = '2014-03-20T08:00:00';
-
         if (lastRunDateIsoString) {
             var lastRunDate = new Date(lastRunDateIsoString);
 
@@ -138,6 +137,7 @@ function downloadGamesAndUpdateFirebase() {
             if (game.tournament_name === API_TOURNAMENT_NAME && getRound(game) >= 1) {
                 updateTeamInfo(game);
                 updateGameInfo(game);
+                updateBracketsWithWinningTeam(game);
                 numGamesUpdated++;
             }
         });
@@ -171,7 +171,7 @@ function downloadGamesAndUpdateFirebase() {
         if (isGameOver(game)) {
             winningTeam = getWinningTeam(game);
 
-            if(team.name === winningTeam.name) {
+            if (team.name === winningTeam.name) {
                 pointsForRound = winningTeam.points_for_round;
             }
             else {
@@ -205,6 +205,39 @@ function downloadGamesAndUpdateFirebase() {
                                        winning_team: getWinningTeam(game)});
             }
         }
+    }
+
+    function updateBracketsWithWinningTeam(game) {
+        var round = getRound(game);
+
+        if (isGameOver(game) && round) {
+            var winningTeam = getWinningTeam(game);
+
+            // find all brackets that contain the winning team, and recalculate their points for the round
+            tournamentRef.child('brackets').once('value', function (bracketsSnapshot) {
+                bracketsSnapshot.forEach(function(bracket) {
+
+                    bracket.child('teams').forEach(function(bracketTeam) {
+
+                        // if the bracket contains a team which just won the game, update the bracket's total points for this round
+                        if (winningTeam.name === bracketTeam.val()) {
+
+                            tournamentRef.child('teams').once('value', function(teamsSnapshot) {
+                                var totalBracketPointsForRound = 0;
+
+                                bracket.child('teams').forEach(function (teamId) {
+                                    var teamPointsPerRound = teamsSnapshot.child(teamId.val() + '/rounds/' + round).val();
+                                    totalBracketPointsForRound += teamPointsPerRound || 0;
+                                });
+
+                                bracket.child('total_bracket_points_for_round/' + round).ref().set(totalBracketPointsForRound);
+                            })
+                        }
+                    });
+                })
+            })
+        }
+
     }
 
     function getRound(game) {
