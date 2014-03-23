@@ -3,7 +3,7 @@
 angular.module('myApp.controllers').controller('ViewBracketController',
            ['$scope', '$routeParams', '$location', '$q', '$timeout', 'poolService', 'bracketService', 'teamService', 'userService', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
     function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   userService,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
-        $scope.sumOfSeeds = 0;
+        $scope.sumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
         $scope.poolId = $routeParams.poolId;
 
         // the bracketId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /bracket/1)
@@ -48,7 +48,6 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             bracket.$bind($scope, 'bracket');
 
             $scope.teamsWithScores = [];
-            $scope.totalPerRound = [];
             $scope.sumOfPoints = 0;
 
             bracket.$child('ownerId').$getRef().once('value', function(ownerId) {
@@ -59,22 +58,11 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                 var teamId = teamSnapshot.snapshot.value;
                 var teamRef = teamService.findById(teamId);
 
-                // use $on('loaded') because we only need to get a team's seed # once; it will never change
-                teamRef.$on('loaded', function(team) {
-                    $scope.sumOfSeeds += team.seed;
-                });
                 $scope.teamsWithScores.push(teamRef);
 
                 // watch for changes to the team's points, which will update when new games finish by adding children to 'rounds'
                 teamRef.$child('rounds').$on('child_added', function(roundSnapshot) {
-                    var round = roundSnapshot.snapshot.name;
                     var points = roundSnapshot.snapshot.value;
-
-                    // update the points-per-round, for column totals
-                    if (!$scope.totalPerRound[round]) {
-                        $scope.totalPerRound[round] = 0;
-                    }
-                    $scope.totalPerRound[round] += points;
 
                     // update the points-per-team, for row totals
                     if (!teamRef.totalPoints) {
@@ -86,7 +74,17 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                     $scope.sumOfPoints += points;
                 });
             });
+
+//            bracket.$child('total_bracket_points_for_round').$on('value', function(snapshot) {
+//                $scope.sumOfPoints = getTotalPoints(snapshot.snapshot.value);
+//            })
         };
+
+//        function getTotalPoints(totalPointsPerRound) {
+//            return totalPointsPerRound.reduce(function (accum, currentValue) {
+//                return accum + currentValue;
+//            }, 0);
+//        }
 
         function buildColumnDefsForBracketGrid() {
             var columnDefs = [
@@ -117,7 +115,7 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 
             for (var i = 1; i <= 6; i++) {
                 footerTemplate += '   <div class="ngFooterCell col' + (i+1) + ' colt' + (i+1) + '">'
-                + '                       <span class="ngLabel">{{totalPerRound[' + i + ']}}</span>'
+                + '                       <span class="ngLabel">{{bracket.total_bracket_points_for_round[' + i + ']}}</span>'
                 + '                   </div>';
             }
 
