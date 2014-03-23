@@ -26,7 +26,7 @@ angular.module('myApp.controllers').controller('PoolsController',
                 });
 
                 // sets the bracketId for the currently-logged-in user, or null if there isn't one
-                $pool.$child('brackets').$on('loaded', function(brackets) {
+                $pool.$child('brackets').$on('value', function(brackets) {
                     // we can't get the id of the currently-logged in user until their auth info has synced from firebase
                     waitForAuth.then(function() {
                         if ($scope.auth.user && brackets) {

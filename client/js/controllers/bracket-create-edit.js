@@ -98,6 +98,9 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 return selectedTeam.id;
             });
 
+            // tell the server to (re)calculate points per round for the bracket, which is needed if the tournament already started
+            $scope.bracket.isNewOrUpdated = true;
+
             if ($scope.isNewBracket) {
                 bracketService.create($scope.bracket).then(function (bracketId) {
                     if(!!bracketId) {

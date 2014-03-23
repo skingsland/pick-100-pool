@@ -16,15 +16,7 @@ var TOURNAMENT_START_TIME = '2014-03-20T16:00:00'; // first game starts at 12:20
 var TOURNAMENT_END_TIME = '2014-04-08T07:59:59'; // the day after the final game
 
 function downloadGamesAndUpdateFirebase() {
-    // to turn on logging in the firebase client
-//    Firebase.enableLogging(true);
-
-    // this is basically a "global variable", because it's needed by several of the functions below
-    var tournamentRef = getTournamentRef(loginToFirebase());
-
-    getLastRunDate()
-        .then(downloadGamesFromAPI)
-        .then(updateFirebaseWithGameData);
+    var tournamentRef;
 
     // login and return a ref to the root of the firebase
     function loginToFirebase() {
@@ -141,6 +133,9 @@ function downloadGamesAndUpdateFirebase() {
                 numGamesUpdated++;
             }
         });
+
+        updateNewAndChangedBrackets();
+
         console.log('Finished updating ' + numGamesUpdated + ' games in firebase, but the aysnchronous writes might still be happening in the background.');
     }
 
@@ -222,23 +217,52 @@ function downloadGamesAndUpdateFirebase() {
                         // if the bracket contains a team which just won the game, update the bracket's total points for this round
                         if (winningTeam.name === bracketTeam.val()) {
 
-                            tournamentRef.child('teams').once('value', function(teamsSnapshot) {
-                                var totalBracketPointsForRound = 0;
-
-                                bracket.child('teams').forEach(function (teamId) {
-                                    var teamPointsPerRound = teamsSnapshot.child(teamId.val() + '/rounds/' + round).val();
-                                    totalBracketPointsForRound += teamPointsPerRound || 0;
-                                });
-
-                                bracket.child('total_bracket_points_for_round/' + round).ref().set(totalBracketPointsForRound);
+                            tournamentRef.child('teams').once('value', function(teams) {
+                                updateBracketPointsForRound(bracket, round, teams)
                             })
                         }
                     });
                 })
             })
         }
-
     }
+
+    function updateBracketPointsForRound(bracket, round, teams) {
+        var totalBracketPointsForRound = 0;
+
+        bracket.child('teams').forEach(function (teamId) {
+            var teamPointsForRound = teams.child(teamId.val() + '/rounds/' + round).val();
+            totalBracketPointsForRound += teamPointsForRound || 0;
+        });
+
+        bracket.child('total_bracket_points_for_round/' + round).ref().set(totalBracketPointsForRound);
+    }
+
+    function updateNewAndChangedBrackets() {
+        tournamentRef.child('brackets').once('value', function (bracketsSnapshot) {
+
+            bracketsSnapshot.forEach(function (bracketSnapshot) {
+                var bracket = bracketSnapshot.val();
+
+                if (bracket.isNewOrUpdated) {
+                    console.log('updating points for new/changed bracket:', bracket.name);
+
+                    // we have to (re)calculate the points for each round
+                    tournamentRef.child('teams').once('value', function(teams) {
+
+                        tournamentRef.child('rounds').on('child_added', function (round) {
+                            updateBracketPointsForRound(bracketSnapshot, round.name(), teams);
+                        })
+                    });
+
+                    // clear the flag when we're done, so we don't have to do this update next time
+                    bracketSnapshot.child('isNewOrUpdated').ref().remove();
+                }
+            });
+        });
+    }
+
+    // HELPER FUNCTIONS
 
     function getRound(game) {
         // the play-in game is returned as round 1 from the API, so we need to subtract 1 from the round number,
@@ -275,10 +299,21 @@ function downloadGamesAndUpdateFirebase() {
     function getSeedForAwayTeam(game) {
         return game.away_ranking || game.top_25_rankings.away;
     }
+
+
+    // to turn on logging in the firebase client
+//    Firebase.enableLogging(true);
+
+    // this is basically a "global variable", because it's needed by several of the functions above
+    tournamentRef = getTournamentRef(loginToFirebase());
+
+    getLastRunDate()
+        .then(downloadGamesFromAPI)
+        .then(updateFirebaseWithGameData);
 }
 
 try {
-    // are we running in standalone mode, i.e. "node theScore.js", or being called as node module?
+    // are we running in standalone mode, i.e. "node theScore.js"
     if (require.main == module) {
         downloadGamesAndUpdateFirebase();
 
@@ -288,6 +323,7 @@ try {
             process.exit();
         }, 15000);
     } else {
+        // else we're being called as node module
         exports.downloadGamesAndUpdateFirebase = downloadGamesAndUpdateFirebase;
     }
 } catch (err) {
