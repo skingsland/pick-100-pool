@@ -48,7 +48,6 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             bracket.$bind($scope, 'bracket');
 
             $scope.teamsWithScores = [];
-            $scope.sumOfPoints = 0;
 
             bracket.$child('ownerId').$getRef().once('value', function(ownerId) {
                 userService.findById(ownerId.val()).$bind($scope, 'owner');
@@ -69,22 +68,20 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                         teamRef.totalPoints = 0;
                     }
                     teamRef.totalPoints += points;
-
-                    // update the grand total
-                    $scope.sumOfPoints += points;
                 });
             });
 
-//            bracket.$child('total_bracket_points_for_round').$on('value', function(snapshot) {
-//                $scope.sumOfPoints = getTotalPoints(snapshot.snapshot.value);
-//            })
+            // when a column total changes (total points per round), update the grand total (points for the whole bracket)
+            bracket.$child('total_bracket_points_for_round').$on('value', function(snapshot) {
+                $scope.sumOfPoints = getTotalPoints(snapshot.snapshot.value);
+            })
         };
 
-//        function getTotalPoints(totalPointsPerRound) {
-//            return totalPointsPerRound.reduce(function (accum, currentValue) {
-//                return accum + currentValue;
-//            }, 0);
-//        }
+        function getTotalPoints(totalPointsPerRound) {
+            return _.reduce(totalPointsPerRound, function (memo, currentValue) {
+                return memo + currentValue;
+            }, 0);
+        }
 
         function buildColumnDefsForBracketGrid() {
             var columnDefs = [
