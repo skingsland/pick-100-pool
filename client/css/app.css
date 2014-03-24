@@ -67,6 +67,10 @@ p.currentUserBracket {
     margin-top: 10px;
 }
 
+.allBracketsGrid {
+    border: 1px solid rgb(212,212,212);
+    margin-top: 20px;
+}
 
 
 

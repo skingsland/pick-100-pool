@@ -6,10 +6,6 @@ angular.module('myApp.services').service('bracketService',
         var allPools = tournamentRef.$child('pools');
         var allBrackets = tournamentRef.$child('brackets');
 
-        this.findAll = function() {
-            return allBrackets;
-        };
-
         this.findById = function(bracketId) {
           return allBrackets.$child(bracketId);
         };
@@ -18,7 +14,6 @@ angular.module('myApp.services').service('bracketService',
             var pool = allPools.$child(poolId);
             return pool.$child('brackets');
         };
-
 
         this.create = function(bracket) {
             var deferred = $q.defer();

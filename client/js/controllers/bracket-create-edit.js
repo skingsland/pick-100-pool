@@ -27,7 +27,6 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 {field:'conference', displayName:'Conference'}
             ],
             sortInfo: {fields: ['seed'], directions: ['asc']}
-//            plugins: [new ngGridFlexibleHeightPlugin()]
         };
 
         $scope.findAllTeams = function () {
