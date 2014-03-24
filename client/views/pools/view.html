@@ -1,4 +1,4 @@
-<div data-ng-init="findOnePool(); findBrackets();">
+<div data-ng-init="findOnePool()">
   <div class="row">
     <div class="col-md-6">
       <h2 style="display: inline-block; padding-right: 30px">{{ pool.name }}</h2>
@@ -21,12 +21,9 @@
     <div ng-init="bracketId = model.currentUserBracketId" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 
-  <!-- having this check here prevents a NPE from setDraggables in ng-grid: "Cannot call method 'find' of null" -->
-  <div ng-if="model.currentUserHasLoaded">
-    <!-- the orderByPriority filter converts the object to an array of bracketIds, and the excludeBracketForCurrentUser is used
-         to remove the bracket for the logged-in user from the list, since it's displayed above and we don't want to repeat it. -->
-    <div ng-repeat="bracketId in pool.brackets | orderByPriority | excludeBracketForCurrentUser:model.currentUserBracketId">
-      <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
-    </div>
+  <!-- the orderByPriority filter converts the object to an array of bracketIds, and the excludeBracketForCurrentUser is used
+       to remove the bracket for the logged-in user from the list, since it's displayed above and we don't want to repeat it. -->
+  <div ng-repeat="bracketId in pool.brackets | orderByPriority | excludeBracketForCurrentUser:model">
+    <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 </div>

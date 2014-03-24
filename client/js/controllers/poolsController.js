@@ -55,9 +55,15 @@ angular.module('myApp.controllers').controller('PoolsController',
     }
 ])
 .filter('excludeBracketForCurrentUser', function() {
-    return function(bracketIds, currentUserBracketId) {
-        return _.filter(bracketIds, function(bracketId) {
-            return bracketId !== currentUserBracketId;
-        });
+    return function(bracketIds, model) {
+        // if the user is logged in, and they've created a bracket in this pool, filter it out of the list
+        if (model.currentUserHasLoaded && model.currentUserBracketId) {
+            return _.filter(bracketIds, function (bracketId) {
+                return bracketId !== model.currentUserBracketId;
+            });
+        } else {
+            // otherwise just return the unfiltered list
+            return bracketIds;
+        }
     };
 });
