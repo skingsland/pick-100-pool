@@ -21,7 +21,7 @@ angular.module('myApp.routes', ['ngRoute'])
 
           .when('/pools',               { templateUrl: 'views/pools/list.html', controller: 'PoolsController', authRequired: false })
           .when('/pools/create',        { templateUrl: 'views/pools/edit.html', controller: 'PoolsController', authRequired: true })
-          .when('/pools/:poolId',       { templateUrl: 'views/pools/view.html', controller: 'PoolsController', authRequired: false })
+          .when('/pools/:poolId',       { templateUrl: 'views/pools/view.html', controller: 'ViewPoolController', authRequired: false })
           .when('/pools/:poolId/edit',  { templateUrl: 'views/pools/edit.html', controller: 'PoolsController', authRequired: true })
 
           .when('/pools/:poolId/brackets/create', {
