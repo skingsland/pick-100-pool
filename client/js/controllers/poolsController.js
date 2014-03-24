@@ -25,15 +25,18 @@ angular.module('myApp.controllers').controller('PoolsController',
                     syncData(['users', managerId.val()]).$bind($scope, 'manager');
                 });
 
-                // sets the bracketId for the currently-logged-in user, or null if there isn't one
-                $pool.$child('brackets').$on('value', function(brackets) {
-                    // we can't get the id of the currently-logged in user until their auth info has synced from firebase
-                    waitForAuth.then(function() {
-                        if ($scope.auth.user && brackets) {
-                            $scope.model.currentUserBracketId = brackets[$scope.auth.user.uid];
-                        }
+                // we can't get the id of the currently-logged-in user until their auth info has synced from firebase
+                waitForAuth.then(function() {
+                    // set the bracketId for the currently-logged-in user, if there is one
+                    if ($scope.auth.user) {
+                        var currentUserBracketId = $pool.$child('brackets').$child($scope.auth.user.uid);
+
+                        currentUserBracketId.$bind($scope, 'model.currentUserBracketId').then(function() {
+                            $scope.model.currentUserHasLoaded = true;
+                        });
+                    } else {
                         $scope.model.currentUserHasLoaded = true;
-                    });
+                    }
                 });
             }
         };
@@ -50,4 +53,11 @@ angular.module('myApp.controllers').controller('PoolsController',
             poolService.removePool(poolId);
         };
     }
-]);
+])
+.filter('excludeBracketForCurrentUser', function() {
+    return function(bracketIds, currentUserBracketId) {
+        return _.filter(bracketIds, function(bracketId) {
+            return bracketId !== currentUserBracketId;
+        });
+    };
+});

@@ -10,12 +10,16 @@
   </a>
 
   <!-- show the current logged-in user's bracket first, if they have one -->
-  <div ng-if="model.currentUserHasLoaded && model.currentUserBracketId">
+  <div ng-if="model.currentUserBracketId">
     <div ng-init="bracketId = model.currentUserBracketId" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 
-  <div ng-repeat="bracketId in pool.brackets">
-    <!-- exclude the bracket for the current logged in user, so it isn't shown twice -->
-    <div ng-if="bracketId !== model.currentUserBracketId" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
+  <!-- having this check here prevents a NPE from setDraggables in ng-grid: "Cannot call method 'find' of null" -->
+  <div ng-if="model.currentUserHasLoaded">
+    <!-- the orderByPriority filter converts the object to an array of bracketIds, and the excludeBracketForCurrentUser is used
+         to remove the bracket for the logged-in user from the list, since it's displayed above and we don't want to repeat it. -->
+    <div ng-repeat="bracketId in pool.brackets | orderByPriority | excludeBracketForCurrentUser:model.currentUserBracketId">
+      <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
+    </div>
   </div>
 </div>
