@@ -12,7 +12,7 @@
       </a>
     </div>
     <div class="col-md-3 col-md-offset-3" ng-if="pool.brackets">
-      <div class="allBracketsGrid" ng-include="'views/brackets/list.html'"></div>
+      <div ng-init="poolId = model.poolId" ng-include="'views/brackets/list.html'"></div>
     </div>
   </div>
 

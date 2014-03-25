@@ -46,7 +46,7 @@ body {
 .bracketGrid .ngFooterCell {
     display: inline-block;
     /* I can't find where this is happening, but for some reason ngFooterCell is getting a 4px right margin added to it,
-       which messes up the alignment between the footer and the rest of the table. So in my very first CSS hack every,
+       which messes up the alignment between the footer and the rest of the table. So in my very first CSS hack ever,
        I am correcting for the extra space by explicitly removing it. */
     margin-right: -4px;
     /* This copies the same padding that the ngCell elements use in the grid. */
@@ -74,10 +74,6 @@ p.currentUserBracket {
 
 
 
-.hide {
-   display: none;
-}
-
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -101,14 +97,6 @@ p.currentUserBracket {
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
-}
-
-p.status {
-   color: red;
-}
-
-p.status.good, p.good {
-   color: green;
 }
 
 form label {
