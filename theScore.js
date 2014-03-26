@@ -229,13 +229,19 @@ function downloadGamesAndUpdateFirebase() {
 
     function updateBracketPointsForRound(bracket, round, teams) {
         var totalBracketPointsForRound = 0;
+        var totalBracketPoints = 0;
 
         bracket.child('teams').forEach(function (teamId) {
             var teamPointsForRound = teams.child(teamId.val() + '/rounds/' + round).val();
             totalBracketPointsForRound += teamPointsForRound || 0;
         });
-
         bracket.child('total_bracket_points_for_round/' + round).ref().set(totalBracketPointsForRound);
+
+        // now recalculate the bracket's *total* points
+        bracket.child('total_bracket_points_for_round').forEach(function (pointsForRound) {
+            totalBracketPoints += pointsForRound.val() || 0;
+        });
+        bracket.child('totalPoints').ref().set(totalBracketPoints);
     }
 
     function updateNewAndChangedBrackets() {

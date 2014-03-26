@@ -25,17 +25,11 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             return;
         }
 
+        // any time a new bracket is added to the pool's list, add the full bracket object to the scope
         bracketService.findBracketIdsByPool($scope.poolId).$on('child_added', function(bracketId) {
+            var bracket = bracketService.findById(bracketId.snapshot.value);
 
-            bracketService.findById(bracketId.snapshot.value).$on('value', function(bracketSnapshot) {
-                var bracket = bracketSnapshot.snapshot.value;
-
-                bracket.totalPoints = _.reduce(bracket.total_bracket_points_for_round, function(memo, currentValue) {
-                    return memo + currentValue;
-                }, 0);
-
-                $scope.allBracketsInPool.push(bracket);
-            })
+            $scope.allBracketsInPool.push(bracket);
         })
     }
 ]);
