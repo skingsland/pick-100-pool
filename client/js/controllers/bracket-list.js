@@ -30,6 +30,16 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             var bracket = bracketService.findById(bracketId.snapshot.value);
 
             $scope.allBracketsInPool.push(bracket);
+        });
+
+        // when a bracket is removed, remove it from the backing array
+        bracketService.findBracketIdsByPool($scope.poolId).$getRef().on('child_removed', function(bracketId) {
+            for (var i in $scope.allBracketsInPool) {
+                if ($scope.allBracketsInPool[i].$id === bracketId.val()) {
+                    $scope.allBracketsInPool.splice(i, 1);
+                    break;
+                }
+            }
         })
     }
 ]);
