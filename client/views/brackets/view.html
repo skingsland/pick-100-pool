@@ -3,7 +3,12 @@
   <span class="bracketOwner">by {{ owner.name }}</span>
   <div class="bracketGrid" ng-grid="bracketGridOptions"></div>
 
-  <p ng-show-auth="'login'" ng-show="auth.user.uid === bracket.ownerId" class="currentUserBracket">
-    <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Edit your bracket</a>
-  </p>
+  <div ng-show-auth="'login'" ng-show="auth.user.uid === bracket.ownerId" class="row currentUserBracket">
+    <div class="col-md-2">
+      <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Edit your bracket</a>
+    </div>
+    <div class="col-md-2">
+      <button ng-click="removeBracket()" class="btn btn-danger">Remove bracket</button>
+    </div>
+  </div>
 </div>

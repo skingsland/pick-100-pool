@@ -18,7 +18,10 @@ function ngGridFlexibleHeightPlugin (opts) {
                 }
             }
 
-            var newViewportHeight = naturalHeight + 2;
+            // the original value was "naturalHeight + 2", but that wasn't enough to prevent the scroll bar from appearing,
+            // so I bumped it up to +5.
+            var newViewportHeight = naturalHeight + 5;
+
             if (!self.scope.baseViewportHeight || self.scope.baseViewportHeight !== newViewportHeight) {
                 self.grid.$viewport.css('height', newViewportHeight + 'px');
                 self.grid.$root.css('height', (newViewportHeight + extraHeight) + 'px');

@@ -22,6 +22,11 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 //            sortInfo: {fields: ['seed'], directions: ['asc']}
         };
 
+        $scope.removeBracket = function() {
+            bracketService.removeBracket($scope.bracketId);
+            $scope.$destroy();
+        };
+
         findAllTeams();
         getBracketWithScores();
 
@@ -52,7 +57,10 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             $scope.teamsWithScores = [];
 
             bracket.$child('ownerId').$getRef().once('value', function(ownerId) {
-                userService.findById(ownerId.val()).$bind($scope, 'owner');
+                // this will be null immediately after the bracket has been deleted
+                if (ownerId.val()) {
+                    userService.findById(ownerId.val()).$bind($scope, 'owner');
+                }
             });
 
             bracket.$child('teams').$on('child_added', function(teamSnapshot) {

@@ -103,19 +103,19 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             if ($scope.isNewBracket) {
                 bracketService.create($scope.bracket).then(function (bracketId) {
                     if(!!bracketId) {
-                        // after the bracket was successfully created, send the user back to the pool overview page,
-                        // where they can see their bracket at the top of the page
-                        $location.path('/pools/' + $scope.poolId);
+                        afterSuccessfulSave()
                     }
                 });
             } else {
-                $scope.bracket.$save().then(function () {
-                    // after the bracket was successfully updated, send the user back to the pool overview page,
-                    // where they can see their bracket at the top of the page
-                    $location.path('/pools/' + $scope.poolId);
-                });
+                $scope.bracket.$save().then(afterSuccessfulSave);
             }
         };
+
+        function afterSuccessfulSave() {
+            // after the bracket was successfully updated, send the user back to the pool overview page,
+            // where they can see their bracket at the top of the page
+            $location.path('/pools/' + $scope.poolId);
+        }
 
         function getSumOfSeeds(teams) {
             return teams.reduce(function (accum, currentValue) {

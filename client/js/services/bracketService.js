@@ -22,32 +22,29 @@ angular.module('myApp.services').service('bracketService',
             allBrackets.$add(bracket).then(function (newBracketRef) {
                 var bracketId = newBracketRef.name();
 
-                // add the bracket id to the list of brackets for the pool, and for the user
+                // add the bracket id to the list of brackets for the pool
                 var pool = allPools.$child(bracket.poolId);
                 // key the bracket by the owner's user id, to allow for easy lookup of the current user's bracket in the pool
                 pool.$child('brackets').$child(bracket.ownerId).$set(bracketId);
-
-                // TODO: saving the bracket in the user record is not useful if we don't know what tournament it belongs to,
-                // (because we can't load teams without that), and maybe which pool as well?
-//                var user = userService.findById(bracket.ownerId);
-//                user.$child('brackets').$add(bracketId);
 
                 deferred.resolve(bracketId);
             });
             return deferred.promise;
         };
 
-        /*
-         return {
-         , removeBracket: function(bracketId) {
-         var bracket = this.find(bracketId);
-         bracket.once('value', function(data) {
-         FireRef.pools().child('/'+data.val().poolId).child('/brackets/'+bracketId).remove();
-         FireRef.users().child('/'+data.val().ownerId).child('/brackets/'+bracketId).remove();
-         })
-         bracket.remove();
-         return;
-         }
-         };
-*/
-}]);
+        this.removeBracket = function (bracketId) {
+            console.log('about to remove bracketId ' + bracketId);
+
+            var $bracket = this.findById(bracketId);
+
+            // first remove the bracket from the list of brackets in the pool
+            $bracket.$getRef().once('value', function (snapshot) {
+                var bracket = snapshot.val();
+                var bracketRefToRemove = allPools.$child(bracket.poolId).$child('brackets').$child(bracket.ownerId);
+                bracketRefToRemove.$remove();
+            });
+
+            // then remove the actual bracket itself
+            $bracket.$remove();
+        };
+    }]);
