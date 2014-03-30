@@ -71,6 +71,12 @@ body {
     border: 1px solid rgb(212,212,212);
     margin-top: 20px;
 }
+.allBracketsGrid .ngCell {
+    text-align: right;
+}
+.allBracketsGrid .col0 {
+    text-align: left;
+}
 
 
 
