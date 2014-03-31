@@ -14,6 +14,11 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             enableRowSelection: false,
             headerRowHeight: 50, // allow room for the <br/>
             rowHeight: 25,
+            rowTemplate:
+                "<div ng-style=\"{ 'cursor': row.cursor }\" ng-repeat=\"col in renderedColumns\" ng-class=\"[col.colIndex(), row.getProperty('is_eliminated') ? 'eliminated' : '']\" class=\"ngCell {{col.cellClass}}\">\n" +
+                "\t<div class=\"ngVerticalBar\" ng-style=\"{height: rowHeight}\" ng-class=\"{ ngVerticalBarVisible: !$last }\">&nbsp;</div>\n" +
+                "\t<div ng-cell></div>\n" +
+                "</div>",
             columnDefs: buildColumnDefsForBracketGrid(),
             showFooter: true,
             footerRowHeight: 30,
@@ -104,7 +109,10 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                 var points = Math.pow(2, i - 1);
 
                 columnDefs.push({field: 'rounds[' + i + ']',
-                                 displayName: 'Round ' + i + '<br/><small>Seed # + ' + points + ' point' + (points > 1 ? 's' : '') + '</small>'
+                                 displayName: 'Round ' + i + '<br/><small>Seed # + ' + points + ' point' + (points > 1 ? 's' : '') + '</small>',
+                                 cellTemplate: '<div class="ngCellText" ng-class="[col.colIndex(), COL_FIELD ? \'won\' : \'noWin\']">'
+                                                + '<span ng-cell-text>{{COL_FIELD || \'\'}}</span>'
+                                             + '</div>'
                 });
             }
 
@@ -123,7 +131,7 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 
             for (var i = 1; i <= 6; i++) {
                 footerTemplate += '   <div class="ngFooterCell col' + (i+1) + ' colt' + (i+1) + '">'
-                + '                       <span class="ngLabel">{{bracket.total_bracket_points_for_round[' + i + ']}}</span>'
+                + '                       <span class="ngLabel">{{bracket.total_bracket_points_for_round[' + i + '] || \'\'}}</span>'
                 + '                   </div>';
             }
 
