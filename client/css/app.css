@@ -32,32 +32,14 @@ body {
 .bracketGrid .ngHeaderText small {
     font-weight: normal;
 }
-.bracketGrid .even .col0,
-.bracketGrid .even .col1,
-.bracketGrid .even .won {
-    background-color: #92EF92;
-}
-/* odd rows are lighter */
-.bracketGrid .odd .col0,
-.bracketGrid .odd .col1,
-.bracketGrid .odd .won {
-    background-color: #9EFB9E;
-}
-.bracketGrid .even .eliminated,
-.bracketGrid .even .eliminated .col0,
-.bracketGrid .even .eliminated .col1 {
-    background-color: #EF9292;
-}
-/* odd rows are lighter */
-.bracketGrid .odd .eliminated,
-.bracketGrid .odd .eliminated .col0,
-.bracketGrid .odd .eliminated .col1 {
-    background-color: #FB9E9E;
+.bracketGrid .eliminated .col0,
+.bracketGrid .eliminated .col1 {
+    color: darkgray;
 }
 .bracketGrid .ngCell {
     text-align: right;
 }
-.bracketGrid .col0 {
+.bracketGrid .ngCell .col0 {
     text-align: left;
 }
 .bracketGrid .ngFooterPanel {

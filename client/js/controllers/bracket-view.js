@@ -110,8 +110,8 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 
                 columnDefs.push({field: 'rounds[' + i + ']',
                                  displayName: 'Round ' + i + '<br/><small>Seed # + ' + points + ' point' + (points > 1 ? 's' : '') + '</small>',
-                                 cellTemplate: '<div class="ngCellText" ng-class="[col.colIndex(), COL_FIELD ? \'won\' : \'noWin\']">'
-                                                + '<span ng-cell-text>{{COL_FIELD || \'\'}}</span>'
+                                 cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">'
+                                                + '<span ng-cell-text>{{COL_FIELD || \'\'}}</span>' // don't show zeros; it's distracting
                                              + '</div>'
                 });
             }
