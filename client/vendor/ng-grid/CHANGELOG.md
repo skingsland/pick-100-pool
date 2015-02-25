@@ -1,4 +1,33 @@
-<a name="2.0.6"></a>
+<a name="2.0.11"></a>
+## 2.0.12 *(2014-08-04)*
+
+* Merged all outstanding 2.x PRs in advance of 3.0 beta release.
+
+<a name="2.0.11"></a>
+## 2.0.11 *(2014-04-29)*
+
+* Fix filtering bug introduced by #513 (7d6eaeef5c, #1152, #1153).
+
+<a name="2.0.10"></a>
+## 2.0.10 *(2014-04-25)*
+
+* Fix bug with $groupPanel $destroy handler (thanks @mikeromano38) (52de35530360d51).
+
+<a name="2.0.9"></a>
+## 2.0.9 *(2014-04-23)*
+
+* Fix broken AngularJS bower dependency.
+
+<a name="2.0.8"></a>
+## 2.0.8 *(2014-04-22)*
+
+* Release 2.0.8 is the last release before 3.0.
+
+### Changes
+
+* Many community-provided fixes and features.
+
+<a name="2.0.7"></a>
 ## 2.0.7 *(2013-07-01)*
 
 ### Features

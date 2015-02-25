@@ -16,14 +16,17 @@ function ngGridFlexibleHeightPlugin (opts) {
                 if (opts.minHeight != null && (naturalHeight + extraHeight) < opts.minHeight) {
                     naturalHeight = opts.minHeight - extraHeight - 2;
                 }
+                if (opts.maxHeight != null && (naturalHeight + extraHeight) > opts.maxHeight) {
+                    naturalHeight = opts.maxHeight;
+                }
             }
 
-            var newViewportHeight = naturalHeight + 2;
+            var newViewportHeight = naturalHeight + 3;
             if (!self.scope.baseViewportHeight || self.scope.baseViewportHeight !== newViewportHeight) {
                 self.grid.$viewport.css('height', newViewportHeight + 'px');
                 self.grid.$root.css('height', (newViewportHeight + extraHeight) + 'px');
                 self.scope.baseViewportHeight = newViewportHeight;
-                self.domUtilityService.UpdateGridLayout(self.scope, self.grid);
+                self.domUtilityService.RebuildGrid(self.scope, self.grid);
             }
         };
         self.scope.catHashKeys = function () {
