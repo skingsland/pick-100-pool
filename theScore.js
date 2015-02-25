@@ -7,8 +7,8 @@ var FirebaseTokenGenerator = require("firebase-token-generator");
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
 var API_SITE = 'thescore';
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2014';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2014';
+var FIREBASE_TOURNAMENT_ID = 'MarchMadness2015';
+var FIREBASE_TOURNAMENT_NAME = 'March Madness 2015';
 
 // the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
 // Thus 08:00 is 4am Eastern Time, and 1am Western Time. Thus the latest starting PDT game should have finished.
@@ -23,7 +23,7 @@ function downloadGamesAndUpdateFirebase() {
         var firebase = new Firebase('https://pick100pool.firebaseio.com');
         var firebaseSecret = process.env.FIREBASE_SECRET;
 
-        if (!firebaseSecret) throw new Error('You need to define an env. var called FIREBASE_SECRET');
+        if (!firebaseSecret) throw new Error('You need to define an environment variable called FIREBASE_SECRET');
         firebase.auth(firebaseSecret);
 
         return firebase;
