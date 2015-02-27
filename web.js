@@ -10,7 +10,8 @@ var server = http.createServer(router);
 
 router.use(express.static(path.resolve(__dirname, 'client')));
 
-var minutes = 1;
+// how often do we check for updated scores?
+var minutes = 60;
 var the_interval = minutes * 60 * 1000;
 
 // call once right away, then schedule for repeated execution

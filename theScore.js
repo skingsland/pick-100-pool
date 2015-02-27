@@ -11,9 +11,9 @@ var FIREBASE_TOURNAMENT_ID = 'MarchMadness2015';
 var FIREBASE_TOURNAMENT_NAME = 'March Madness 2015';
 
 // the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
-// Thus 08:00 is 4am Eastern Time, and 1am Western Time. Thus the latest starting PDT game should have finished.
-var TOURNAMENT_START_TIME = '2014-03-20T16:00:00'; // first game starts at 12:20pm EST; UTC is 4 hours later
-var TOURNAMENT_END_TIME = '2014-04-08T07:59:59'; // the day after the final game
+// Thus 08:00 is 4am Eastern Time, and 1am Western Time, so the latest starting PDT game should have finished.
+var TOURNAMENT_START_TIME = '2015-03-17T12:00:00'; // the day of the first game
+var TOURNAMENT_END_TIME = '2015-04-07T07:59:59'; // the day after the final game
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
@@ -102,11 +102,16 @@ function downloadGamesAndUpdateFirebase() {
         if (lastRunDateIsoString) {
             var lastRunDate = new Date(lastRunDateIsoString);
 
-            // the start date is used to filter the game_date (which is the date and time the game STARTED),
-            // but scores don't immediately appear after the game is finished,
-            // so we subtract a few hours from the last run date to make sure we get ALL completed games.
-            lastRunDate.setHours(lastRunDate.getHours() - 3);
-            startDateIsoString = convertDateToString(lastRunDate);
+            // if we're running BEFORE the tournament has started, then use the tournament start date (the date of the first game)
+            if (lastRunDate < new Date(TOURNAMENT_START_TIME)) {
+                startDateIsoString = TOURNAMENT_START_TIME;
+            } else {
+                // the start date is used to filter the game_date (which is the date and time the game STARTED),
+                // but scores don't immediately appear after the game is finished,
+                // so we subtract a few hours from the last run date to make sure we get ALL completed games.
+                lastRunDate.setHours(lastRunDate.getHours() - 3);
+                startDateIsoString = convertDateToString(lastRunDate);
+            }
         } else {
             // else if the last run date is null, it means this is the first time we're downloading scores for this tournament.
             // So download scores for all games in the tournament, starting just before the tourny began.
