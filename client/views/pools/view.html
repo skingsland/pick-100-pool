@@ -6,7 +6,7 @@
       <br/>
       <a class="btn btn-default" href="#/pools" style="margin-right: 20px">View all pools</a>
 
-      <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/create"
+      <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/create" ng-show-auth="'login'"
          data-ng-show="model.currentUserHasLoaded && !model.currentUserBracketId">
         Select Your Teams
       </a>

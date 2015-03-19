@@ -1,6 +1,6 @@
 <div data-ng-init="findPools()">
   <h3>March Madness Pools</h3>
-  Select a pool, or create a new one:<br><br>
+  Select a pool<span ng-show-auth="'login'">, or create a new one</span>:<br><br>
   <ul class="unstyled">
     <li data-ng-repeat="pool in pools | orderByPriority">
       <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
@@ -11,5 +11,5 @@
     </li>
   </ul> 
   <br>
-  <a href="#/pools/create">Create a new pool</a>
+  <a class="btn btn-primary" ng-href="#/pools/create" ng-show-auth="'login'">Create a Pool</a>
 </div>
