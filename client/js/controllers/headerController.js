@@ -26,7 +26,7 @@ angular.module('myApp.controllers').controller('HeaderController',
 
         $scope.navbarEntries = [
             {
-              "title": "Pools",
+              "title": "Play Now",
               "link": "/pools"
             }
         ];

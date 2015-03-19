@@ -1,6 +1,6 @@
 <div data-ng-init="findPools()">
-  <h3>Pools</h3>
-  <h4>All Pools</h4>
+  <h3>March Madness Pools</h3>
+  Select a pool, or create a new one:<br><br>
   <ul class="unstyled">
     <li data-ng-repeat="pool in pools | orderByPriority">
       <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
