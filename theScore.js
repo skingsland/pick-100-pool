@@ -156,8 +156,6 @@ function downloadGamesAndUpdateFirebase() {
         teamInFirebase.transaction(function(currentValue) {
             // we're using the short name of the team as its ID, to make foreign keys in firebase more intuitive
             if (currentValue === null) {
-                console.log("updating team in firebase:", team.short_name, seed, region, conference);
-
                 return {
                     id: team.short_name,
                     full_name: team.full_name,
