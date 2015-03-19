@@ -16,11 +16,16 @@ Deployment to heroku:
 
 Running the full app locally:
 
+* export FIREBASE_SECRET=<copied from https://pick100pool.firebaseio.com/?page=Admin>
 * `foreman start`
 
 Running just the web server, without the back-end to fetch scores:
 
 * `npm install -g http-server`
 * `http-server client -p 5000`
+
+Running just the backend program to fetch scores, teams, etc.:
+
+* `node theScore.js`
 
 https://devcenter.heroku.com/articles/git

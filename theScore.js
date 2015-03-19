@@ -150,15 +150,17 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function updateTeamInFirebase(team, seed, region, conference, game) {
-        var teamInFirebase = tournamentRef.child('teams').child(team.name);
+        var teamInFirebase = tournamentRef.child('teams').child(team.short_name);
         var pointsForRound, winningTeam;
 
         // add the team to firebase, if it doesn't already exist
         teamInFirebase.transaction(function(currentValue) {
             // we're using the short name of the team as its ID, to make foreign keys in firebase more intuitive
             if (currentValue === null) {
+                console.log("updating team in firebase:", team.short_name, seed, region, conference);
+
                 return {
-                    id: team.name,
+                    id: team.short_name,
                     full_name: team.full_name,
                     seed: seed,
                     region: region,
@@ -171,7 +173,7 @@ function downloadGamesAndUpdateFirebase() {
         if (isGameOver(game)) {
             winningTeam = getWinningTeam(game);
 
-            if (team.name === winningTeam.name) {
+            if (team.short_name === winningTeam.short_name) {
                 pointsForRound = winningTeam.points_for_round;
             }
             else {
@@ -188,7 +190,7 @@ function downloadGamesAndUpdateFirebase() {
     // no point in holding up the write to Firebase waiting on a read.
     function updateGameInfo(game) {
         var round = getRound(game);
-        var gameId = game.away_team.name + '-' + game.home_team.name;
+        var gameId = game.away_team.short_name + '-' + game.home_team.short_name;
         var gameInFirebase, score;
 
         // not sure why the round number wouldn't exist, but we'll check just in case (should maybe throw an ex instead?)
@@ -220,7 +222,7 @@ function downloadGamesAndUpdateFirebase() {
                     bracket.child('teams').forEach(function(bracketTeam) {
 
                         // if the bracket contains a team which just won the game, update the bracket's total points for this round
-                        if (winningTeam.name === bracketTeam.val()) {
+                        if (winningTeam.short_name === bracketTeam.val()) {
 
                             tournamentRef.child('teams').once('value', function(teams) {
                                 updateBracketStats(bracket, round, teams)
@@ -303,9 +305,9 @@ function downloadGamesAndUpdateFirebase() {
         var winningTeam;
 
         if (score.home.score > score.away.score) {
-            winningTeam = {name: game.home_team.name, seed: getSeedForHomeTeam(game)};
+            winningTeam = {short_name: game.home_team.short_name, seed: getSeedForHomeTeam(game)};
         } else {
-            winningTeam = {name: game.away_team.name, seed: getSeedForAwayTeam(game)};
+            winningTeam = {short_name: game.away_team.short_name, seed: getSeedForAwayTeam(game)};
         }
         winningTeam.points_for_round = getWinningTeamPointsForRound(winningTeam.seed, getRound(game));
 
@@ -326,7 +328,7 @@ function downloadGamesAndUpdateFirebase() {
 
 
     // to turn on logging in the firebase client
-//    Firebase.enableLogging(true);
+    //Firebase.enableLogging(true);
 
     // this is basically a "global variable", because it's needed by several of the functions above
     tournamentRef = getTournamentRef(loginToFirebase());
