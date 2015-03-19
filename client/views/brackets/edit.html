@@ -1,7 +1,7 @@
 <div data-ng-init="findAllTeams().then(getBracketForEditing);" data-ng-controller="CreateEditBracketController">
   <form class="form-horizontal" role="form">
     <fieldset>
-      <legend style="margin-bottom: 0">{{isNewBracket ? 'Create' : 'Update'}} your bracket</legend>
+      <legend style="margin-bottom: 0">{{isNewBracket ? 'Select' : 'Change'}} Your Teams</legend>
 
       <div class="container">
         <div class="row">
@@ -35,14 +35,14 @@
         <br/>
         <div class="row">
           <div class="col-md-2">
-              <a class="btn btn-default" href="#/pools/{{ poolId }}">View all Brackets</a>
+              <a class="btn btn-default" href="#/pools/{{ poolId }}">Cancel</a>
           </div>
           <div class="col-md-2 col-md-offset-1">
             <button data-ng-click="saveBracket()"
                     ng-disabled="!bracket.name || selectedTeams.length !== requiredNumTeams || sumOfSeeds !== requiredSumOfSeeds"
                     ng-class="{'btn-danger': selectedTeams.length > requiredNumTeams || sumOfSeeds > requiredSumOfSeeds}"
                     class="btn pull-right btn-success">
-              {{isNewBracket ? 'Create' : 'Update'}} bracket
+              {{isNewBracket ? 'Save' : 'Update'}}
             </button>
           </div>
         </div>

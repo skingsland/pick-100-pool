@@ -5,10 +5,10 @@
 
   <div ng-show-auth="'login'" ng-show="auth.user.uid === bracket.ownerId" class="row currentUserBracket">
     <div class="col-md-2">
-      <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Edit your bracket</a>
+      <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Change Your Teams</a>
     </div>
     <div class="col-md-2">
-      <button ng-click="removeBracket()" class="btn btn-danger">Remove bracket</button>
+      <button ng-click="removeBracket()" class="btn btn-danger">Delete Your Teams</button>
     </div>
   </div>
 </div>
