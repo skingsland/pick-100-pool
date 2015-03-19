@@ -12,7 +12,7 @@ var FIREBASE_TOURNAMENT_NAME = 'March Madness 2015';
 
 // the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
 // Thus 08:00 is 4am Eastern Time, and 1am Western Time, so the latest starting PDT game should have finished.
-var TOURNAMENT_START_TIME = '2015-03-17T12:00:00'; // the day of the first game
+var TOURNAMENT_START_TIME = '2015-03-17T12:00:00'; // the day of the first play-in game
 var TOURNAMENT_END_TIME = '2015-04-07T07:59:59'; // the day after the final game
 
 function downloadGamesAndUpdateFirebase() {
@@ -130,8 +130,7 @@ function downloadGamesAndUpdateFirebase() {
         console.log(games.length + ' games returned from firebase');
 
         games.forEach(function (game) {
-            // is it a March Madness game, and has the tournament gotten past the play-in games, to the first round?
-            if (game.tournament_name === API_TOURNAMENT_NAME && getRound(game) >= 1) {
+            if (game.tournament_name === API_TOURNAMENT_NAME) {
                 updateTeamInfo(game);
                 updateGameInfo(game);
                 updateBracketsWithWinningTeam(game);
@@ -193,19 +192,16 @@ function downloadGamesAndUpdateFirebase() {
         var gameId = game.away_team.short_name + '-' + game.home_team.short_name;
         var gameInFirebase, score;
 
-        // not sure why the round number wouldn't exist, but we'll check just in case (should maybe throw an ex instead?)
-        if (round) {
-            gameInFirebase = tournamentRef.child('rounds').child(round).child('games').child(gameId);
+        gameInFirebase = tournamentRef.child('rounds').child(round).child('games').child(gameId);
 
-            gameInFirebase.update({game_date: game.game_date});
+        gameInFirebase.update({game_date: game.game_date});
 
-            // is the game over, so we can record the score?
-            if (isGameOver(game)) {
-                score = game.box_score.score;
+        // is the game over, so we can record the score?
+        if (isGameOver(game)) {
+            score = game.box_score.score;
 
-                gameInFirebase.update({score: score.away.score + '-' + score.home.score,
-                                       winning_team: getWinningTeam(game)});
-            }
+            gameInFirebase.update({score: score.away.score + '-' + score.home.score,
+                                   winning_team: getWinningTeam(game)});
         }
     }
 
@@ -315,8 +311,15 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function getWinningTeamPointsForRound(teamSeed, roundNumber) {
-        // the first round's bonus should be 1 point, which is 2^0, so subtract 1 from the round
-        return teamSeed + Math.pow(2, roundNumber-1);
+        // round 0 is the play-in round, so no points should be awarded
+        if (roundNumber === 0) {
+            return 0;
+        }
+
+        // round 1 = 1 point, 2 = 2 points, 3 = 4 points, 4 = 8 points, etc.
+        var bonusForRound = Math.pow(2, roundNumber-1);
+
+        return teamSeed + bonusForRound;
     }
 
     function getSeedForHomeTeam(game) {
