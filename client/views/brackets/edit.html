@@ -34,10 +34,10 @@
         </div>
         <br/>
         <div class="row">
-          <div class="col-sm-offset-1 col-sm-1">
+          <div class="col-sm-1">
               <a class="btn btn-default" href="#/pools/{{ poolId }}">Cancel</a>
           </div>
-          <div class="col-sm-1 col-sm-offset-1">
+          <div class="col-sm-1">
             <button data-ng-click="saveBracket()"
                     ng-disabled="!bracket.name || selectedTeams.length !== requiredNumTeams || sumOfSeeds !== requiredSumOfSeeds"
                     ng-class="{'btn-danger': selectedTeams.length > requiredNumTeams || sumOfSeeds > requiredSumOfSeeds}"
