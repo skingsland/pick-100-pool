@@ -24,7 +24,7 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             footerRowHeight: 30,
             footerTemplate: buildFooterTemplateForBracketGrid(),
             // TODO fix sorting (this doesn't seem to have any effect, perhaps because the data is loaded after the grid renders)
-//            sortInfo: {fields: ['seed'], directions: ['asc']}
+            sortInfo: {fields: ['seed'], directions: ['asc']}
         };
 
         $scope.removeBracket = function() {
@@ -32,26 +32,17 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             $scope.$destroy();
         };
 
-        findAllTeams();
-        getBracketWithScores();
-
-        function findAllTeams () {
+        $scope.findAllTeams = function () {
             var deferred = $q.defer();
 
             teamService.findAll().$on('value', function(teamsSnapshot) {
-                var allTeams = teamsSnapshot.snapshot.value;
-
-                // we don't want to just return the direct children of /teams, because each team is stored as a key-value pair,
-                // where the key is the team id, and the value is the team object (which *also* includes its id).
-                $scope.teams = Object.keys(allTeams).map(function (key) {
-                    return allTeams[key];
-                });
-
-                deferred.resolve();
+                deferred.resolve(teamsSnapshot.snapshot.value);
             });
+
             return deferred.promise;
-        }
-        function getBracketWithScores () {
+        };
+
+        $scope.getBracketWithScores = function (allTeams) {
             if (!$scope.bracketId) {
                 console.log(new Error('view bracket page requested without a bracketId!'));
                 return;
@@ -68,29 +59,38 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                 }
             });
 
+            // get the ID of each team in the bracket, and use the team ID to look up its team ref, containing the points for each round
             bracket.$child('teams').$on('child_added', function(teamSnapshot) {
                 var teamId = teamSnapshot.snapshot.value;
-                var teamRef = teamService.findById(teamId);
+                var teamRef = allTeams[teamId];
 
                 $scope.teamsWithScores.push(teamRef);
 
-                // watch for changes to the team's points, which will update when new games finish by adding children to 'rounds'
-                teamRef.$child('rounds').$on('child_added', function(roundSnapshot) {
-                    var points = roundSnapshot.snapshot.value;
+                // only calculate each team's total points once
+                if (!teamRef.isTotalPointsCalculated) {
+                    teamRef.isTotalPointsCalculated = true;
 
-                    // update the points-per-team, for row totals
-                    if (!teamRef.totalPoints) {
-                        teamRef.totalPoints = 0;
+                    for (var i in teamRef.rounds) {
+                        var points = teamRef.rounds[i];
+
+                        if (i > 0 && points != null) {
+                            console.log("adding", points, "points to", teamRef.full_name, "for round", i);
+
+                            // update the points-per-team, for row totals
+                            if(!teamRef.totalPoints) {
+                                teamRef.totalPoints = 0;
+                            }
+                            teamRef.totalPoints += points;
+                        }
                     }
-                    teamRef.totalPoints += points;
-                });
+                }
             });
 
             // when a column total changes (total points per round), update the grand total (points for the whole bracket)
             bracket.$child('total_bracket_points_for_round').$on('value', function(snapshot) {
                 $scope.sumOfPoints = getTotalPoints(snapshot.snapshot.value);
-            })
-        }
+            });
+        };
 
         function getTotalPoints(totalPointsPerRound) {
             return _.reduce(totalPointsPerRound, function (memo, currentValue) {
