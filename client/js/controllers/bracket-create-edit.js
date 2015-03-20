@@ -24,7 +24,7 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 {field:'seed', displayName:'Seed', width:60},
                 {field:'full_name', displayName:'Name'},
                 {field:'region', displayName:'Region', width:85},
-                {field:'conference', displayName:'Conference'}
+                {field:'conference', displayName:'Conference', width:220}
             ],
             sortInfo: {fields: ['seed'], directions: ['asc']}
         };

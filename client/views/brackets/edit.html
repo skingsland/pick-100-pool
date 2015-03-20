@@ -15,10 +15,10 @@
         <div class="row">
           <h4>Select <strong>{{requiredNumTeams}}</strong> teams whose seeds add up to <strong>{{requiredSumOfSeeds}}</strong>:</h4>
           <br/>
-          <div class="col-md-5">
+          <div class="col-md-6">
             <div class="selectTeamsGrid" ng-grid="selectTeamsGridOptions"></div>
           </div>
-          <div class="selectedItems col-md-6">
+          <div class="selectedItems col-md-5">
             <h4>Your {{selectedTeams.length}} selected teams:</h4>
             <ul class="unstyled">
               <li data-ng-repeat="selectedTeam in selectedTeams | orderBy:'seed'">{{selectedTeam.seed}} - {{selectedTeam.full_name}}</li>
@@ -34,10 +34,10 @@
         </div>
         <br/>
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-sm-offset-1 col-sm-1">
               <a class="btn btn-default" href="#/pools/{{ poolId }}">Cancel</a>
           </div>
-          <div class="col-md-2 col-md-offset-1">
+          <div class="col-sm-1 col-sm-offset-1">
             <button data-ng-click="saveBracket()"
                     ng-disabled="!bracket.name || selectedTeams.length !== requiredNumTeams || sumOfSeeds !== requiredSumOfSeeds"
                     ng-class="{'btn-danger': selectedTeams.length > requiredNumTeams || sumOfSeeds > requiredSumOfSeeds}"

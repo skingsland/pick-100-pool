@@ -7,11 +7,15 @@ body {
     /*background-size: 200px;*/
 }
 
-/* for ng-grid directive on the create bracket page */
+/* styles for the ng-grid directive on the create/edit bracket page */
 .selectTeamsGrid {
     border: 1px solid rgb(212,212,212);
     height: 400px;
-    width: 450px;
+    width: 550px;
+}
+/* prevents a horizontal scroll bar from appearing, even when it's not needed */
+.selectTeamsGrid .ngViewport {
+    overflow-x: hidden;
 }
 
 /* styles for the view-bracket module */
