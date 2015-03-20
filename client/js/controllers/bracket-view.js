@@ -74,8 +74,6 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                         var points = teamRef.rounds[i];
 
                         if (i > 0 && points != null) {
-                            console.log("adding", points, "points to", teamRef.full_name, "for round", i);
-
                             // update the points-per-team, for row totals
                             if(!teamRef.totalPoints) {
                                 teamRef.totalPoints = 0;
