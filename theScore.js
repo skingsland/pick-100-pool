@@ -106,10 +106,11 @@ function downloadGamesAndUpdateFirebase() {
             if (lastRunDate < new Date(TOURNAMENT_START_TIME)) {
                 startDateIsoString = TOURNAMENT_START_TIME;
             } else {
-                // the start date is used to filter the game_date (which is the date and time the game STARTED),
+                // The start date is used to filter the game_date (which is the date and time the game STARTED),
                 // but scores don't immediately appear after the game is finished,
-                // so we subtract a few hours from the last run date to make sure we get ALL completed games.
-                lastRunDate.setHours(lastRunDate.getHours() - 3);
+                // so we subtract several hours from the last run date to make sure we get ALL completed games.
+                // There is extra buffer built in as well to handle delayed games, since we query by the *scheduled* start time.
+                lastRunDate.setHours(lastRunDate.getHours() - 5);
                 startDateIsoString = convertDateToString(lastRunDate);
             }
         } else {
@@ -172,10 +173,14 @@ function downloadGamesAndUpdateFirebase() {
 
             if (team.short_name === winningTeam.short_name) {
                 pointsForRound = winningTeam.points_for_round;
+
+                //console.log(team.name, "won round", game.round, "for", pointsForRound, "points");
             }
             else {
                 pointsForRound = 0;
                 teamInFirebase.update({is_eliminated: true});
+
+                //console.log(team.name, "is eliminated in round", game.round);
             }
             teamInFirebase.child('rounds').child(getRound(game)).set(pointsForRound);
         }
