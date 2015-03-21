@@ -9,15 +9,20 @@
           <input id="name" name="name" data-ng-model="pool.name" type="text" placeholder="name of pool" class="form-control input-md" required autofocus>
         </div>
       </div>
+      <br>
 
-      <div class="form-group">
-        <label class="col-md-4 control-label" for="createpool"></label>
+      <!-- display a simple "save" button if the user is renaming an already-existing pool -->
+      <a class="btn btn-primary" href="#/pools" data-ng-show="model.poolId">Save</a>
+
+      <!-- otherwise if the user is creating a new pool, display cancel and submit buttons -->
+      <div class="form-group" data-ng-show="!model.poolId">
         <div class="col-md-4">
-          <button id="createpool" name="createpool" data-ng-click="createPool()" data-ng-show="!model.poolId" class="btn btn-primary">Create Pool</button>
+          <a class="btn btn-default" href="#/pools">Cancel</a>
+        </div>
+        <div class="col-md-6 col-md-offset-2">
+          <button class="btn btn-primary" id="createpool" name="createpool" data-ng-click="createPool()">Create Pool</button>
         </div>
       </div>
-      <br>
-      <a href="#/pools">View all pools</a>
     </fieldset>
   </form>
 
