@@ -40,6 +40,7 @@ body {
 .bracketGrid .eliminated .col1 {
     color: darkgray;
 }
+/* all of the numbers in the table should be right-aligned */
 .bracketGrid .ngCell {
     text-align: right;
 }
@@ -85,7 +86,10 @@ body {
 .allBracketsGrid .col0 {
     text-align: left;
 }
-
+/* prevents a horizontal scroll bar from appearing, even when it's not needed */
+.allBracketsGrid .ngViewport {
+    overflow: hidden;
+}
 
 
 .menu {

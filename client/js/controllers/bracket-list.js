@@ -28,9 +28,9 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
         // any time a new bracket is added to the pool's list, add the full bracket object to the scope
         bracketService.findBracketIdsByPool($scope.poolId).$on('child_added', function(bracketId) {
-            var bracket = bracketService.findById(bracketId.snapshot.value);
-
-            $scope.allBracketsInPool.push(bracket);
+            bracketService.findById(bracketId.snapshot.value).$on('value', function(bracket) {
+                $scope.allBracketsInPool.push(bracket.snapshot.value);
+            });
         });
 
         // when a bracket is removed, remove it from the backing array
