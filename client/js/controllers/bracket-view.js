@@ -35,8 +35,8 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         $scope.findAllTeams = function () {
             var deferred = $q.defer();
 
-            teamService.findAll().$on('value', function(teamsSnapshot) {
-                deferred.resolve(teamsSnapshot.snapshot.value);
+            teamService.findAll().$getRef().once('value', function(teamsSnapshot) {
+                deferred.resolve(teamsSnapshot.val());
             });
 
             return deferred.promise;

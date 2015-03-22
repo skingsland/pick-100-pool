@@ -27,9 +27,28 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         }
 
         // any time a new bracket is added to the pool's list, add the full bracket object to the scope
-        bracketService.findBracketIdsByPool($scope.poolId).$on('child_added', function(bracketId) {
-            bracketService.findById(bracketId.snapshot.value).$on('value', function(bracket) {
-                $scope.allBracketsInPool.push(bracket.snapshot.value);
+        bracketService.findBracketIdsByPool($scope.poolId).$on('child_added', function(bracketIdSnapshot) {
+            var bracketId = bracketIdSnapshot.snapshot.value;
+
+            // Listen for changes to the bracket; this will be called first with the complete data, then again later if/when
+            // any fields in the bracket change (e.g. total points or teams remaining).
+            bracketService.findById(bracketId).$getRef().on('value', function(bracketSnapshot) {
+                var bracket = bracketSnapshot.val();
+                bracket.id = bracketId; // save the bracketId for later, so we can find it again
+
+                // has the bracket already been added to the scope? If so, remove it before we re-add it
+                for (var i in $scope.allBracketsInPool) {
+                    if ($scope.allBracketsInPool[i].id === bracketId) {
+
+                        // If the bracket has already been added to the scope, remove it so we can add it again.
+                        // Note that removing the element from the array, calling $scope.apply(), and then re-adding it is the
+                        // only way to make ng-grid aware of the change so it will re-render the updated bracket in the grid.
+                        $scope.allBracketsInPool.splice(i, 1);
+                        $scope.$apply();
+                    }
+                }
+
+                $scope.allBracketsInPool.push(bracket);
             });
         });
 
