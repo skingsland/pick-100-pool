@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('ListBracketsController',
-           ['$scope', '$routeParams', 'bracketService',
-    function($scope,   $routeParams,   bracketService) {
+           ['$scope', '$routeParams', 'bracketService', '$anchorScroll', '$location',
+    function($scope,   $routeParams,   bracketService,   $anchorScroll,   $location) {
         // the poolId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /pool/1/brackets)
         $scope.poolId = $scope.poolId || $routeParams.poolId;
 
@@ -12,7 +12,11 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             data: 'allBracketsInPool',
             enableRowSelection: false,
             rowHeight: 25,
-            columnDefs: [{field:'name', displayName:'Bracket'},
+            columnDefs: [{field:'name',
+                          displayName:'Bracket',
+                          cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">'
+                                        + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>'
+                                        + '</div>'},
                          {field:'totalPoints', displayName:'Points', width:60},
                          {field:'num_teams_remaining', displayName:'Teams left', width:85}
                         ],
@@ -25,6 +29,19 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             console.log(new Error('tried to view brackets list page, without a poolId!'));
             return;
         }
+
+        $scope.scrollTo = function(id) {
+            // saving the old hash and resetting it after scrolling to the anchor prevents the page from reloading,
+            // while keeping the route clean
+            var old = $location.hash();
+            $location.hash(id);
+
+            // anchor hash linking doesn't work like normal because the AngularJS router intercepts hash links, so we use this
+            $anchorScroll();
+
+            // reset to old to keep any additional routing logic from kicking in
+            $location.hash(old);
+        };
 
         // any time a new bracket is added to the pool's list, add the full bracket object to the scope
         bracketService.findBracketIdsByPool($scope.poolId).$on('child_added', function(bracketIdSnapshot) {
