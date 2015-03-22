@@ -7,6 +7,19 @@ body {
     /*background-size: 200px;*/
 }
 
+/* Make the navbar link in the header ("Play Now") appear the same as the "Rules" navbar-brand element. This is easier than
+   trying to have 2 (or more) different navbar-brand elements, while retaining the active-tab highlighting that nav links have. */
+.navbar-header .navbar-nav {
+    margin-top: 0;
+    padding-left: inherit;
+}
+.navbar-header .navbar-nav a {
+    float: left;
+    padding: 15px;
+    font-size: 18px;
+    text-decoration: none;
+}
+
 /* styles for the ng-grid directive on the create/edit bracket page */
 .selectTeamsGrid {
     border: 1px solid rgb(212,212,212);
