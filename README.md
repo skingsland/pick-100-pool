@@ -14,6 +14,10 @@ Deployment to heroku:
 * `git push heroku master`
 * `heroku logs --tail`
 
+Deployment to heroku "dev" tier, from the local `dev` branch:
+
+* `git push heroku-dev dev:master`
+
 Running the full app locally:
 
 * export FIREBASE_SECRET=<copied from https://pick100pool.firebaseio.com/?page=Admin>
