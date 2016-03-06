@@ -6,7 +6,7 @@ One-time Heroku setup:
 * install the Heroku toolbelt (which includes the heroku CLI and foreman)
 * upload public key file to heroku.com
 * `heroku login`
-* `heroku config:set FIREBASE_SECRET=...`
+* `heroku config:set FIREBASE_SECRET=... --remote heroku`
 
 Deployment to heroku:
 
@@ -21,7 +21,7 @@ Deployment to heroku "dev" tier, from the local `dev` branch:
 Running the full app locally:
 
 * export FIREBASE_SECRET=<copied from https://pick100pool.firebaseio.com/?page=Admin>
-* `foreman start`
+* `node web.js` (or `foreman start`)
 
 Running just the web server, without the back-end to fetch scores:
 

@@ -6,6 +6,17 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         $scope.sumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
         $scope.poolId = $routeParams.poolId;
 
+        var $pool = poolService.findById($scope.poolId);
+
+        // Fetch two pieces of data from the server in parallel: whether the tourney has started, and whether users are
+        // allowed to create or change brackets after it has started. Then combine then into a single flag on the scope.
+        $q.all({'hasTourneyStarted': poolService.hasTourneyStarted(),
+                'allowBracketChangesDuringTourney': poolService.allowBracketChangesDuringTourney($pool)})
+            .then(function(results) {
+                $scope.isUserAllowedToEditBracket = results['allowBracketChangesDuringTourney'] || !results['hasTourneyStarted'];
+            });
+
+
         // the bracketId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /bracket/1)
         $scope.bracketId = $scope.bracketId || $routeParams.bracketId;
 

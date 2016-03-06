@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('PoolsController',
-           ['$scope', '$routeParams', '$location', 'poolService', 'bracketService', 'syncData', 'waitForAuth',
-    function($scope,   $routeParams,   $location,   poolService,   bracketService,   syncData,   waitForAuth) {
+           ['$scope', '$routeParams', '$location', '$q', 'poolService', 'syncData', 'waitForAuth',
+    function($scope,   $routeParams,   $location,   $q,   poolService,   syncData,   waitForAuth) {
         // the only reason I'm creating this object is so that I've got an object on the $scope to bind primitives to, since
         // prototypical inheritance doesn't work with primitives. Not sure if this matters though, since I'm not using ng-model.
         $scope.model = {};
@@ -24,6 +24,14 @@ angular.module('myApp.controllers').controller('PoolsController',
                 $pool.$getRef().child('managerId').once('value', function(managerId) {
                     syncData(['users', managerId.val()]).$bind($scope, 'manager');
                 });
+
+                // Fetch two pieces of data from the server in parallel: whether the tourney has started, and whether users are
+                // allowed to create or change brackets after it has started. Then combine then into a single flag on the scope.
+                $q.all({'hasTourneyStarted': poolService.hasTourneyStarted(),
+                        'allowBracketChangesDuringTourney': poolService.allowBracketChangesDuringTourney($pool)})
+                    .then(function(results) {
+                        $scope.model.isUserAllowedToCreateBracket = results['allowBracketChangesDuringTourney'] || !results['hasTourneyStarted'];
+                    });
 
                 // we can't get the id of the currently-logged-in user until their auth info has synced from firebase
                 waitForAuth.then(function() {

@@ -1,25 +1,39 @@
-<div data-ng-init="findOnePool()">
-  <form class="form-horizontal">
+<div data-ng-init="findOnePool()" class="editPool">
+  <form class="form-horizontal" role="form">
     <fieldset>
       <legend>Your pool</legend>
 
       <div class="form-group">
-        <label class="col-md-4 control-label" for="name">Name</label>
-        <div class="col-md-8">
+        <label class="col-md-1 control-label" for="name">Name</label>
+        <div class="col-md-offset-1 col-md-10">
           <input id="name" name="name" data-ng-model="pool.name" type="text" placeholder="name of pool" class="form-control input-md" required autofocus>
         </div>
       </div>
-      <br>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+          <div class="checkbox">
+            <label>
+              <input id="allowBracketChangesDuringTourney" name="allowBracketChangesDuringTourney" data-ng-model="pool.allowBracketChangesDuringTourney" type="checkbox">
+              Allow brackets to be created or changed after the tourney starts?
+            </label>
+          </div>
+        </div>
+      </div>
+      <br/>
 
-      <!-- display a simple "save" button if the user is renaming an already-existing pool -->
-      <a class="btn btn-primary" href="#/pools" data-ng-show="model.poolId">Save</a>
+      <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+          <!-- display a simple "save" button if the user is changing an already-existing pool -->
+          <a class="btn btn-primary" href="#/pools" data-ng-show="model.poolId">Save</a>
+        </div>
+      </div>
 
       <!-- otherwise if the user is creating a new pool, display cancel and submit buttons -->
       <div class="form-group" data-ng-show="!model.poolId">
-        <div class="col-md-4">
+        <div class="col-md-offset-2 col-md-2">
           <a class="btn btn-default" href="#/pools">Cancel</a>
         </div>
-        <div class="col-md-6 col-md-offset-2">
+        <div class="col-md-4">
           <button class="btn btn-primary" id="createpool" name="createpool" data-ng-click="createPool()">Create Pool</button>
         </div>
       </div>

@@ -2,7 +2,6 @@ var rest = require('restler');
 var util = require('util');
 var Q = require("q");
 var Firebase = require('firebase');
-var FirebaseTokenGenerator = require("firebase-token-generator");
 
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
 var API_SITE = 'thescore';
@@ -10,10 +9,9 @@ var API_SITE = 'thescore';
 var FIREBASE_TOURNAMENT_ID = 'MarchMadness2015';
 var FIREBASE_TOURNAMENT_NAME = 'March Madness 2015';
 
-// the API expects dates in UTC (not sure it supports different TZs), which is 4 hours ahead of EDT.
-// Thus 08:00 is 4am Eastern Time, and 1am Western Time, so the latest starting PDT game should have finished.
-var TOURNAMENT_START_TIME = '2015-03-17T12:00:00'; // the day of the first play-in game
-var TOURNAMENT_END_TIME = '2015-04-07T07:59:59'; // the day after the final game
+// appending "-04:00" sets the time zone to EDT
+var TOURNAMENT_START_TIME = '2015-03-17T08:00:00-04:00'; // the date and time of the first game in the second (i.e NOT play-in) round
+var TOURNAMENT_END_TIME = '2015-04-07T03:59:59-04:00'; // the day after the final game
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
@@ -98,6 +96,7 @@ function downloadGamesAndUpdateFirebase() {
     function getEventsUrlForDate(lastRunDateIsoString) {
         var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?game_date.in=%s,%s&conference=All+Conferences';
         var startDateIsoString;
+        var endDateIsoString = TOURNAMENT_END_TIME; // the end of the date range to fetch games, teams, scores, etc. for
 
         if (lastRunDateIsoString) {
             var lastRunDate = new Date(lastRunDateIsoString);
@@ -119,7 +118,10 @@ function downloadGamesAndUpdateFirebase() {
             startDateIsoString = TOURNAMENT_START_TIME;
         }
 
-        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, TOURNAMENT_END_TIME);
+        // startDateIsoString = '2015-03-16T08:00:00-04:00';
+        // endDateIsoString = '2015-03-20T08:00:00-04:00';
+        
+        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, endDateIsoString);
 
         console.log('lastRunDate =', lastRunDateIsoString, '| startDateTime =', startDateIsoString, '| eventsUrlForDate =', eventsUrlForDate);
 
@@ -131,7 +133,9 @@ function downloadGamesAndUpdateFirebase() {
         console.log(games.length + ' games returned from firebase');
 
         games.forEach(function (game) {
-            if (game.tournament_name === API_TOURNAMENT_NAME) {
+            // don't store results for play-in games, because teams don't participate in brackets until they've won the play-in,
+            // and they don't earn any points for winning a play-in game
+            if (game.tournament_name === API_TOURNAMENT_NAME && getRound(game) > 0) {
                 updateTeamInfo(game);
                 updateGameInfo(game);
                 updateAllBrackets(game);

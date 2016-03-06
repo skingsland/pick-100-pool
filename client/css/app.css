@@ -20,6 +20,13 @@ body {
     text-decoration: none;
 }
 
+.editPool fieldset {
+    width: 600px;
+}
+.editPool label {
+    text-align: left;
+}
+
 /* styles for the ng-grid directive on the create/edit bracket page */
 .selectTeamsGrid {
     border: 1px solid rgb(212,212,212);

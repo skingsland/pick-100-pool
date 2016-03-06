@@ -6,8 +6,11 @@
       <br/>
       <a class="btn btn-default" href="#/pools" style="margin-right: 20px">View all pools</a>
 
+      <!-- In order for the "create bracket" button to be displayed, the user needs to be logged in, they can't already have
+           created a bracket in this pool (i.e. currentUserBracketId should be undefined), and the current date needs
+           to be before the first game of the tournament UNLESS the pool has allowBracketChangesDuringTourney = true. -->
       <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/create" ng-show-auth="'login'"
-         data-ng-show="model.currentUserHasLoaded && !model.currentUserBracketId">
+         data-ng-show="model.currentUserHasLoaded && !model.currentUserBracketId && model.isUserAllowedToCreateBracket">
         Select Your Teams
       </a>
     </div>

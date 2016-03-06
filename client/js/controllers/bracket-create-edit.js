@@ -101,12 +101,16 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             $scope.bracket.isNewOrUpdated = true;
 
             if ($scope.isNewBracket) {
+                $scope.bracket.created_on = new Date();
+
                 bracketService.create($scope.bracket).then(function (bracketId) {
                     if(!!bracketId) {
                         afterSuccessfulSave()
                     }
                 });
             } else {
+                $scope.bracket.updated_on = new Date();
+
                 $scope.bracket.$save().then(afterSuccessfulSave);
             }
         };
