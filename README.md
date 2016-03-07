@@ -12,15 +12,16 @@ Deployment to heroku:
 
 * `git commit ...`
 * `git push heroku master`
-* `heroku logs --tail`
+* `heroku logs --tail --app pick100pool`
 
 Deployment to heroku "dev" tier, from the local `dev` branch:
 
 * `git push heroku-dev dev:master`
+* `heroku logs --tail --app pick100pool-dev`
 
 Running the full app locally:
 
-* export FIREBASE_SECRET=<copied from https://pick100pool.firebaseio.com/?page=Admin>
+* `export FIREBASE_SECRET=`<copied from https://pick100pool.firebaseio.com/?page=Admin>
 * `node web.js` (or `foreman start`)
 
 Running just the web server, without the back-end to fetch scores:
