@@ -10,6 +10,7 @@ angular.module('myApp',
        'simpleLoginTools',
        'routeSecurity',
        'ngGrid',
+       'timer'
     ])
     .run(['loginService', '$rootScope', '$templateCache', function(loginService, $rootScope, $templateCache) {
         $rootScope.auth = loginService.init();

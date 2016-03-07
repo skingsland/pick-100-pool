@@ -35,11 +35,14 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             teamService.findAll().$getRef().once('value', function(teamsSnapshot) {
                 var allTeams = teamsSnapshot.val();
 
-                // we don't want to just return the direct children of /teams, because each team is stored as a key-value pair,
-                // where the key is the team id, and the value is the team object (which *also* includes its id).
-                $scope.teams = Object.keys(allTeams).map(function (key) {
-                    return allTeams[key];
-                });
+                // this will be null if there aren't any teams yet
+                if (allTeams) {
+                    // we don't want to just return the direct children of /teams, because each team is stored as a key-value,
+                    // pair where the key is the team id, and the value is the team object (which *also* includes its id).
+                    $scope.teams = Object.keys(allTeams).map(function (key) {
+                        return allTeams[key];
+                    });
+                }
 
                 deferred.resolve();
             });

@@ -2,11 +2,16 @@
 
 // add this controller to the existing controllers module
 angular.module('myApp.controllers').controller('HeaderController',
-           ['$rootScope', '$scope', '$location', 'syncData', 'loginService',
-    function($rootScope,   $scope,   $location,   syncData,   loginService) {
+           ['$rootScope', '$scope', '$location', 'syncData', 'loginService', 'tournamentRef',
+    function($rootScope,   $scope,   $location,   syncData,   loginService,   tournamentRef) {
         // bind the user's data to the scope, once they're logged in
 
         $scope.user = {};
+
+        tournamentRef.$child('start_time').$getRef().once('value', function(startTime) {
+            $scope.tourneyStartTime = new Date(startTime.val());
+            $scope.hasTourneyStarted = new Date() >= $scope.tourneyStartTime;
+        });
 
         // whenever a new user logs in, bind their user data to the $scope so we can show their username in the view
         $rootScope.$on('$firebaseSimpleLogin:login', function(event, user) {

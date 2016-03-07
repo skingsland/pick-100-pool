@@ -51,6 +51,12 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             // any fields in the bracket change (e.g. total points or teams remaining).
             bracketService.findById(bracketId).$getRef().on('value', function(bracketSnapshot) {
                 var bracket = bracketSnapshot.val();
+
+                // this will happen right after the bracket is removed
+                if (bracket === null) {
+                    return;
+                }
+
                 bracket.id = bracketId; // save the bracketId for later, so we can find it again
 
                 // has the bracket already been added to the scope? If so, remove it before we re-add it
