@@ -6,12 +6,11 @@ var Firebase = require('firebase');
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
 var API_SITE = 'thescore';
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2015';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2015';
+var FIREBASE_TOURNAMENT_ID = 'MarchMadness2016';
+var FIREBASE_TOURNAMENT_NAME = 'March Madness 2016';
 
-// appending "-04:00" sets the time zone to EDT
-var TOURNAMENT_START_TIME = '2015-03-17T08:00:00-04:00'; // the date and time of the first game in the second (i.e NOT play-in) round
-var TOURNAMENT_END_TIME = '2015-04-07T03:59:59-04:00'; // the day after the final game
+var TOURNAMENT_START_TIME = '2016-03-17T12:00:00-06:00'; // the date and time of the first game in the second (i.e NOT play-in) round
+var TOURNAMENT_END_TIME = '2016-04-05T12:00:00-05:00'; // the day after the final game
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
@@ -118,6 +117,7 @@ function downloadGamesAndUpdateFirebase() {
             startDateIsoString = TOURNAMENT_START_TIME;
         }
 
+        // for testing:
         // startDateIsoString = '2015-03-16T08:00:00-04:00';
         // endDateIsoString = '2015-03-20T08:00:00-04:00';
         
