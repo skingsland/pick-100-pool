@@ -17,21 +17,20 @@ angular.module('myApp.controllers').controller('PoolsController',
         };
         $scope.findOnePool = function () {
             if ($scope.model.poolId) {
+
                 var $pool = poolService.findById($scope.model.poolId);
                 $pool.$bind($scope, 'pool');
+
+                // if we already have the user's auth info, update it on the scope, instead of waiting for auth to sync
+                if ($scope.auth.user) {
+                    $pool.$child('brackets').$child($scope.auth.user.uid).$bind($scope, 'model.currentUserBracketId');
+                    $scope.model.currentUserHasLoaded = true;
+                }
 
                 // using the pool's managerId property, look up the user and bind their data to the scope
                 $pool.$getRef().child('managerId').once('value', function(managerId) {
                     syncData(['users', managerId.val()]).$bind($scope, 'manager');
                 });
-
-                // Fetch two pieces of data from the server in parallel: whether the tourney has started, and whether users are
-                // allowed to create or change brackets after it has started. Then combine then into a single flag on the scope.
-                $q.all({'hasTourneyStarted': poolService.hasTourneyStarted(),
-                        'allowBracketChangesDuringTourney': poolService.allowBracketChangesDuringTourney($pool)})
-                    .then(function(results) {
-                        $scope.model.isUserAllowedToCreateBracket = results['allowBracketChangesDuringTourney'] || !results['hasTourneyStarted'];
-                    });
 
                 // we can't get the id of the currently-logged-in user until their auth info has synced from firebase
                 waitForAuth.then(function() {
@@ -45,6 +44,14 @@ angular.module('myApp.controllers').controller('PoolsController',
                     } else {
                         $scope.model.currentUserHasLoaded = true;
                     }
+                });
+
+                // Fetch two pieces of data from the server in parallel: whether the tourney has started, and whether users are
+                // allowed to create or change brackets after it has started. Then combine then into a single flag on the scope.
+                $q.all({'hasTourneyStarted': poolService.hasTourneyStarted(),
+                        'allowBracketChangesDuringTourney': poolService.allowBracketChangesDuringTourney($pool)})
+                    .then(function(results) {
+                        $scope.model.isUserAllowedToCreateBracket = results['allowBracketChangesDuringTourney'] || !results['hasTourneyStarted'];
                 });
             }
         };

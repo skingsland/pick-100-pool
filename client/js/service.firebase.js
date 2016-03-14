@@ -3,6 +3,9 @@ angular.module('myApp.service.firebase', ['firebase'])
 
    // a simple utility to create references to Firebase paths
    .factory('firebaseRef', ['Firebase', 'FBURL', function(Firebase, FBURL) {
+       // un-comment this to enable debug logging in the web console for the firebase client
+       //Firebase.enableLogging(true);
+       
       /**
        * @function
        * @name firebaseRef
