@@ -17,7 +17,7 @@
           <a href="#{{entry.link}}">{{entry.title}}</a>
         </li>
       </ul>
-      <span class="navbar-text" ng-if="!hasTourneyStarted">
+      <span class="navbar-text tourney-countdown" ng-if="!hasTourneyStarted">
         Tourney starts on {{tourneyStartTime | date:"MMM d 'at' h:mm a"}}.
         <timer end-time="tourneyStartTime">{{days}} days, {{hours}}h {{minutes}}m {{seconds}}s</timer>
         left to finalize your bracket!

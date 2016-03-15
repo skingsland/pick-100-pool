@@ -19,6 +19,13 @@ body {
     font-size: 18px;
     text-decoration: none;
 }
+/** Don't display the tourney countdown timer in the header on small screens, cause it messes up the layout. */
+@media (max-width: 980px) {
+  .navbar-header .tourney-countdown {
+      display:none;
+  }
+}
+
 
 .editPool fieldset {
     width: 600px;
