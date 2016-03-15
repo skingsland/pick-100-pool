@@ -1,6 +1,7 @@
 <h2>Account</h2>
 
 <form ng-cloak>
+    <!-- This is buggy!
     <fieldset>
         <legend>Profile</legend>
 
@@ -14,7 +15,7 @@
             <input type="text" name="name" ng-model="user.email"/>
         </label>
     </fieldset>
-
+    -->
     <fieldset>
         <legend>Change Password</legend>
 
@@ -35,10 +36,11 @@
 
         <button ng-click="updatePassword()">update password</button>
 
-        <p class="error" ng-show="err">{{err}}</p>
-        <p class="good" ng-show="msg">{{msg}}</p>
+        <br>
+        <p class="erroralert alert-danger" ng-show="err">{{err}}</p>
+        <p class="good alert alert-success" ng-show="msg">{{msg}}</p>
     </fieldset>
-
+    <!-- This is buggy!
     <fieldset>
         <legend>Change Email</legend>
 
@@ -57,6 +59,7 @@
         <p class="error" ng-show="emailerr">{{emailerr}}</p>
         <p class="good" ng-show="emailmsg">{{emailmsg}}</p>
     </fieldset>
+    -->
 </form>
 
-<button ng-click="logout()">Log Out</button>
+<!--<button ng-click="logout()">Log Out</button>-->
