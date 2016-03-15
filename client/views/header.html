@@ -31,6 +31,7 @@
             {{ user.name }}<b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
+            <li><a href="" ng-click="changePassword()">Change Password</a></li>
             <li><a href="" ng-click="logout()">Logout</a></li>
           </ul>
         </li>
@@ -87,8 +88,15 @@
                     <div class="form-group">
                       <button ng-click="login(); $event.stopPropagation();" class="btn btn-success btn-block">Log in</button>
                     </div>
+                    <div class="form-group">
+                      <button ng-click="resetPassword(); $event.stopPropagation();" class="btn btn-danger btn-block"
+                              data-toggle="tooltip" data-placement="bottom" title="Sends you an email with a new password">
+                        Reset Password
+                      </button>
+                    </div>
 
-                    <p ng-show="err" class="error">{{err}}</p>
+                    <p class="alert-info">{{msg}}</p>
+                    <p ng-show="err" class="alert-danger">{{err}}</p>
                   </form>
                 </div>
               </div>

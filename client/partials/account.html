@@ -1,65 +1,26 @@
-<h2>Account</h2>
+<h2>Change Password</h2>
+<br/>
+<div class="alert alert-info" role="alert" ng-show-auth="['logout','error']">
+    <h4>This page only works after you have logged in. Please click "Log In" in the upper right corner!</h4>
+</div>
 
-<form ng-cloak>
-    <!-- This is buggy!
-    <fieldset>
-        <legend>Profile</legend>
+<form ng-show-auth="'login'" class="accountManagement">
+    <div class="form-group">
+      <label for="oldpass">Old Password</label>
+      <input type="password" class="form-control" id="oldpass" placeholder="Your current password" ng-keypress="reset()" ng-model="oldpass">
+    </div>
+    <div class="form-group">
+      <label for="newpass">New Password</label>
+      <input type="password" class="form-control" id="newpass" placeholder="Your new password" ng-keypress="reset()" ng-model="newpass">
+    </div>
+    <div class="form-group">
+      <label for="confirm">Confirm Password</label>
+      <input type="password" class="form-control" id="confirm" placeholder="Your new password" ng-keypress="reset()" ng-model="confirm">
+    </div>
 
-        <label>
-            <span>Name:</span>
-            <input type="text" name="name" ng-model="user.name"/>
-        </label>
-
-        <label>
-            <span>Email:</span>
-            <input type="text" name="name" ng-model="user.email"/>
-        </label>
-    </fieldset>
-    -->
-    <fieldset>
-        <legend>Change Password</legend>
-
-        <label>
-            <span>Old Password:</span>
-            <input type="password" ng-keypress="reset()" ng-model="oldpass"/>
-        </label>
-
-        <label>
-            <span>New Password:</span>
-            <input type="password" ng-keypress="reset()" ng-model="newpass"/>
-        </label>
-
-        <label>
-            <span>Confirm Password:</span>
-            <input type="password" ng-keypress="reset()" ng-model="confirm"/>
-        </label>
-
-        <button ng-click="updatePassword()">update password</button>
-
-        <br>
-        <p class="erroralert alert-danger" ng-show="err">{{err}}</p>
-        <p class="good alert alert-success" ng-show="msg">{{msg}}</p>
-    </fieldset>
-    <!-- This is buggy!
-    <fieldset>
-        <legend>Change Email</legend>
-
-        <label>
-            <span>New Email:</span>
-            <input type="text" ng-keypress="reset()" ng-model="newemail"/>
-        </label>
-
-        <label>
-            <span>Password:</span>
-            <input type="password" ng-keypress="reset()" ng-model="pass"/>
-        </label>
-
-        <button ng-click="updateEmail()">update email</button>
-
-        <p class="error" ng-show="emailerr">{{emailerr}}</p>
-        <p class="good" ng-show="emailmsg">{{emailmsg}}</p>
-    </fieldset>
-    -->
+    <button type="submit" class="btn btn-primary" ng-click="updatePassword()">Update Password</button>
+    <br>
+    <br>
+    <div class="alert alert-danger" role="alert" ng-show="err">{{err}}</div>
+    <div class="alert alert-success" role="alert" ng-show="msg">{{msg}}</div>
 </form>
-
-<!--<button ng-click="logout()">Log Out</button>-->

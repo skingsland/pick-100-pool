@@ -47,6 +47,11 @@ angular.module('myApp.service.login', ['firebase', 'myApp.service.firebase'])
                }
             },
 
+            resetPassword: function(email, callback) {
+               assertAuth();
+               auth.$sendPasswordResetEmail(email).then(callback);
+            },
+
             createAccount: function(email, pass, callback) {
                assertAuth();
                auth.$createUser(email, pass).then(function(user) { callback && callback(null, user) }, callback);

@@ -26,6 +26,10 @@ body {
   }
 }
 
+.accountManagement input {
+    width: 15em;
+}
+
 
 .editPool fieldset {
     width: 600px;

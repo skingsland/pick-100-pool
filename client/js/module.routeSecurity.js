@@ -21,11 +21,11 @@
          var self = this;
          this._checkCurrent();
 
-         // Set up a handler for all future route changes, so we can check
-         // if authentication is required.
-         self._rootScope.$on("$routeChangeStart", function(e, next) {
-            self._authRequiredRedirect(next, self._loginPath);
-         });
+         // Set up a handler for all future route changes, so we can check if authentication is required.
+         // TODO: un-comment this if I ever want a standalone login page to redirect to
+         // self._rootScope.$on("$routeChangeStart", function(e, next) {
+         //    self._authRequiredRedirect(next, self._loginPath);
+         // });
 
          self._rootScope.$on('$firebaseSimpleLogin:login', angular.bind(this, this._login));
          self._rootScope.$on('$firebaseSimpleLogin:logout', angular.bind(this, this._logout));
@@ -34,9 +34,10 @@
 
       _checkCurrent: function() {
          // Check if the current page requires authentication.
-         if (this._route.current) {
-            this._authRequiredRedirect(this._route.current, this._loginPath);
-         }
+         // TODO: un-comment this if I ever want a standalone login page to redirect to
+         // if (this._route.current) {
+         //    this._authRequiredRedirect(this._route.current, this._loginPath);
+         // }
       },
 
       _login: function() {

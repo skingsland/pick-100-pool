@@ -4,6 +4,11 @@
 angular.module('myApp.controllers').controller('HeaderController',
            ['$rootScope', '$scope', '$location', 'syncData', 'loginService', 'tournamentRef',
     function($rootScope,   $scope,   $location,   syncData,   loginService,   tournamentRef) {
+        // enable the jQuery-based tooltip on the "Reset Password" button
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+        });
+
         // bind the user's data to the scope, once they're logged in
 
         $scope.user = {};
@@ -27,6 +32,10 @@ angular.module('myApp.controllers').controller('HeaderController',
             // clear the old user's firebase and scope bindings
             $scope.unBindUser();
             $scope.user = {};
+        };
+
+        $scope.changePassword = function() {
+            $location.path('/account');
         };
 
         $scope.navbarEntries = [
