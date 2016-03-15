@@ -102,8 +102,11 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         };
 
         function getTotalPoints(totalPointsPerRound) {
-            return _.reduce(totalPointsPerRound, function (memo, currentValue) {
-                return memo + currentValue;
+            return totalPointsPerRound.reduce(function(previousValue, currentValue, currentIndex) {
+                // there is no zero index in the array, since the first position is the first round of the tourney
+                if (currentIndex === 0) return 0;
+
+                return previousValue + currentValue;
             }, 0);
         }
 
