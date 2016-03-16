@@ -102,6 +102,9 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         };
 
         function getTotalPoints(totalPointsPerRound) {
+            // this happens after the bracket is deleted, for some reason
+            if (totalPointsPerRound == null) return 0;
+
             return totalPointsPerRound.reduce(function(previousValue, currentValue, currentIndex) {
                 // there is no zero index in the array, since the first position is the first round of the tourney
                 if (currentIndex === 0) return 0;

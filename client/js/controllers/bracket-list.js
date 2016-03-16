@@ -46,6 +46,9 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         // any time a new bracket is added to the pool's list, add the full bracket object to the scope
         bracketService.findBracketIdsByPool($scope.poolId).$on('child_added', function(bracketIdSnapshot) {
             var bracketId = bracketIdSnapshot.snapshot.value;
+            
+            // happens after a bracket is deleted, for some reason
+            if (!bracketId) return;
 
             // Listen for changes to the bracket; this will be called first with the complete data, then again later if/when
             // any fields in the bracket change (e.g. total points or teams remaining).

@@ -40,6 +40,7 @@ angular.module('myApp.services').service('bracketService',
             // first remove the bracket from the list of brackets in the pool
             $bracket.$getRef().once('value', function (snapshot) {
                 var bracket = snapshot.val();
+                console.log('removing bracket', JSON.stringify(bracket), 'from pool', bracket.poolId);
                 var bracketRefToRemove = allPools.$child(bracket.poolId).$child('brackets').$child(bracket.ownerId);
                 bracketRefToRemove.$remove();
             });
