@@ -95,7 +95,9 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function getEventsUrlForDate(lastRunDateIsoString) {
-        var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?game_date.in=%s,%s&conference=All+Conferences';
+        var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?id.in='
+            + '106663,106675,106652,106680,106662,106677,106653,106681,106651,106742,106678,106674,106683,106650,106679,106676,106682,'
+            + '106904,106686,106655,106666,106656,106687,106654,106664,106657,106688,106685,106669,106665,106689,106739,106684,106668,106667';
         var startDateIsoString;
         var endDateIsoString = TOURNAMENT_END_TIME; // the end of the date range to fetch games, teams, scores, etc. for
 
@@ -123,7 +125,8 @@ function downloadGamesAndUpdateFirebase() {
         // startDateIsoString = '2015-03-16T08:00:00-04:00';
         // endDateIsoString = '2015-03-20T08:00:00-04:00';
         
-        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, endDateIsoString);
+        // var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, endDateIsoString);
+        var eventsUrlForDate = eventsUrlTemplate;
 
         console.log('lastRunDate =', lastRunDateIsoString, '| startDateTime =', startDateIsoString, '| eventsUrlForDate =', eventsUrlForDate);
 

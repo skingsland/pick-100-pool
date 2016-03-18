@@ -18,7 +18,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                                         + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>'
                                         + '</div>'},
                          {field:'totalPoints', displayName:'Points', width:60},
-                         {field:'num_teams_remaining', displayName:'Teams left', width:85}
+                         // {field:'num_teams_remaining', displayName:'Teams left', width:85}
                         ],
             // TODO: bold the row for the current user
             sortInfo: {fields: ['totalPoints'], directions: ['desc']},
