@@ -14,7 +14,7 @@
         Select Your Teams
       </a>
     </div>
-    <div class="col-md-4 col-md-offset-2" ng-if="pool.brackets">
+    <div class="col-md-4 col-md-offset-2" ng-if="pool.brackets" ng-init="enableBracketNameLink = true">
       <div ng-init="poolId = model.poolId" ng-include="'views/brackets/list.html'"></div>
     </div>
   </div>

@@ -8,15 +8,22 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
         $scope.allBracketsInPool = [];
 
+        function getCellTemplateForBracketNameColumn() {
+            if ($scope.enableBracketNameLink) {
+                return '<div class="ngCellText" ng-class="col.colIndex()">'
+                         + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>'
+                     + '</div>';
+            }
+            return ''; // use the normal, built-in cell template
+        }
+
         $scope.allBracketsGridOptions = {
             data: 'allBracketsInPool',
             enableRowSelection: false,
             rowHeight: 25,
             columnDefs: [{field:'name',
                           displayName:'Bracket',
-                          cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">'
-                                        + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>'
-                                        + '</div>'},
+                          cellTemplate: getCellTemplateForBracketNameColumn()},
                          {field:'totalPoints', displayName:'Points', width:60},
                          {field:'num_teams_remaining', displayName:'Teams left', width:85}
                         ],
