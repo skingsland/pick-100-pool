@@ -271,6 +271,12 @@ function downloadGamesAndUpdateFirebase() {
             var teamPointsForRound = team.child('/rounds/' + round).val();
             totalBracketPointsForRound += teamPointsForRound || 0;
 
+            console.log('updatePointsForBracket() for bracket =', bracket.val().name,
+                        'round =', round,
+                        'team =', team.val().id,
+                        'teamPointsForRound =', team.child('/rounds/' + round).val(),
+                        'is_eliminated =', team.child('is_eliminated').val());
+
             if (!team.child('is_eliminated').val()) {
                 numTeamsRemaining++;
             }
@@ -278,6 +284,8 @@ function downloadGamesAndUpdateFirebase() {
 
         totalBracketPointsForRoundRef.child(round).set(totalBracketPointsForRound);
         bracket.child('num_teams_remaining').ref().set(numTeamsRemaining);
+        
+        console.log('updated bracket', bracket.val().name, 'to have', numTeamsRemaining, 'teams remaining');
 
         // now recalculate the bracket's *total* points
         totalBracketPointsForRoundRef.once('value', function (rounds) {
