@@ -263,7 +263,7 @@ function downloadGamesAndUpdateFirebase() {
         var totalBracketPointsForRoundRef = bracket.child('total_bracket_points_for_round').ref();
         var totalBracketPointsForRound = 0;
         var totalBracketPoints = 0;
-        var numTeamsRemaining = 0;
+        // var numTeamsRemaining = 0;
 
         bracket.child('teams').forEach(function (teamId) {
             var team = allTeamsSnapshot.child(teamId.val());
@@ -277,15 +277,15 @@ function downloadGamesAndUpdateFirebase() {
                         'teamPointsForRound =', team.child('/rounds/' + round).val(),
                         'is_eliminated =', team.child('is_eliminated').val());
 
-            if (!team.child('is_eliminated').val()) {
-                numTeamsRemaining++;
-            }
+            // if (!team.child('is_eliminated').val()) {
+            //     numTeamsRemaining++;
+            // }
         });
 
         totalBracketPointsForRoundRef.child(round).set(totalBracketPointsForRound);
-        bracket.child('num_teams_remaining').ref().set(numTeamsRemaining);
         
-        console.log('updated bracket', bracket.val().name, 'to have', numTeamsRemaining, 'teams remaining');
+        // bracket.child('num_teams_remaining').ref().set(numTeamsRemaining);
+        // console.log('updated bracket', bracket.val().name, 'to have', numTeamsRemaining, 'teams remaining');
 
         // now recalculate the bracket's *total* points
         totalBracketPointsForRoundRef.once('value', function (rounds) {
