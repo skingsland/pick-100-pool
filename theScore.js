@@ -16,7 +16,6 @@ var TOURNAMENT_END_TIME = '2016-04-05T12:00:00-04:00';
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
-    var allTeamsSnapshot;
     var allBracketsSnapshot;
 
     // login and return a ref to the root of the firebase
@@ -60,16 +59,6 @@ function downloadGamesAndUpdateFirebase() {
 
         tournamentRef.child('brackets').once('value', function(snapshot) {
             allBracketsSnapshot = snapshot;
-            deferred.resolve();
-        });
-        return deferred.promise;
-    }
-
-    function fetchAllTeams() {
-        var deferred = Q.defer();
-
-        tournamentRef.child('teams').once('value', function(snapshot) {
-            allTeamsSnapshot = snapshot;
             deferred.resolve();
         });
         return deferred.promise;
@@ -157,7 +146,7 @@ function downloadGamesAndUpdateFirebase() {
 
     function updateFirebaseWithGameData(games) {
         var numGamesUpdated = 0;
-        console.log(games.length + ' games returned from firebase');
+        console.log(games.length + ' games returned from API, loading into firebase...');
 
         games.forEach(function (game) {
             // don't store results for play-in games, because teams don't participate in brackets until they've won the play-in,
@@ -263,37 +252,39 @@ function downloadGamesAndUpdateFirebase() {
         var totalBracketPointsForRoundRef = bracket.child('total_bracket_points_for_round').ref();
         var totalBracketPointsForRound = 0;
         var totalBracketPoints = 0;
-        // var numTeamsRemaining = 0;
+        var numTeamsRemaining = 0;
 
-        bracket.child('teams').forEach(function (teamId) {
-            var team = allTeamsSnapshot.child(teamId.val());
+        tournamentRef.child('teams').once('value', function(allTeamsSnapshot) {
+            bracket.child('teams').forEach(function (teamId) {
+                var team = allTeamsSnapshot.child(teamId.val());
+    
+                var teamPointsForRound = team.child('/rounds/' + round).val();
+                totalBracketPointsForRound += teamPointsForRound || 0;
 
-            var teamPointsForRound = team.child('/rounds/' + round).val();
-            totalBracketPointsForRound += teamPointsForRound || 0;
+                console.log('updatePointsForBracket() for bracket =', bracket.val().name,
+                            'round =', round,
+                            'team =', team.val().id,
+                            'teamPointsForRound =', team.child('/rounds/' + round).val(),
+                            'is_eliminated =', team.child('is_eliminated').val());
 
-            console.log('updatePointsForBracket() for bracket =', bracket.val().name,
-                        'round =', round,
-                        'team =', team.val().id,
-                        'teamPointsForRound =', team.child('/rounds/' + round).val(),
-                        'is_eliminated =', team.child('is_eliminated').val());
-
-            // if (!team.child('is_eliminated').val()) {
-            //     numTeamsRemaining++;
-            // }
-        });
-
-        totalBracketPointsForRoundRef.child(round).set(totalBracketPointsForRound);
-        
-        // bracket.child('num_teams_remaining').ref().set(numTeamsRemaining);
-        // console.log('updated bracket', bracket.val().name, 'to have', numTeamsRemaining, 'teams remaining');
-
-        // now recalculate the bracket's *total* points
-        totalBracketPointsForRoundRef.once('value', function (rounds) {
-            rounds.forEach(function (pointsForRound) {
-                totalBracketPoints += pointsForRound.val() || 0;
+                if (!team.child('is_eliminated').val()) {
+                    numTeamsRemaining++;
+                }
             });
-            console.log('updating bracket', bracket.val().name, 'to have', totalBracketPoints, 'totalPoints');
-            bracket.child('totalPoints').ref().set(totalBracketPoints);
+
+            totalBracketPointsForRoundRef.child(round).set(totalBracketPointsForRound);
+
+            bracket.child('num_teams_remaining').ref().set(numTeamsRemaining);
+            console.log('updated bracket', bracket.val().name, 'to have', numTeamsRemaining, 'teams remaining');
+
+            // now recalculate the bracket's *total* points
+            totalBracketPointsForRoundRef.once('value', function (rounds) {
+                rounds.forEach(function (pointsForRound) {
+                    totalBracketPoints += pointsForRound.val() || 0;
+                });
+                console.log('updating bracket', bracket.val().name, 'to have', totalBracketPoints, 'totalPoints');
+                bracket.child('totalPoints').ref().set(totalBracketPoints);
+            });
         });
     }
 
@@ -368,7 +359,6 @@ function downloadGamesAndUpdateFirebase() {
     tournamentRef = getTournamentRef(loginToFirebase());
 
     fetchAllBrackets()
-        .then(fetchAllTeams)
         .then(getLastRunDate)
         .then(downloadGamesFromAPI)
         .then(updateFirebaseWithGameData);
