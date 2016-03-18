@@ -16,6 +16,8 @@ var TOURNAMENT_END_TIME = '2016-04-05T12:00:00-04:00';
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
+    var allTeamsSnapshot;
+    var allBracketsSnapshot;
 
     // login and return a ref to the root of the firebase
     function loginToFirebase() {
@@ -49,6 +51,26 @@ function downloadGamesAndUpdateFirebase() {
 
         tournamentRef.child('last_run_date').once('value', function(snapshot) {
             deferred.resolve(snapshot.val());
+        });
+        return deferred.promise;
+    }
+
+    function fetchAllBrackets() {
+        var deferred = Q.defer();
+
+        tournamentRef.child('brackets').once('value', function(snapshot) {
+            allBracketsSnapshot = snapshot;
+            deferred.resolve();
+        });
+        return deferred.promise;
+    }
+
+    function fetchAllTeams() {
+        var deferred = Q.defer();
+
+        tournamentRef.child('teams').once('value', function(snapshot) {
+            allTeamsSnapshot = snapshot;
+            deferred.resolve();
         });
         return deferred.promise;
     }
@@ -223,33 +245,28 @@ function downloadGamesAndUpdateFirebase() {
         if (isGameOver(game) && round) {
 
             // find all brackets that contain the winning team, and recalculate their points for the round
-            tournamentRef.child('brackets').once('value', function (bracketsSnapshot) {
-                bracketsSnapshot.forEach(function(bracket) {
+            allBracketsSnapshot.forEach(function(bracket) {
 
-                    bracket.child('teams').forEach(function(bracketTeam) {
+                bracket.child('teams').forEach(function (bracketTeam) {
 
-                        // if the bracket contains one of the teams that just finished the game, update the bracket's total points
-                        // for this round (if the team won) and num_teams_remaining (if the team lost)
-                        if (game.home_team.short_name === bracketTeam.val() || game.away_team.short_name === bracketTeam.val()) {
-
-                            tournamentRef.child('teams').once('value', function(teams) {
-                                updatePointsForBracket(bracket, round, teams)
-                            })
-                        }
-                    });
-                })
-            })
+                    // if the bracket contains one of the teams that just finished the game, update the bracket's total points
+                    // for this round (if the team won) and num_teams_remaining (if the team lost)
+                    if(game.home_team.short_name === bracketTeam.val() || game.away_team.short_name === bracketTeam.val()) {
+                        updatePointsForBracket(bracket, round);
+                    }
+                });
+            });
         }
     }
 
-    function updatePointsForBracket(bracket, round, teams) {
+    function updatePointsForBracket(bracket, round) {
         var totalBracketPointsForRoundRef = bracket.child('total_bracket_points_for_round').ref();
         var totalBracketPointsForRound = 0;
         var totalBracketPoints = 0;
         var numTeamsRemaining = 0;
 
         bracket.child('teams').forEach(function (teamId) {
-            var team = teams.child(teamId.val());
+            var team = allTeamsSnapshot.child(teamId.val());
 
             var teamPointsForRound = team.child('/rounds/' + round).val();
             totalBracketPointsForRound += teamPointsForRound || 0;
@@ -273,26 +290,20 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function updateNewAndChangedBrackets() {
-        tournamentRef.child('brackets').once('value', function (bracketsSnapshot) {
+            allBracketsSnapshot.forEach(function (bracketSnapshot) {
+            var bracket = bracketSnapshot.val();
 
-            bracketsSnapshot.forEach(function (bracketSnapshot) {
-                var bracket = bracketSnapshot.val();
+            if (bracket.isNewOrUpdated) {
+                console.log('updating points for new/changed bracket:', bracket.name);
 
-                if (bracket.isNewOrUpdated) {
-                    console.log('updating points for new/changed bracket:', bracket.name);
+                // we have to (re)calculate the points for each round
+                tournamentRef.child('rounds').on('child_added', function (round) {
+                    updatePointsForBracket(bracketSnapshot, round.name());
+                });
 
-                    // we have to (re)calculate the points for each round
-                    tournamentRef.child('teams').once('value', function(teams) {
-
-                        tournamentRef.child('rounds').on('child_added', function (round) {
-                            updatePointsForBracket(bracketSnapshot, round.name(), teams);
-                        })
-                    });
-
-                    // clear the flag when we're done, so we don't have to do this update next time
-                    bracketSnapshot.child('isNewOrUpdated').ref().remove();
-                }
-            });
+                // clear the flag when we're done, so we don't have to do this update next time
+                bracketSnapshot.child('isNewOrUpdated').ref().remove();
+            }
         });
     }
 
@@ -343,12 +354,14 @@ function downloadGamesAndUpdateFirebase() {
 
 
     // to turn on logging in the firebase client
-    //Firebase.enableLogging(true);
+    // Firebase.enableLogging(true);
 
     // this is basically a "global variable", because it's needed by several of the functions above
     tournamentRef = getTournamentRef(loginToFirebase());
 
-    getLastRunDate()
+    fetchAllBrackets()
+        .then(fetchAllTeams)
+        .then(getLastRunDate)
         .then(downloadGamesFromAPI)
         .then(updateFirebaseWithGameData);
 }
