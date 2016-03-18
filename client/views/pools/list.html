@@ -1,15 +1,18 @@
-<div data-ng-init="findPools()">
+<div data-ng-init="findPools()" class="poolsList">
   <h3>March Madness Pools</h3>
   Select a pool<span ng-show-auth="'login'">, or create a new one</span>:<br><br>
-  <ul class="unstyled">
-    <li data-ng-repeat="pool in pools | orderByPriority">
-      <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
-      <span ng-show="pool.managerId === auth.user.uid">
-        (<a href="#/pools/{{ pool.$id }}/edit">Edit</a>)
-        (<a href="" data-ng-click="removePool(pool.$id)" >Delete</a>)
-      </span>
-    </li>
-  </ul> 
-  <br>
+    <div data-ng-repeat="pool in pools | orderByPriority">
+      <h4>
+        <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
+        <span ng-show="pool.managerId === auth.user.uid">
+          (<a href="#/pools/{{ pool.$id }}/edit">Edit</a>)
+          (<a href="" data-ng-click="removePool(pool.$id)" >Delete</a>)
+        </span>
+      </h4>
+      <div ng-if="pool.brackets">
+        <div ng-init="poolId = pool.$id" ng-include="'views/brackets/list.html'"></div>
+      </div>
+      <br/>
+    </div>
   <a class="btn btn-primary" ng-href="#/pools/create" ng-show-auth="'login'">Create a Pool</a>
 </div>
