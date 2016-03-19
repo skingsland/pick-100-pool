@@ -19,6 +19,10 @@ Deployment to heroku "dev" tier, from the local `dev` branch:
 * `git push heroku-dev dev:master`
 * `heroku logs --tail --app pick100pool-dev`
 
+Building the server and client (optional, since all dependencies are checked in):
+* `npm install`
+* `bower install`
+
 Running the full app locally:
 
 * `export FIREBASE_SECRET=`<copied from https://pick100pool.firebaseio.com/?page=Admin>
