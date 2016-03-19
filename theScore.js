@@ -107,8 +107,8 @@ function downloadGamesAndUpdateFirebase() {
 
     function getEventsUrlForDate(lastRunDateIsoString) {
         var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?id.in='
-            + '106663,106675,106652,106680,106662,106677,106653,106681,106651,106742,106678,106674,106683,106650,106679,106676,106682,'
-            + '106904,106686,106655,106666,106656,106687,106654,106664,106657,106688,106685,106669,106665,106689,106739,106684,106668,106667';
+            + '106737,106658,106900,106902,106670,106692,106693,106690,106659,106694,106691,'
+            + '106741,106660,106695,106672,106899,106696,106661,106736,106671,106697,106673';
         var startDateIsoString;
         var endDateIsoString = TOURNAMENT_END_TIME; // the end of the date range to fetch games, teams, scores, etc. for
 
@@ -257,7 +257,7 @@ function downloadGamesAndUpdateFirebase() {
         tournamentRef.child('teams').once('value', function(allTeamsSnapshot) {
             bracket.child('teams').forEach(function (teamId) {
                 var team = allTeamsSnapshot.child(teamId.val());
-    
+
                 var teamPointsForRound = team.child('/rounds/' + round).val();
                 totalBracketPointsForRound += teamPointsForRound || 0;
 
