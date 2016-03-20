@@ -170,40 +170,53 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function updateTeamInFirebase(team, seed, region, conference, game) {
-        var teamInFirebase = tournamentRef.child('teams').child(team.short_name);
-        var pointsForRound, winningTeam;
+        addTeamToFirebaseIfNotExists(team, seed, region, conference).then(function() {
+            var teamInFirebase = tournamentRef.child('teams').child(team.short_name);
+            var pointsForRound, winningTeam;
 
-        // add the team to firebase, if it doesn't already exist
-        teamInFirebase.transaction(function(currentValue) {
-            // we're using the short name of the team as its ID, to make foreign keys in firebase more intuitive
-            if (currentValue === null) {
-                return {
+            // now add the points for the team winning or losing the round
+            if (isGameOver(game)) {
+                winningTeam = getWinningTeam(game);
+
+                if (team.short_name === winningTeam.short_name) {
+                    pointsForRound = winningTeam.points_for_round;
+
+                    // console.log(team.name, "won round", getRound(game), "for", pointsForRound, "points");
+                }
+                else {
+                    pointsForRound = 0;
+                    teamInFirebase.update({is_eliminated: true});
+
+                    // console.log(team.name, "is eliminated in round", getRound(game));
+                }
+                teamInFirebase.child('rounds').child(getRound(game)).set(pointsForRound);
+            }
+        })
+    }
+
+    function addTeamToFirebaseIfNotExists(team, seed, region, conference) {
+        var deferred = Q.defer();
+
+        var teamInFirebase = tournamentRef.child('teams').child(team.short_name);
+        
+        teamInFirebase.once('value', function(teamSnapshot) {
+            if (!teamSnapshot.exists()) {
+                console.log('team', teamSnapshot.name(), 'is new and will be added to the list of teams in firebase!');
+
+                // we're using the short name of the team as its ID, to make foreign keys in firebase more intuitive
+                teamInFirebase.set({
                     id: team.short_name,
                     full_name: team.full_name,
                     seed: seed,
                     region: region,
                     conference: conference
-                };
+                });
             }
+
+            deferred.resolve();
         });
 
-        // now add the points for the team winning or losing the round
-        if (isGameOver(game)) {
-            winningTeam = getWinningTeam(game);
-
-            if (team.short_name === winningTeam.short_name) {
-                pointsForRound = winningTeam.points_for_round;
-
-                //console.log(team.name, "won round", game.round, "for", pointsForRound, "points");
-            }
-            else {
-                pointsForRound = 0;
-                teamInFirebase.update({is_eliminated: true});
-
-                //console.log(team.name, "is eliminated in round", game.round);
-            }
-            teamInFirebase.child('rounds').child(getRound(game)).set(pointsForRound);
-        }
+        return deferred.promise;
     }
 
     // updates the game info in Firebase, based on what the API returned
@@ -267,7 +280,10 @@ function downloadGamesAndUpdateFirebase() {
                             'teamPointsForRound =', team.child('/rounds/' + round).val(),
                             'is_eliminated =', team.child('is_eliminated').val());
 
+                // console.log('team =', team.val());
+
                 if (!team.child('is_eliminated').val()) {
+                    // console.log('is_eliminated != true');
                     numTeamsRemaining++;
                 }
             });
