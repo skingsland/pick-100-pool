@@ -75,6 +75,7 @@ body {
 .bracketGrid .eliminated .col0,
 .bracketGrid .eliminated .col1 {
     color: darkgray;
+    text-decoration: line-through;
 }
 /* all of the numbers in the table should be right-aligned */
 .bracketGrid .ngCell {
