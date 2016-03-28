@@ -107,7 +107,7 @@ function downloadGamesAndUpdateFirebase() {
 
     function getEventsUrlForDate(lastRunDateIsoString) {
         var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?id.in='
-            + '106848,106847,106850,106849';
+            + '106851,106852';
         var startDateIsoString;
         var endDateIsoString = TOURNAMENT_END_TIME; // the end of the date range to fetch games, teams, scores, etc. for
 
