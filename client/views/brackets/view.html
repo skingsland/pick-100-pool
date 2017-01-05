@@ -1,7 +1,7 @@
 <div id="{{ bracketId }}" class="viewBracket" data-ng-controller="ViewBracketController" data-ng-init="findAllTeams().then(getBracketWithScores);">
   <h3>{{ bracket.name }}</h3>
   <span class="bracketOwner">by {{ owner.name }}</span>
-  <div class="bracketGrid" ng-grid="bracketGridOptions"></div>
+  <div class="bracketGrid" ui-grid="bracketGridOptions" ui-grid-resize-columns></div>
 
   <!-- In order for the edit or delete bracket buttons to be displayed, the user needs to be logged in, they need to be the
        owner of the bracket, and the current date needs to be before the first game of the tournament UNLESS the pool has

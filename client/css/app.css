@@ -62,6 +62,7 @@ body {
 .viewBracket .bracketOwner {
     margin-left: 15px;
 }
+/* allow room for the <br/> */
 .bracketGrid {
     border: 1px solid rgb(212,212,212);
     height: 409px;
@@ -72,8 +73,7 @@ body {
 .bracketGrid .ngHeaderText small {
     font-weight: normal;
 }
-.bracketGrid .eliminated .col0,
-.bracketGrid .eliminated .col1 {
+.bracketGrid .eliminated {
     color: darkgray;
     text-decoration: line-through;
 }

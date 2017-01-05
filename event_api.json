@@ -1,0 +1,3615 @@
+[
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Missouri Valley",
+      "Pac-12",
+      "Top 25"
+    ],
+    event_status: "in_progress",
+    has_play_by_play_records: true,
+    id: 106650,
+    game_date: "Fri, 18 Mar 2016 01:20:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 02:09:51 -0000",
+    api_uri: "/ncaab/events/106650",
+    resource_uri: "/basketball/events/106650",
+    status: "in_progress",
+    preview: "/articles/3546326",
+    event_details: [
+      {
+        label: "Providence, RI",
+        content: "Dunkin' Donuts Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Watch on",
+        content: "TSN4",
+        identifier: "broadcast/ca"
+      },
+      {
+        label: "Watch on",
+        content: "TNT",
+        identifier: "broadcast/us"
+      },
+      {
+        label: "Closing odds",
+        content: "ARI pk, o/u 136.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Wich",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Wichita State",
+      search_name: "Wichita State",
+      id: 1213,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1213/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1213/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1213/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1213/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Wichita State",
+      short_name: "WICH",
+      conference: "Missouri Valley",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:17:38 -0000",
+      subscription_count: 37133,
+      api_uri: "/ncaab/teams/1213",
+      resource_uri: "/basketball/teams/1213"
+    },
+    home_team: {
+      abbreviation: "Ari",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Arizona",
+      search_name: "Arizona",
+      id: 69,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/69/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/69/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/69/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/69/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Arizona",
+      short_name: "ARI",
+      conference: "Pacific 12",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:33:34 -0000",
+      subscription_count: 70058,
+      api_uri: "/ncaab/teams/69",
+      resource_uri: "/basketball/teams/69"
+    },
+    top_match: {
+      priority: "High",
+      description: "",
+      note: ""
+    },
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Providence, RI",
+    stadium: "Dunkin' Donuts Center",
+    away_conference: "Missouri Valley",
+    home_conference: "Pacific 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:136.0",
+      home_odd: "pk",
+      id: 51735,
+      line: "ARI pk",
+      over_under: "136.0",
+      api_uri: "/ncaab/odds/51735",
+      closing: "ARI pk, o/u 136.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112294,
+      has_statistics: true,
+      progress: {
+        clock_label: "7:24 1st",
+        string: "7:24 1st",
+        status: "in_progress",
+        event_status: "in_progress",
+        segment: 1,
+        segment_string: "1st",
+        segment_description: "1st Half",
+        clock: "7:24",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 02:09:45 -0000",
+      api_uri: "/ncaab/box_scores/112294",
+      score: {
+        home: {
+          score: 9
+        },
+        away: {
+          score: 17
+        },
+        winning_team: "/ncaab/teams/1213",
+        losing_team: "/ncaab/teams/69",
+        tie_game: false
+      }
+    },
+    away_ranking: 11,
+    home_ranking: 6,
+    important: true,
+    away_region: "South",
+    home_region: "South",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 5,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 6,
+      away: 11
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "ACC",
+      "All Conferences",
+      "MAC",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106651,
+    game_date: "Thu, 17 Mar 2016 22:50:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 01:06:52 -0000",
+    api_uri: "/ncaab/events/106651",
+    resource_uri: "/basketball/events/106651",
+    status: "final",
+    preview: "/articles/3546322",
+    recap: "/articles/3546973",
+    event_details: [
+      {
+        label: "Providence, RI",
+        content: "Dunkin' Donuts Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Referees",
+        content: "Ed Corbett, Antinio Petty, Tim Gattis",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "MIA-FL -14.0, o/u 148.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Buff",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Buffalo",
+      search_name: "Buffalo",
+      id: 162,
+      location: "",
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/162/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/162/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/162/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/162/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Buffalo",
+      short_name: "BUF",
+      conference: "Mid-American",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:22:01 -0000",
+      subscription_count: 7299,
+      api_uri: "/ncaab/teams/162",
+      resource_uri: "/basketball/teams/162"
+    },
+    home_team: {
+      abbreviation: "Mia-Fl",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Miami (FL)",
+      search_name: "Miami (FL)",
+      id: 657,
+      location: "",
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/657/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/657/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/657/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/657/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Miami FL",
+      short_name: "MIA",
+      conference: "Atlantic Coast",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:43:26 -0000",
+      subscription_count: 46156,
+      api_uri: "/ncaab/teams/657",
+      resource_uri: "/basketball/teams/657"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Providence, RI",
+    stadium: "Dunkin' Donuts Center",
+    away_conference: "Mid-American",
+    home_conference: "Atlantic Coast",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:148.0",
+      home_odd: "-14.0",
+      id: 51672,
+      line: "MIA-FL -14.0",
+      over_under: "148.0",
+      api_uri: "/ncaab/odds/51672",
+      closing: "MIA-FL -14.0, o/u 148.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112289,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 01:39:18 -0000",
+      api_uri: "/ncaab/box_scores/112289",
+      score: {
+        home: {
+          score: 79
+        },
+        away: {
+          score: 72
+        },
+        winning_team: "/ncaab/teams/657",
+        losing_team: "/ncaab/teams/162",
+        tie_game: false
+      }
+    },
+    away_ranking: 14,
+    home_ranking: 3,
+    important: true,
+    away_region: "South",
+    home_region: "South",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 6,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 3,
+      away: 14
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "AAC",
+      "All Conferences",
+      "Pac-12"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106652,
+    game_date: "Thu, 17 Mar 2016 17:30:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 01:34:01 -0000",
+    api_uri: "/ncaab/events/106652",
+    resource_uri: "/basketball/events/106652",
+    status: "final",
+    preview: "/articles/3546269",
+    recap: "/articles/3546768",
+    event_details: [
+      {
+        label: "Des Moines, IA",
+        content: "Wells Fargo Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Referees",
+        content: "James Breeding, Karl Hess, Sean Hull",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "UCONN -3.5, o/u 131.5",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "UConn",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Connecticut",
+      search_name: "Connecticut",
+      id: 280,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/280/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/280/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/280/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/280/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Connecticut",
+      short_name: "UCONN",
+      conference: "American Athletic",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:08:30 -0000",
+      subscription_count: 51289,
+      api_uri: "/ncaab/teams/280",
+      resource_uri: "/basketball/teams/280"
+    },
+    home_team: {
+      abbreviation: "Colo",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Colorado",
+      search_name: "Colorado",
+      id: 260,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/260/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/260/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/260/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/260/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Colorado",
+      short_name: "COL",
+      conference: "Pacific 12",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:44:58 -0000",
+      subscription_count: 21161,
+      api_uri: "/ncaab/teams/260",
+      resource_uri: "/basketball/teams/260"
+    },
+    top_match: {
+      priority: "High",
+      description: "",
+      note: ""
+    },
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Des Moines, IA",
+    stadium: "Wells Fargo Arena",
+    away_conference: "American Athletic",
+    home_conference: "Pacific 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "-3.5",
+      home_odd: "T:131.5",
+      id: 51668,
+      line: "UCONN -3.5",
+      over_under: "131.5",
+      api_uri: "/ncaab/odds/51668",
+      closing: "UCONN -3.5, o/u 131.5"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112283,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 20:03:03 -0000",
+      api_uri: "/ncaab/box_scores/112283",
+      score: {
+        home: {
+          score: 67
+        },
+        away: {
+          score: 74
+        },
+        winning_team: "/ncaab/teams/280",
+        losing_team: "/ncaab/teams/260",
+        tie_game: false
+      }
+    },
+    away_ranking: 9,
+    home_ranking: 8,
+    important: false,
+    away_region: "South",
+    home_region: "South",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 2,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 8,
+      away: 9
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big 12",
+      "Ohio Valley",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106653,
+    game_date: "Thu, 17 Mar 2016 20:00:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Thu, 17 Mar 2016 22:33:09 -0000",
+    api_uri: "/ncaab/events/106653",
+    resource_uri: "/basketball/events/106653",
+    status: "final",
+    preview: "/articles/3546181",
+    recap: "/articles/3546899",
+    event_details: [
+      {
+        label: "Des Moines, IA",
+        content: "Wells Fargo Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Attendance",
+        content: "16,628",
+        identifier: "stadium_attendance"
+      },
+      {
+        label: "Referees",
+        content: "D.J. Carstensen, Jeffrey Anderson, A.J. Desai",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "KANSAS -24.5, o/u 151.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "APSU",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Austin Peay",
+      search_name: "Austin Peay",
+      id: 94,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/94/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/94/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/94/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/94/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Austin Peay",
+      short_name: "APSU",
+      conference: "Ohio Valley",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:44:54 -0000",
+      subscription_count: 3372,
+      api_uri: "/ncaab/teams/94",
+      resource_uri: "/basketball/teams/94"
+    },
+    home_team: {
+      abbreviation: "Kansas",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Kansas",
+      search_name: "Kansas",
+      id: 524,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/524/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/524/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/524/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/524/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Kansas",
+      short_name: "KAN",
+      conference: "Big 12",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:36:32 -0000",
+      subscription_count: 134214,
+      api_uri: "/ncaab/teams/524",
+      resource_uri: "/basketball/teams/524"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Des Moines, IA",
+    stadium: "Wells Fargo Arena",
+    away_conference: "Ohio Valley",
+    home_conference: "Big 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:151.0",
+      home_odd: "-24.5",
+      id: 51671,
+      line: "KANSAS -24.5",
+      over_under: "151.0",
+      api_uri: "/ncaab/odds/51671",
+      closing: "KANSAS -24.5, o/u 151.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112287,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 22:36:13 -0000",
+      api_uri: "/ncaab/box_scores/112287",
+      score: {
+        home: {
+          score: 105
+        },
+        away: {
+          score: 79
+        },
+        winning_team: "/ncaab/teams/524",
+        losing_team: "/ncaab/teams/94",
+        tie_game: false
+      }
+    },
+    away_ranking: 16,
+    home_ranking: 1,
+    important: true,
+    away_region: "South",
+    home_region: "South",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 1,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 1,
+      away: 16
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big 12",
+      "Ivy League",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106662,
+    game_date: "Thu, 17 Mar 2016 18:45:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Thu, 17 Mar 2016 21:32:43 -0000",
+    api_uri: "/ncaab/events/106662",
+    resource_uri: "/basketball/events/106662",
+    status: "final",
+    preview: "/articles/3546289",
+    recap: "/articles/3546845",
+    event_details: [
+      {
+        label: "Providence, RI",
+        content: "Dunkin' Donuts Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Attendance",
+        content: "11,656",
+        identifier: "stadium_attendance"
+      },
+      {
+        label: "Referees",
+        content: "Roger Ayers, Michael Irving, Tim Comer",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "BAYLOR -5.5, o/u 136.5",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Yale",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Yale",
+      search_name: "Yale",
+      id: 1254,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1254/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1254/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1254/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1254/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Yale",
+      short_name: "YALE",
+      conference: "Ivy League",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:34:04 -0000",
+      subscription_count: 5126,
+      api_uri: "/ncaab/teams/1254",
+      resource_uri: "/basketball/teams/1254"
+    },
+    home_team: {
+      abbreviation: "Baylor",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Baylor",
+      search_name: "Baylor",
+      id: 109,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/109/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/109/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/109/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/109/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Baylor",
+      short_name: "BAY",
+      conference: "Big 12",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:34:23 -0000",
+      subscription_count: 36049,
+      api_uri: "/ncaab/teams/109",
+      resource_uri: "/basketball/teams/109"
+    },
+    top_match: {
+      priority: "High",
+      description: "",
+      note: ""
+    },
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Providence, RI",
+    stadium: "Dunkin' Donuts Center",
+    away_conference: "Ivy League",
+    home_conference: "Big 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:136.5",
+      home_odd: "-5.5",
+      id: 51670,
+      line: "BAYLOR -5.5",
+      over_under: "136.5",
+      api_uri: "/ncaab/odds/51670",
+      closing: "BAYLOR -5.5, o/u 136.5"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112285,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 21:57:02 -0000",
+      api_uri: "/ncaab/box_scores/112285",
+      score: {
+        home: {
+          score: 75
+        },
+        away: {
+          score: 79
+        },
+        winning_team: "/ncaab/teams/1254",
+        losing_team: "/ncaab/teams/109",
+        tie_game: false
+      }
+    },
+    away_ranking: 12,
+    home_ranking: 5,
+    important: true,
+    away_region: "West",
+    home_region: "West",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 11,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 5,
+      away: 12
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "ACC",
+      "All Conferences",
+      "Colonial Athletic",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106663,
+    game_date: "Thu, 17 Mar 2016 16:15:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Thu, 17 Mar 2016 18:44:58 -0000",
+    api_uri: "/ncaab/events/106663",
+    resource_uri: "/basketball/events/106663",
+    status: "final",
+    preview: "/articles/3546168",
+    recap: "/articles/3546723",
+    event_details: [
+      {
+        label: "Providence, RI",
+        content: "Dunkin' Donuts Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Referees",
+        content: "Lamont Simpson, David Hall, Tony Chiazza",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "DUKE -10.0, o/u 154.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "NC-Wil",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "UNCW",
+      search_name: "UNCW",
+      id: 764,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/764/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/764/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/764/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/764/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "NC Wilmington",
+      short_name: "NCW",
+      conference: "Colonial Athletic",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:26:35 -0000",
+      subscription_count: 3891,
+      api_uri: "/ncaab/teams/764",
+      resource_uri: "/basketball/teams/764"
+    },
+    home_team: {
+      abbreviation: "Duke",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Duke",
+      search_name: "Duke",
+      id: 329,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/329/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/329/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/329/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/329/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Duke",
+      short_name: "DUKE",
+      conference: "Atlantic Coast",
+      has_injuries: true,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:19:01 -0000",
+      subscription_count: 237264,
+      api_uri: "/ncaab/teams/329",
+      resource_uri: "/basketball/teams/329"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Providence, RI",
+    stadium: "Dunkin' Donuts Center",
+    away_conference: "Colonial Athletic",
+    home_conference: "Atlantic Coast",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:154.0",
+      home_odd: "-10.0",
+      id: 51667,
+      line: "DUKE -10.0",
+      over_under: "154.0",
+      api_uri: "/ncaab/odds/51667",
+      closing: "DUKE -10.0, o/u 154.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112281,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 20:22:32 -0000",
+      api_uri: "/ncaab/box_scores/112281",
+      score: {
+        home: {
+          score: 93
+        },
+        away: {
+          score: 85
+        },
+        winning_team: "/ncaab/teams/329",
+        losing_team: "/ncaab/teams/764",
+        tie_game: false
+      }
+    },
+    away_ranking: 13,
+    home_ranking: 4,
+    important: true,
+    away_region: "West",
+    home_region: "West",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 12,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 4,
+      away: 13
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "ACC",
+      "All Conferences",
+      "Atlantic Sun",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106674,
+    game_date: "Thu, 17 Mar 2016 23:20:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 01:37:54 -0000",
+    api_uri: "/ncaab/events/106674",
+    resource_uri: "/basketball/events/106674",
+    status: "final",
+    preview: "/articles/3546283",
+    recap: "/articles/3546984",
+    event_details: [
+      {
+        label: "Raleigh, NC",
+        content: "PNC Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Referees",
+        content: "Jeff Vlark, Michael Greenstein, Donnie Eppley",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "UNC -22.5, o/u 149.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "FGCU",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "FGCU",
+      search_name: "FGCU",
+      id: 385,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/385/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/385/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/385/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/385/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "FGCU",
+      short_name: "FGCU",
+      conference: "Atlantic Sun",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:28:01 -0000",
+      subscription_count: 7320,
+      api_uri: "/ncaab/teams/385",
+      resource_uri: "/basketball/teams/385"
+    },
+    home_team: {
+      abbreviation: "UNC",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "North Carolina",
+      search_name: "North Carolina",
+      id: 756,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/756/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/756/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/756/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/756/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "North Carolina",
+      short_name: "UNC",
+      conference: "Atlantic Coast",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:26:52 -0000",
+      subscription_count: 201923,
+      api_uri: "/ncaab/teams/756",
+      resource_uri: "/basketball/teams/756"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Raleigh, NC",
+    stadium: "PNC Arena",
+    away_conference: "Atlantic Sun",
+    home_conference: "Atlantic Coast",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:149.0",
+      home_odd: "-22.5",
+      id: 51734,
+      line: "UNC -22.5",
+      over_under: "149.0",
+      api_uri: "/ncaab/odds/51734",
+      closing: "UNC -22.5, o/u 149.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112292,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 02:09:55 -0000",
+      api_uri: "/ncaab/box_scores/112292",
+      score: {
+        home: {
+          score: 83
+        },
+        away: {
+          score: 67
+        },
+        winning_team: "/ncaab/teams/756",
+        losing_team: "/ncaab/teams/385",
+        tie_game: false
+      }
+    },
+    away_ranking: 16,
+    home_ranking: 1,
+    important: true,
+    away_region: "East",
+    home_region: "East",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 17,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 1,
+      away: 16
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big 12",
+      "Big East"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106675,
+    game_date: "Thu, 17 Mar 2016 16:40:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 01:34:01 -0000",
+    api_uri: "/ncaab/events/106675",
+    resource_uri: "/basketball/events/106675",
+    status: "final",
+    preview: "/articles/3546148",
+    recap: "/articles/3546714",
+    event_details: [
+      {
+        label: "Raleigh, NC",
+        content: "PNC Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Referees",
+        content: "Doug Sirmons, John Gaffney, Matt Potter",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "BUTLER -3.5, o/u 144.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Butler",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Butler",
+      search_name: "Butler",
+      id: 164,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/164/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/164/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/164/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/164/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Butler",
+      short_name: "BUT",
+      conference: "Big East",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:32:59 -0000",
+      subscription_count: 26900,
+      api_uri: "/ncaab/teams/164",
+      resource_uri: "/basketball/teams/164"
+    },
+    home_team: {
+      abbreviation: "TxTch",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Texas Tech",
+      search_name: "Texas Tech",
+      id: 1079,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1079/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1079/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1079/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1079/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Texas Tech",
+      short_name: "TTU",
+      conference: "Big 12",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:11:40 -0000",
+      subscription_count: 16413,
+      api_uri: "/ncaab/teams/1079",
+      resource_uri: "/basketball/teams/1079"
+    },
+    top_match: {
+      priority: "High",
+      description: "",
+      note: ""
+    },
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Raleigh, NC",
+    stadium: "PNC Arena",
+    away_conference: "Big East",
+    home_conference: "Big 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "-3.5",
+      home_odd: "T:144.0",
+      id: 51650,
+      line: "BUTLER -3.5",
+      over_under: "144.0",
+      api_uri: "/ncaab/odds/51650",
+      closing: "BUTLER -3.5, o/u 144.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112282,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 19:55:09 -0000",
+      api_uri: "/ncaab/box_scores/112282",
+      score: {
+        home: {
+          score: 61
+        },
+        away: {
+          score: 71
+        },
+        winning_team: "/ncaab/teams/164",
+        losing_team: "/ncaab/teams/1079",
+        tie_game: false
+      }
+    },
+    away_ranking: 9,
+    home_ranking: 8,
+    important: false,
+    away_region: "Midwest",
+    home_region: "Midwest",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 26,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 8,
+      away: 9
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big East",
+      "Pac-12"
+    ],
+    event_status: "in_progress",
+    has_play_by_play_records: true,
+    id: 106676,
+    game_date: "Fri, 18 Mar 2016 01:50:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 02:09:05 -0000",
+    api_uri: "/ncaab/events/106676",
+    resource_uri: "/basketball/events/106676",
+    status: "in_progress",
+    preview: "/articles/3546272",
+    event_details: [
+      {
+        label: "Raleigh, NC",
+        content: "PNC Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Watch on",
+        content: "TSN3",
+        identifier: "broadcast/ca"
+      },
+      {
+        label: "Watch on",
+        content: "TBS",
+        identifier: "broadcast/us"
+      },
+      {
+        label: "Closing odds",
+        content: "PROV -2.5, o/u 150.5",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Prov",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Providence",
+      search_name: "Providence",
+      id: 865,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/865/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/865/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/865/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/865/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Providence",
+      short_name: "PROV",
+      conference: "Big East",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:22:51 -0000",
+      subscription_count: 13438,
+      api_uri: "/ncaab/teams/865",
+      resource_uri: "/basketball/teams/865"
+    },
+    home_team: {
+      abbreviation: "USC",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "USC",
+      search_name: "USC",
+      id: 1131,
+      location: "",
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1131/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1131/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1131/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1131/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "USC",
+      short_name: "USC",
+      conference: "Pacific 12",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:14:20 -0000",
+      subscription_count: 21049,
+      api_uri: "/ncaab/teams/1131",
+      resource_uri: "/basketball/teams/1131"
+    },
+    top_match: {
+      priority: "High",
+      description: "",
+      note: ""
+    },
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Raleigh, NC",
+    stadium: "PNC Arena",
+    away_conference: "Big East",
+    home_conference: "Pacific 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "-2.5",
+      home_odd: "T:150.5",
+      id: 51654,
+      line: "PROV -2.5",
+      over_under: "150.5",
+      api_uri: "/ncaab/odds/51654",
+      closing: "PROV -2.5, o/u 150.5"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112296,
+      has_statistics: true,
+      progress: {
+        clock_label: "14:45 1st",
+        string: "14:45 1st",
+        status: "in_progress",
+        event_status: "in_progress",
+        segment: 1,
+        segment_string: "1st",
+        segment_description: "1st Half",
+        clock: "14:45",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 02:08:05 -0000",
+      api_uri: "/ncaab/box_scores/112296",
+      score: {
+        home: {
+          score: 13
+        },
+        away: {
+          score: 9
+        },
+        winning_team: "/ncaab/teams/1131",
+        losing_team: "/ncaab/teams/865",
+        tie_game: false
+      }
+    },
+    away_ranking: 9,
+    home_ranking: 8,
+    important: false,
+    away_region: "East",
+    home_region: "East",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 18,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 8,
+      away: 9
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "ACC",
+      "All Conferences",
+      "MEAC",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106677,
+    game_date: "Thu, 17 Mar 2016 19:10:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Thu, 17 Mar 2016 21:07:04 -0000",
+    api_uri: "/ncaab/events/106677",
+    resource_uri: "/basketball/events/106677",
+    status: "final",
+    preview: "/articles/3546153",
+    recap: "/articles/3546825",
+    event_details: [
+      {
+        label: "Raleigh, NC",
+        content: "PNC Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Closing odds",
+        content: "UVA -23.0, o/u 130.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Hamp",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Hampton",
+      search_name: "Hampton",
+      id: 441,
+      location: "",
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/441/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/441/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/441/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/441/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Hampton",
+      short_name: "HAMP",
+      conference: "Mid-Eastern",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:36:07 -0000",
+      subscription_count: 3831,
+      api_uri: "/ncaab/teams/441",
+      resource_uri: "/basketball/teams/441"
+    },
+    home_team: {
+      abbreviation: "UVa",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Virginia",
+      search_name: "Virginia",
+      id: 1146,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1146/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1146/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1146/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1146/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Virginia",
+      short_name: "UVA",
+      conference: "Atlantic Coast",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:08:18 -0000",
+      subscription_count: 42983,
+      api_uri: "/ncaab/teams/1146",
+      resource_uri: "/basketball/teams/1146"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Raleigh, NC",
+    stadium: "PNC Arena",
+    away_conference: "Mid-Eastern",
+    home_conference: "Atlantic Coast",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:130.0",
+      home_odd: "-23.0",
+      id: 51651,
+      line: "UVA -23.0",
+      over_under: "130.0",
+      api_uri: "/ncaab/odds/51651",
+      closing: "UVA -23.0, o/u 130.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112286,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 21:45:02 -0000",
+      api_uri: "/ncaab/box_scores/112286",
+      score: {
+        home: {
+          score: 81
+        },
+        away: {
+          score: 45
+        },
+        winning_team: "/ncaab/teams/1146",
+        losing_team: "/ncaab/teams/441",
+        tie_game: false
+      }
+    },
+    away_ranking: 16,
+    home_ranking: 1,
+    important: true,
+    away_region: "Midwest",
+    home_region: "Midwest",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 25,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 1,
+      away: 16
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big Ten",
+      "Southern",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106678,
+    game_date: "Thu, 17 Mar 2016 23:10:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 01:28:16 -0000",
+    api_uri: "/ncaab/events/106678",
+    resource_uri: "/basketball/events/106678",
+    status: "final",
+    preview: "/articles/3546342",
+    recap: "/articles/3546980",
+    event_details: [
+      {
+        label: "Des Moines, IA",
+        content: "Wells Fargo Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Closing odds",
+        content: "IND -11.0, o/u 148.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Chat",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Chattanooga",
+      search_name: "Chattanooga",
+      id: 233,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/233/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/233/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/233/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/233/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Chattanooga",
+      short_name: "CHAT",
+      conference: "Southern",
+      has_injuries: true,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:29:10 -0000",
+      subscription_count: 4528,
+      api_uri: "/ncaab/teams/233",
+      resource_uri: "/basketball/teams/233"
+    },
+    home_team: {
+      abbreviation: "Ind",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Indiana",
+      search_name: "Indiana",
+      id: 490,
+      location: "",
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/490/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/490/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/490/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/490/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Indiana",
+      short_name: "IND",
+      conference: "Big Ten",
+      has_injuries: true,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:05:56 -0000",
+      subscription_count: 90706,
+      api_uri: "/ncaab/teams/490",
+      resource_uri: "/basketball/teams/490"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Des Moines, IA",
+    stadium: "Wells Fargo Arena",
+    away_conference: "Southern",
+    home_conference: "Big Ten",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:148.0",
+      home_odd: "-11.0",
+      id: 51673,
+      line: "IND -11.0",
+      over_under: "148.0",
+      api_uri: "/ncaab/odds/51673",
+      closing: "IND -11.0, o/u 148.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112291,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 01:28:16 -0000",
+      api_uri: "/ncaab/box_scores/112291",
+      score: {
+        home: {
+          score: 99
+        },
+        away: {
+          score: 74
+        },
+        winning_team: "/ncaab/teams/490",
+        losing_team: "/ncaab/teams/233",
+        tie_game: false
+      }
+    },
+    away_ranking: 12,
+    home_ranking: 5,
+    important: true,
+    away_region: "East",
+    home_region: "East",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 19,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 5,
+      away: 12
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "America East",
+      "SEC",
+      "Top 25"
+    ],
+    event_status: "in_progress",
+    has_play_by_play_records: true,
+    id: 106679,
+    game_date: "Fri, 18 Mar 2016 01:40:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 02:11:02 -0000",
+    api_uri: "/ncaab/events/106679",
+    resource_uri: "/basketball/events/106679",
+    status: "in_progress",
+    preview: "/articles/3546329",
+    event_details: [
+      {
+        label: "Des Moines, IA",
+        content: "Wells Fargo Arena",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Watch on",
+        content: "TSN5, CBS",
+        identifier: "broadcast/ca"
+      },
+      {
+        label: "Watch on",
+        content: "CBS",
+        identifier: "broadcast/us"
+      },
+      {
+        label: "Closing odds",
+        content: "UK -13.5, o/u 143.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "StnyBr",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Stony Brook",
+      search_name: "Stony Brook",
+      id: 1048,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1048/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1048/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1048/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1048/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Stony Brook",
+      short_name: "SB",
+      conference: "America East",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:43:36 -0000",
+      subscription_count: 4338,
+      api_uri: "/ncaab/teams/1048",
+      resource_uri: "/basketball/teams/1048"
+    },
+    home_team: {
+      abbreviation: "UK",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Kentucky",
+      search_name: "Kentucky",
+      id: 531,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/531/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/531/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/531/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/531/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Kentucky",
+      short_name: "UK",
+      conference: "Southeastern",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:36:31 -0000",
+      subscription_count: 176706,
+      api_uri: "/ncaab/teams/531",
+      resource_uri: "/basketball/teams/531"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Des Moines, IA",
+    stadium: "Wells Fargo Arena",
+    away_conference: "America East",
+    home_conference: "Southeastern",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:143.0",
+      home_odd: "-13.5",
+      id: 51674,
+      line: "UK -13.5",
+      over_under: "143.0",
+      api_uri: "/ncaab/odds/51674",
+      closing: "UK -13.5, o/u 143.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112295,
+      has_statistics: true,
+      progress: {
+        clock_label: "14:24 1st",
+        string: "14:24 1st",
+        status: "in_progress",
+        event_status: "in_progress",
+        segment: 1,
+        segment_string: "1st",
+        segment_description: "1st Half",
+        clock: "14:24",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 02:11:02 -0000",
+      api_uri: "/ncaab/box_scores/112295",
+      score: {
+        home: {
+          score: 8
+        },
+        away: {
+          score: 6
+        },
+        winning_team: "/ncaab/teams/531",
+        losing_team: "/ncaab/teams/1048",
+        tie_game: false
+      }
+    },
+    away_ranking: 13,
+    home_ranking: 4,
+    important: true,
+    away_region: "East",
+    home_region: "East",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 20,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 4,
+      away: 13
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big 12",
+      "Metro Atlantic Athletic",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106680,
+    game_date: "Thu, 17 Mar 2016 18:00:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Thu, 17 Mar 2016 20:10:22 -0000",
+    api_uri: "/ncaab/events/106680",
+    resource_uri: "/basketball/events/106680",
+    status: "final",
+    preview: "/articles/3546182",
+    recap: "/articles/3546794",
+    event_details: [
+      {
+        label: "Denver, CO",
+        content: "Pepsi Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Referees",
+        content: "Mike Roberts, Gregory Nixon, Tim Kelly",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "IAST -7.0, o/u 165.5",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Iona",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Iona",
+      search_name: "Iona",
+      id: 499,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/499/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/499/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/499/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/499/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Iona",
+      short_name: "IONA",
+      conference: "Metro Atlantic Athletic",
+      has_injuries: true,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:43:07 -0000",
+      subscription_count: 4718,
+      api_uri: "/ncaab/teams/499",
+      resource_uri: "/basketball/teams/499"
+    },
+    home_team: {
+      abbreviation: "IaSt",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Iowa State",
+      search_name: "Iowa State",
+      id: 501,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/501/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/501/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/501/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/501/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Iowa State",
+      short_name: "ISU",
+      conference: "Big 12",
+      has_injuries: true,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:35:08 -0000",
+      subscription_count: 49288,
+      api_uri: "/ncaab/teams/501",
+      resource_uri: "/basketball/teams/501"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Denver, CO",
+    stadium: "Pepsi Center",
+    away_conference: "Metro Atlantic Athletic",
+    home_conference: "Big 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:165.5",
+      home_odd: "-7.0",
+      id: 51669,
+      line: "IAST -7.0",
+      over_under: "165.5",
+      api_uri: "/ncaab/odds/51669",
+      closing: "IAST -7.0, o/u 165.5"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112284,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 20:48:23 -0000",
+      api_uri: "/ncaab/box_scores/112284",
+      score: {
+        home: {
+          score: 94
+        },
+        away: {
+          score: 81
+        },
+        winning_team: "/ncaab/teams/501",
+        losing_team: "/ncaab/teams/499",
+        tie_game: false
+      }
+    },
+    away_ranking: 13,
+    home_ranking: 4,
+    important: true,
+    away_region: "Midwest",
+    home_region: "Midwest",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 28,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 4,
+      away: 13
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big Ten",
+      "Sun Belt",
+      "Top 25"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106681,
+    game_date: "Thu, 17 Mar 2016 20:30:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Thu, 17 Mar 2016 23:28:17 -0000",
+    api_uri: "/ncaab/events/106681",
+    resource_uri: "/basketball/events/106681",
+    status: "final",
+    preview: "/articles/3546198",
+    recap: "/articles/3546931",
+    event_details: [
+      {
+        label: "Denver, CO",
+        content: "Pepsi Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Attendance",
+        content: "19,499",
+        identifier: "stadium_attendance"
+      },
+      {
+        label: "Referees",
+        content: "Brian O'Connell, Gerry Pollard, Deldre Carr",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "PURDUE -8.0, o/u 127.5",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "LR",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Little Rock",
+      search_name: "Little Rock",
+      id: 76,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/76/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/76/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/76/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/76/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Little Rock",
+      short_name: "LR",
+      conference: "Sun Belt",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:24:26 -0000",
+      subscription_count: 3665,
+      api_uri: "/ncaab/teams/76",
+      resource_uri: "/basketball/teams/76"
+    },
+    home_team: {
+      abbreviation: "Purdue",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Purdue",
+      search_name: "Purdue",
+      id: 872,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/872/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/872/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/872/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/872/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Purdue",
+      short_name: "PUR",
+      conference: "Big Ten",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:42:10 -0000",
+      subscription_count: 38389,
+      api_uri: "/ncaab/teams/872",
+      resource_uri: "/basketball/teams/872"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Denver, CO",
+    stadium: "Pepsi Center",
+    away_conference: "Sun Belt",
+    home_conference: "Big Ten",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:127.5",
+      home_odd: "-8.0",
+      id: 51652,
+      line: "PURDUE -8.0",
+      over_under: "127.5",
+      api_uri: "/ncaab/odds/51652",
+      closing: "PURDUE -8.0, o/u 127.5"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112288,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final (2OT)",
+        string: "Final (2OT)",
+        status: "final",
+        event_status: "final",
+        segment: 4,
+        segment_string: "2OT",
+        segment_description: "2OT",
+        clock: "0:00",
+        overtime: true
+      },
+      updated_at: "Fri, 18 Mar 2016 00:04:39 -0000",
+      api_uri: "/ncaab/box_scores/112288",
+      score: {
+        home: {
+          score: 83
+        },
+        away: {
+          score: 85
+        },
+        winning_team: "/ncaab/teams/76",
+        losing_team: "/ncaab/teams/872",
+        tie_game: false
+      }
+    },
+    away_ranking: 12,
+    home_ranking: 5,
+    important: true,
+    away_region: "Midwest",
+    home_region: "Midwest",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 27,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 5,
+      away: 12
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Big East",
+      "Top 25",
+      "West Coast"
+    ],
+    event_status: "pre_game",
+    has_play_by_play_records: false,
+    id: 106682,
+    game_date: "Fri, 18 Mar 2016 01:57:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Mon, 14 Mar 2016 03:37:24 -0000",
+    api_uri: "/ncaab/events/106682",
+    resource_uri: "/basketball/events/106682",
+    status: "pre_game",
+    preview: "/articles/3546405",
+    event_details: [
+      {
+        label: "Denver, CO",
+        content: "Pepsi Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Watch on",
+        content: "TSN",
+        identifier: "broadcast/ca"
+      },
+      {
+        label: "Watch on",
+        content: "TRU",
+        identifier: "broadcast/us"
+      }
+    ],
+    away_team: {
+      abbreviation: "Gonz",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Gonzaga",
+      search_name: "Gonzaga",
+      id: 421,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/421/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/421/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/421/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/421/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Gonzaga",
+      short_name: "GONZ",
+      conference: "West Coast",
+      has_injuries: true,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:34:14 -0000",
+      subscription_count: 43945,
+      api_uri: "/ncaab/teams/421",
+      resource_uri: "/basketball/teams/421"
+    },
+    home_team: {
+      abbreviation: "SetonH",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Seton Hall",
+      search_name: "Seton Hall",
+      id: 935,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/935/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/935/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/935/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/935/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Seton Hall",
+      short_name: "SET",
+      conference: "Big East",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:46:45 -0000",
+      subscription_count: 11107,
+      api_uri: "/ncaab/teams/935",
+      resource_uri: "/basketball/teams/935"
+    },
+    top_match: {
+      priority: "High",
+      description: "",
+      note: ""
+    },
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Denver, CO",
+    stadium: "Pepsi Center",
+    away_conference: "West Coast",
+    home_conference: "Big East",
+    flip_alignment: false,
+    odd: {
+      away_odd: "-2.0",
+      home_odd: "T:146.0",
+      id: 51655,
+      line: "GONZ -2.0",
+      over_under: "146.0",
+      api_uri: "/ncaab/odds/51655"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112297,
+      has_statistics: false,
+      progress: {
+        clock_label: "Pre Game",
+        string: "Pre Game",
+        status: "pre_game",
+        event_status: "pre_game",
+        segment: null,
+        segment_string: null,
+        segment_description: null,
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 14:00:04 -0000",
+      api_uri: "/ncaab/box_scores/112297",
+      score: {
+        home: {
+          score: 0
+        },
+        away: {
+          score: 0
+        },
+        tie_game: true
+      }
+    },
+    away_ranking: 11,
+    home_ranking: 6,
+    important: true,
+    away_region: "Midwest",
+    home_region: "Midwest",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 29,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 6,
+      away: 11
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "Mountain West",
+      "Pac-12",
+      "Top 25"
+    ],
+    event_status: "in_progress",
+    has_play_by_play_records: true,
+    id: 106683,
+    game_date: "Thu, 17 Mar 2016 23:27:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 02:11:00 -0000",
+    api_uri: "/ncaab/events/106683",
+    resource_uri: "/basketball/events/106683",
+    status: "in_progress",
+    preview: "/articles/3546337",
+    event_details: [
+      {
+        label: "Denver, CO",
+        content: "Pepsi Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Watch on",
+        content: "TSN",
+        identifier: "broadcast/ca"
+      },
+      {
+        label: "Watch on",
+        content: "TRU",
+        identifier: "broadcast/us"
+      },
+      {
+        label: "Closing odds",
+        content: "UTAH -8.5, o/u 138.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "Fres",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Fresno State",
+      search_name: "Fresno State",
+      id: 401,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/401/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/401/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/401/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/401/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Fresno State",
+      short_name: "FSU",
+      conference: "Mountain West",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:42:46 -0000",
+      subscription_count: 6495,
+      api_uri: "/ncaab/teams/401",
+      resource_uri: "/basketball/teams/401"
+    },
+    home_team: {
+      abbreviation: "Utah",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Utah",
+      search_name: "Utah",
+      id: 1132,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1132/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1132/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1132/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1132/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Utah",
+      short_name: "UTAH",
+      conference: "Pacific 12",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:34:37 -0000",
+      subscription_count: 24862,
+      api_uri: "/ncaab/teams/1132",
+      resource_uri: "/basketball/teams/1132"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Denver, CO",
+    stadium: "Pepsi Center",
+    away_conference: "Mountain West",
+    home_conference: "Pacific 12",
+    flip_alignment: false,
+    odd: {
+      away_odd: "T:138.0",
+      home_odd: "-8.5",
+      id: 51653,
+      line: "UTAH -8.5",
+      over_under: "138.0",
+      api_uri: "/ncaab/odds/51653",
+      closing: "UTAH -8.5, o/u 138.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112293,
+      has_statistics: true,
+      progress: {
+        clock_label: "2:09 2nd",
+        string: "2:09 2nd",
+        status: "in_progress",
+        event_status: "in_progress",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "2:09",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 02:11:10 -0000",
+      api_uri: "/ncaab/box_scores/112293",
+      score: {
+        home: {
+          score: 67
+        },
+        away: {
+          score: 57
+        },
+        winning_team: "/ncaab/teams/1132",
+        losing_team: "/ncaab/teams/401",
+        tie_game: false
+      }
+    },
+    away_ranking: 14,
+    home_ranking: 3,
+    important: true,
+    away_region: "Midwest",
+    home_region: "Midwest",
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: "Round of 64",
+    slot: 30,
+    tournament_name: "NCAA Final 64",
+    top_25_rankings: {
+      home: 3,
+      away: 14
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "ACC",
+      "All Conferences",
+      "Horizon"
+    ],
+    event_status: "final",
+    has_play_by_play_records: true,
+    id: 106742,
+    game_date: "Thu, 17 Mar 2016 23:00:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Fri, 18 Mar 2016 01:16:39 -0000",
+    api_uri: "/ncaab/events/106742",
+    resource_uri: "/basketball/events/106742",
+    status: "final",
+    recap: "/articles/3546971",
+    event_details: [
+      {
+        label: "Valparaiso, IN",
+        content: "Athletics-Recreation Center",
+        identifier: "stadium_location"
+      },
+      {
+        label: "Attendance",
+        content: "4,991",
+        identifier: "stadium_attendance"
+      },
+      {
+        label: "Referees",
+        content: "Randy Heimerman, Steve McJunkins, Kelly Pfeifer",
+        identifier: "officials"
+      },
+      {
+        label: "Closing odds",
+        content: "VALPO -4.5, o/u 148.0",
+        identifier: "closing_odds"
+      }
+    ],
+    away_team: {
+      abbreviation: "FlaSt",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Florida State",
+      search_name: "Florida State",
+      id: 388,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/388/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/388/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/388/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/388/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Florida State",
+      short_name: "FSU",
+      conference: "Atlantic Coast",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:26:16 -0000",
+      subscription_count: 30934,
+      api_uri: "/ncaab/teams/388",
+      resource_uri: "/basketball/teams/388"
+    },
+    home_team: {
+      abbreviation: "Valpo",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Valparaiso",
+      search_name: "Valparaiso",
+      id: 1140,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1140/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1140/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1140/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/1140/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Valparaiso",
+      short_name: "VALP",
+      conference: "Horizon",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:14:37 -0000",
+      subscription_count: 5933,
+      api_uri: "/ncaab/teams/1140",
+      resource_uri: "/basketball/teams/1140"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Valparaiso, IN",
+    stadium: "Athletics-Recreation Center",
+    away_conference: "Atlantic Coast",
+    home_conference: "Horizon",
+    odd: {
+      away_odd: "T:148.0",
+      home_odd: "-4.5",
+      id: 51736,
+      line: "VALPO -4.5",
+      over_under: "148.0",
+      api_uri: "/ncaab/odds/51736",
+      closing: "VALPO -4.5, o/u 148.0"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "tight_game",
+        display: "Close Game",
+        default: true
+      },
+      {
+        key: "every_five_minutes",
+        display: "Score - Every 5 Minutes",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112290,
+      has_statistics: true,
+      progress: {
+        clock_label: "Final",
+        string: "Final",
+        status: "final",
+        event_status: "final",
+        segment: 2,
+        segment_string: "2nd",
+        segment_description: "2nd Half",
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Fri, 18 Mar 2016 01:22:50 -0000",
+      api_uri: "/ncaab/box_scores/112290",
+      score: {
+        home: {
+          score: 81
+        },
+        away: {
+          score: 69
+        },
+        winning_team: "/ncaab/teams/1140",
+        losing_team: "/ncaab/teams/388",
+        tie_game: false
+      }
+    },
+    away_ranking: 4,
+    home_ranking: 1,
+    important: false,
+    away_region: null,
+    home_region: null,
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: null,
+    slot: null,
+    tournament_name: "NIT",
+    top_25_rankings: {
+      home: 1,
+      away: 4
+    }
+  },
+  {
+    colours: {
+      away: null,
+      home: null
+    },
+    conference_names: [
+      "All Conferences",
+      "SWAC",
+      "Western Athletic"
+    ],
+    event_status: "pre_game",
+    has_play_by_play_records: false,
+    id: 106904,
+    game_date: "Fri, 18 Mar 2016 02:00:00 -0000",
+    game_type: "Postseason Tournament",
+    game_description: null,
+    tba: false,
+    updated_at: "Wed, 16 Mar 2016 14:50:16 -0000",
+    api_uri: "/ncaab/events/106904",
+    resource_uri: "/basketball/events/106904",
+    status: "pre_game",
+    event_details: [
+      {
+        label: "Phoenix, AZ",
+        content: "Grand Canyon University Arena",
+        identifier: "stadium_location"
+      }
+    ],
+    away_team: {
+      abbreviation: "JkSt",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Jackson State",
+      search_name: "Jackson State",
+      id: 507,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/507/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/507/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/507/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/507/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Jackson State",
+      short_name: "JAKS",
+      conference: "Southwestern Athletic",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Wed, 16 Mar 2016 08:17:24 -0000",
+      subscription_count: 3473,
+      api_uri: "/ncaab/teams/507",
+      resource_uri: "/basketball/teams/507"
+    },
+    home_team: {
+      abbreviation: "GraCan",
+      colour_1: null,
+      colour_2: null,
+      division: "I",
+      full_name: "Grand Canyon",
+      search_name: "Grand Canyon",
+      id: 427,
+      location: null,
+      logos: {
+        large: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/427/logo.png",
+        small: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/427/small_logo.png",
+        w72xh72: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/427/w72xh72_logo.png",
+        tiny: "https://d1si3tbndbzwz9.cloudfront.net/basketball/team/427/tiny_logo.png",
+        facing: null
+      },
+      medium_name: "Grand Canyon",
+      short_name: "GCAN",
+      conference: "Western Athletic",
+      has_injuries: false,
+      has_rosters: true,
+      updated_at: "Thu, 17 Mar 2016 08:06:38 -0000",
+      subscription_count: 3589,
+      api_uri: "/ncaab/teams/427",
+      resource_uri: "/basketball/teams/427"
+    },
+    top_match: null,
+    league: {
+      localizations: {},
+      daily_rollover_offset: 32400,
+      daily_rollover_time: "13:00:00 +0000",
+      default_section: "events",
+      full_name: "National Collegiate Athletic Association Basketball",
+      medium_name: "NCAA March Madness",
+      season_type: "post",
+      short_name: "NCAAB",
+      slug: "ncaab",
+      sport_name: "basketball",
+      updated_at: "Mon, 14 Mar 2016 02:41:07 -0000",
+      api_uri: "/ncaab",
+      resource_uri: "/basketball/leagues/1"
+    },
+    location: "Phoenix, AZ",
+    stadium: "Grand Canyon University Arena",
+    away_conference: "Southwestern Athletic",
+    home_conference: "Western Athletic",
+    odd: {
+      away_odd: "T:143.0",
+      home_odd: "-10.5",
+      id: 51740,
+      line: "GRACAN -10.5",
+      over_under: "143.0",
+      api_uri: "/ncaab/odds/51740"
+    },
+    subscribable_alerts: [
+      {
+        key: "game_start",
+        display: "Game Start",
+        default: true
+      },
+      {
+        key: "game_end",
+        display: "Game End",
+        default: true
+      },
+      {
+        key: "segment_end",
+        display: "Score - Each Half",
+        default: true
+      }
+    ],
+    box_score: {
+      id: 112298,
+      has_statistics: false,
+      progress: {
+        clock_label: "Pre Game",
+        string: "Pre Game",
+        status: "pre_game",
+        event_status: "pre_game",
+        segment: null,
+        segment_string: null,
+        segment_description: null,
+        clock: "0:00",
+        overtime: false
+      },
+      updated_at: "Thu, 17 Mar 2016 14:00:04 -0000",
+      api_uri: "/ncaab/box_scores/112298",
+      score: {
+        home: {
+          score: 0
+        },
+        away: {
+          score: 0
+        },
+        tie_game: true
+      }
+    },
+    away_ranking: null,
+    home_ranking: null,
+    important: false,
+    away_region: null,
+    home_region: null,
+    playoff: {
+      game_number: null,
+      round: 2,
+      series_away_losses: 0,
+      series_away_wins: 0,
+      series_home_losses: 0,
+      series_home_wins: 0
+    },
+    round: 2,
+    round_name: null,
+    slot: null,
+    tournament_name: "CollegeInsider.com Postseason Tournament",
+    top_25_rankings: {
+      home: null,
+      away: null
+    }
+  }
+]

@@ -16,7 +16,7 @@
           <h4>Select <strong>{{requiredNumTeams}}</strong> teams whose seeds add up to <strong>{{requiredSumOfSeeds}}</strong>:</h4>
           <br/>
           <div class="col-md-6">
-            <div class="selectTeamsGrid" ng-grid="selectTeamsGridOptions"></div>
+            <div class="selectTeamsGrid" ui-grid="selectTeamsGridOptions" ui-grid-resize-columns ui-grid-selection></div>
           </div>
           <div class="selectedItems col-md-5">
             <h4>Your {{selectedTeams.length}} selected teams:</h4>

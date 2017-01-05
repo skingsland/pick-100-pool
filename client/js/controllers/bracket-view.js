@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('ViewBracketController',
-           ['$scope', '$routeParams', '$location', '$q', '$timeout', 'poolService', 'bracketService', 'teamService', 'userService', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
-    function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   userService,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
+           ['$scope', '$routeParams', '$location', '$q', '$timeout', 'uiGridConstants', 'poolService', 'bracketService', 'teamService', 'userService', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
+    function($scope,   $routeParams,   $location,   $q,   $timeout,   uiGridConstants,   poolService,   bracketService,   teamService,   userService,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
         $scope.sumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
         $scope.poolId = $routeParams.poolId;
 
@@ -22,20 +22,10 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 
         $scope.bracketGridOptions = {
             data: 'teamsWithScores',
-            enableRowSelection: false,
-            headerRowHeight: 50, // allow room for the <br/>
             rowHeight: 25,
-            rowTemplate:
-                "<div ng-style=\"{ 'cursor': row.cursor }\" ng-repeat=\"col in renderedColumns\" ng-class=\"[col.colIndex(), row.getProperty('is_eliminated') ? 'eliminated' : '']\" class=\"ngCell {{col.cellClass}}\">\n" +
-                "\t<div class=\"ngVerticalBar\" ng-style=\"{height: rowHeight}\" ng-class=\"{ ngVerticalBarVisible: !$last }\">&nbsp;</div>\n" +
-                "\t<div ng-cell></div>\n" +
-                "</div>",
             columnDefs: buildColumnDefsForBracketGrid(),
-            showFooter: true,
-            footerRowHeight: 30,
-            footerTemplate: buildFooterTemplateForBracketGrid(),
-            // TODO fix sorting (this doesn't seem to have any effect, perhaps because the data is loaded after the grid renders)
-            sortInfo: {fields: ['seed'], directions: ['asc']}
+            enableColumnMenus: false,
+            showColumnFooter: true
         };
 
         $scope.removeBracket = function() {
@@ -113,11 +103,19 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             }, 0);
         }
 
+        function getCellClassForEliminated(grid, row, col, rowRenderIndex, colRenderIndex) {
+            return row.entity['is_eliminated'] ? 'eliminated' : '';
+        }
+
         function buildColumnDefsForBracketGrid() {
-            // ngGrid's minWidth property doesn't work, so set the exact width for the first columns
             var columnDefs = [
-                {field:'full_name', displayName:'Picks', width:150},
-                {field:'seed', displayName:'Seed', width:60}
+                {field:'full_name', displayName:'Picks', minWidth:100, cellClass: getCellClassForEliminated,
+                    footerCellTemplate: '<div class="ui-grid-cell-contents">TOTALS:</div>'
+                },
+                {field:'seed', displayName:'Seed', width:60, cellClass: getCellClassForEliminated,
+                    footerCellTemplate: '<div class="ui-grid-cell-contents">{{grid.appScope.sumOfSeeds}}</div>',
+                    // aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true,
+                    sort: {direction: uiGridConstants.ASC, priority: 1}}
             ];
 
             for (var i = 1; i <= 6; i++) {
@@ -125,37 +123,20 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 
                 columnDefs.push({field: 'rounds[' + i + ']',
                                  displayName: 'Round ' + i + '<br/><small>Seed # + ' + points + ' point' + (points > 1 ? 's' : '') + '</small>',
-                                 cellTemplate: '<div class="ngCellText" ng-class="col.colIndex()">'
-                                                + '<span ng-cell-text>{{COL_FIELD || \'\'}}</span>' // don't show zeros; it's distracting
-                                             + '</div>'
+                                 headerCellFilter: 'trustHtml', // name of the custom Angular filter to use to allow HTML in the column header
+                                 cellTemplate: '<div class="ui-grid-cell-contents" title="TOOLTIP">'
+                                                + '{{COL_FIELD || \'\'}}' // don't show zeros; it's distracting
+                                             + '</div>',
+                                 footerCellTemplate: '<div class="ui-grid-cell-contents">{{grid.appScope.bracket.total_bracket_points_for_round[' + i + '] || \'\'}}</div>'
+                                 // aggregationType: uiGridConstants.aggregationTypes.sum, aggregationHideLabel: true
                 });
             }
 
-            columnDefs.push({field:'totalPoints', displayName:'Team Total'});
+            columnDefs.push({field: 'totalPoints',
+                             displayName: 'Team Total',
+                             aggregationType: uiGridConstants.aggregationTypes.sum,
+                             aggregationHideLabel: true});
             return columnDefs;
-        }
-
-        function buildFooterTemplateForBracketGrid() {
-            var footerTemplate = '<div class="ngFooterPanel" ng-style="footerStyle()">'
-                + '                   <div class="ngFooterCell col0 colt0">'
-                + '                       <span class="ngLabel">TOTALS:</span>'
-                + '                   </div>'
-                + '                   <div class="ngFooterCell col1 colt1">'
-                + '                       <span class="ngLabel">{{sumOfSeeds}}</span>'
-                + '                   </div>';
-
-            for (var i = 1; i <= 6; i++) {
-                footerTemplate += '   <div class="ngFooterCell col' + (i+1) + ' colt' + (i+1) + '">'
-                + '                       <span class="ngLabel">{{bracket.total_bracket_points_for_round[' + i + '] || \'\'}}</span>'
-                + '                   </div>';
-            }
-
-            footerTemplate += '       <div class="ngFooterCell col7 colt7">'
-            + '                           <span class="ngLabel">{{sumOfPoints}}</span>'
-            + '                       </div>'
-            + '                   </div>';
-
-            return footerTemplate;
         }
     }
 ]);

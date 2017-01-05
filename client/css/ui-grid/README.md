@@ -1,0 +1,2 @@
+These files were copied from https://github.com/angular-ui/bower-ui-grid/tree/v3.2.9, because the `angular-ui-grid` bower package
+ for 3.2.9 (or anything >= 3.0.5) has a messed up semver that requires Angular 1.4.

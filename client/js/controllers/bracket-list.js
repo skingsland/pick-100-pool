@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('ListBracketsController',
-           ['$scope', '$routeParams', 'bracketService', '$anchorScroll', '$location',
-    function($scope,   $routeParams,   bracketService,   $anchorScroll,   $location) {
+           ['$scope', '$routeParams', 'bracketService', '$anchorScroll', '$location', 'uiGridConstants',
+    function($scope,   $routeParams,   bracketService,   $anchorScroll,   $location,   uiGridConstants) {
         // the poolId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /pool/1/brackets)
         $scope.poolId = $scope.poolId || $routeParams.poolId;
 
@@ -10,8 +10,8 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
         function getCellTemplateForBracketNameColumn() {
             if ($scope.enableBracketNameLink) {
-                return '<div class="ngCellText" ng-class="col.colIndex()">'
-                         + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>'
+                return '<div class="ui-grid-cell-contents" title="TOOLTIP">'
+                         + '<a href="" ng-click="scrollTo(row.entity[\'id\']))">{{COL_FIELD CUSTOM_FILTERS}}</a>'
                      + '</div>';
             }
             return ''; // use the normal, built-in cell template
@@ -19,17 +19,15 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
         $scope.allBracketsGridOptions = {
             data: 'allBracketsInPool',
-            enableRowSelection: false,
             rowHeight: 25,
             columnDefs: [{field:'name',
                           displayName:'Bracket',
                           cellTemplate: getCellTemplateForBracketNameColumn()},
-                         {field:'totalPoints', displayName:'Points', width:60},
-                         {field:'num_teams_remaining', displayName:'Teams left', width:85}
+                         {field:'totalPoints', displayName:'Points', width:60, sort: {direction: uiGridConstants.DESC, priority: 1}},
+                         {field:'num_teams_remaining', displayName:'Teams left', width:90}
                         ],
+            enableColumnMenus: false
             // TODO: bold the row for the current user
-            sortInfo: {fields: ['totalPoints'], directions: ['desc']},
-            plugins: [new ngGridFlexibleHeightPlugin()]
         };
 
         if (!$scope.poolId) {
@@ -75,7 +73,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
                         // If the bracket has already been added to the scope, remove it so we can add it again.
                         // Note that removing the element from the array, calling $scope.apply(), and then re-adding it is the
-                        // only way to make ng-grid aware of the change so it will re-render the updated bracket in the grid.
+                        // only way to make ui-grid aware of the change so it will re-render the updated bracket in the grid.
                         $scope.allBracketsInPool.splice(i, 1);
                         $scope.$apply();
                     }
