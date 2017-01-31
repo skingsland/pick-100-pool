@@ -11,7 +11,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         function getCellTemplateForBracketNameColumn() {
             if ($scope.enableBracketNameLink) {
                 return '<div class="ui-grid-cell-contents" title="TOOLTIP">'
-                         + '<a href="" ng-click="scrollTo(row.entity[\'id\']))">{{COL_FIELD CUSTOM_FILTERS}}</a>'
+                         + '<a href="" ng-click="scrollTo(row.entity[\'id\'])">{{COL_FIELD CUSTOM_FILTERS}}</a>'
                      + '</div>';
             }
             return ''; // use the normal, built-in cell template
