@@ -70,7 +70,9 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 bracket.id = bracketId; // save the bracketId for later, so we can find it again
 
                 // has the bracket already been added to the scope? If so, remove it before we re-add it
-                for (var i in $scope.allBracketsInPool) {
+                var arrayLength = $scope.allBracketsInPool.length;
+
+                for (var i = 0; i < arrayLength; i++) {
                     if ($scope.allBracketsInPool[i].id === bracketId) {
 
                         // If the bracket has already been added to the scope, remove it so we can add it again.
@@ -87,7 +89,9 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
         // when a bracket is removed, remove it from the backing array
         bracketService.findBracketIdsByPool($scope.poolId).$getRef().on('child_removed', function(bracketId) {
-            for (var i in $scope.allBracketsInPool) {
+            var arrayLength = $scope.allBracketsInPool.length;
+
+            for (var i = 0; i < arrayLength; i++) {
                 if ($scope.allBracketsInPool[i].$id === bracketId.val()) {
                     $scope.allBracketsInPool.splice(i, 1);
                     break;
