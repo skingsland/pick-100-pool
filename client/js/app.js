@@ -10,6 +10,7 @@ angular.module('myApp',
        'simpleLoginTools',
        'routeSecurity',
        'ngGrid',
+       'smart-table',
        'timer'
     ])
     .run(['loginService', '$rootScope', '$templateCache', function(loginService, $rootScope, $templateCache) {
