@@ -1,7 +1,51 @@
 <div id="{{ bracketId }}" class="viewBracket" data-ng-controller="ViewBracketController" data-ng-init="findAllTeams().then(getBracketWithScores);">
   <h3>{{ bracket.name }}</h3>
   <span class="bracketOwner">by {{ owner.name }}</span>
-  <div class="bracketGrid" ng-grid="bracketGridOptions"></div>
+
+  <div class="table-responsive">
+    <table st-table="displayedCollection" st-safe-src="teamsWithScores" class="bracketTable table table-striped table-bordered table-condensed">
+      <thead>
+        <tr>
+           <th st-skip-natural="true" st-sort="full_name">Picks</th>
+           <th st-skip-natural="true" st-sort="seed" st-sort-default="true">Seed</th>
+           <th st-skip-natural="true" st-sort="rounds[1]">Round 1<br/><small>Seed # + 1 point</small></th>
+           <th st-skip-natural="true" st-sort="rounds[2]">Round 2<br/><small>Seed # + 2 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[3]">Round 3<br/><small>Seed # + 4 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[4]">Round 4<br/><small>Seed # + 8 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[5]">Round 5<br/><small>Seed # + 16 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[6]">Round 6<br/><small>Seed # + 32 points</small></th>
+           <th st-skip-natural="true" st-sort="totalPoints">Team Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="team in displayedCollection" ng-class="team.is_eliminated ? 'eliminated' : ''">
+          <td>{{team.full_name}}</td>
+          <td>{{team.seed}}</td>
+          <!-- The "or empty string" part is so we don't show zeros, because they are distracting -->
+          <td>{{team.rounds[1] || ''}}</td>
+          <td>{{team.rounds[2] || ''}}</td>
+          <td>{{team.rounds[3] || ''}}</td>
+          <td>{{team.rounds[4] || ''}}</td>
+          <td>{{team.rounds[5] || ''}}</td>
+          <td>{{team.rounds[6] || ''}}</td>
+          <td>{{team.totalPoints}}</td>
+        </tr>
+     </tbody>
+     <tfoot>
+       <tr>
+         <td>TOTALS:</td>
+         <td>{{sumOfSeeds}}</td>
+         <td>{{bracket.total_bracket_points_for_round[1] || ''}}</td>
+         <td>{{bracket.total_bracket_points_for_round[2] || ''}}</td>
+         <td>{{bracket.total_bracket_points_for_round[3] || ''}}</td>
+         <td>{{bracket.total_bracket_points_for_round[4] || ''}}</td>
+         <td>{{bracket.total_bracket_points_for_round[5] || ''}}</td>
+         <td>{{bracket.total_bracket_points_for_round[6] || ''}}</td>
+         <td>{{sumOfPoints}}</td>
+       </tr>
+     </tfoot>
+    </table>
+  </div>
 
   <!-- In order for the edit or delete bracket buttons to be displayed, the user needs to be logged in, they need to be the
        owner of the bracket, and the current date needs to be before the first game of the tournament UNLESS the pool has

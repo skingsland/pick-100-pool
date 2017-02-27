@@ -62,50 +62,72 @@ body {
 .viewBracket .bracketOwner {
     margin-left: 15px;
 }
-.bracketGrid {
+.bracketTable {
     border: 1px solid rgb(212,212,212);
     height: 409px;
 }
-.bracketGrid .ngHeaderText {
-    white-space: normal;
+.bracketTable thead {
+    background-color: #eaeaea;
+    border-bottom: 1px solid #d4d4d4;
 }
-.bracketGrid .ngHeaderText small {
+.bracketTable th {
+    height: 50px;
+    line-height: 50px;
+    vertical-align: top;
+    cursor: pointer;  /* indicates to the user that the column header is clickable, to sort the column */
+}
+#bootstrap-overrides .bracketTable th {
+    vertical-align: top;
+}
+.bracketTable th small {
     font-weight: normal;
 }
-.bracketGrid .eliminated .col0,
-.bracketGrid .eliminated .col1 {
+/* picks (i.e. school/team name) column */
+.bracketTable th:nth-child(1) {
+    width: 150px;
+    min-width: 130px;
+}
+/* seed column */
+.bracketTable th:nth-child(2) {
+    min-width: 45px;
+    max-width: 60px;
+}
+/* team total column */
+.bracketTable th:nth-child(9) {
+    min-width: 85px;
+    max-width: 100px;
+}
+.bracketTable .eliminated td:nth-child(1),
+.bracketTable .eliminated td:nth-child(2) {
     color: darkgray;
     text-decoration: line-through;
 }
-/* all of the numbers in the table should be right-aligned */
-.bracketGrid .ngCell {
-    text-align: right;
+/* make the striping on every other row a lighter shade of gray */
+.bracketTable tr:nth-of-type(even) {
+    background-color: #f3f3f3;
 }
-.bracketGrid .ngCell .col0 {
+#bootstrap-overrides tbody td {
+    /* even MORE condensed than the .table-condensed bootstrap class gives (5px) */
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+.bracketTable td {
+    /* all of the numbers in the table should be right-aligned */
+    text-align: right;
+    height: 25px;
+    line-height: 25px;
+}
+/* only the first column (with the team name) should be left-aligned */
+.bracketTable tbody td:nth-child(1) {
     text-align: left;
 }
-.bracketGrid .ngFooterPanel {
-    /* I have no idea why, but there is a 2px white gutter at the bottom of the footer panel, and this is the only way to get
-       rid of it. CSS Hack #2! */
-    margin-top: 2px;
-}
-.bracketGrid .ngFooterCell {
-    display: inline-block;
-    /* I can't find where this is happening, but for some reason ngFooterCell is getting a 4px right margin added to it,
-       which messes up the alignment between the footer and the rest of the table. So in my very first CSS hack ever,
-       I am correcting for the extra space by explicitly removing it. */
-    margin-right: -4px;
-    /* This copies the same padding that the ngCell elements use in the grid. */
-    padding-right: 5px;
-    text-align: right;
-}
-.bracketGrid .ngFooterCell .ngLabel {
-    display: inline-block;
-    /* vertically aligns the text in the footer cells */
-    padding-top: 3px;
+.bracketTable tfoot {
     font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    background-color: #eaeaea;
 }
-.bracketGrid .ngFooterPanel .col0 {
+.bracketTable tfoot td:nth-child(1) {
     text-align: center;
 }
 
@@ -171,4 +193,16 @@ fieldset {
    float: left;
    margin-right: 25px;
    padding: 25px;
+}
+
+/* Smart-Table styles */
+.st-sort-ascent:before {
+    content: '\25B2  '; /* up arrow */
+    font-size: 11px;
+    color: #337ab7;
+}
+.st-sort-descent:before {
+    content: '\25BC  '; /* down array */
+    font-size: 11px;
+    color: #337ab7;
 }
