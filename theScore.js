@@ -2,6 +2,7 @@ var rest = require('restler');
 var util = require('util');
 var Q = require("q");
 var Firebase = require('firebase');
+var moment = require('moment');
 
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
 var API_SITE = 'thescore';
@@ -58,6 +59,8 @@ function downloadGamesAndUpdateFirebase() {
         var deferred = Q.defer();
 
         tournamentRef.child('brackets').once('value', function(snapshot) {
+            //console.log('Found', snapshot.numChildren(), 'bracket(s) in the tournament.');
+
             allBracketsSnapshot = snapshot;
             deferred.resolve();
         });
@@ -106,8 +109,7 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function getEventsUrlForDate(lastRunDateIsoString) {
-        var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?id.in='
-            + '106823';
+        var eventsUrlTemplate = 'http://api.' + API_SITE + '.com/ncaab/events?game_date.in=%s,%s&conference=NCAA%20Tournament';
         var startDateIsoString;
         var endDateIsoString = TOURNAMENT_END_TIME; // the end of the date range to fetch games, teams, scores, etc. for
 
@@ -115,7 +117,8 @@ function downloadGamesAndUpdateFirebase() {
             var lastRunDate = new Date(lastRunDateIsoString);
 
             // if we're running BEFORE the tournament has started, then use the tournament start date (the date of the first game)
-            if (lastRunDate < new Date(TOURNAMENT_START_TIME)) {
+            // also do the same for running AFTER the tourney ended, which is common when testing using last year's data
+            if (lastRunDate < new Date(TOURNAMENT_START_TIME) || lastRunDate > new Date(TOURNAMENT_END_TIME)) {
                 startDateIsoString = TOURNAMENT_START_TIME;
             } else {
                 // The start date is used to filter the game_date (which is the date and time the game STARTED),
@@ -123,11 +126,13 @@ function downloadGamesAndUpdateFirebase() {
                 // so we subtract several hours from the last run date to make sure we get ALL completed games.
                 // There is extra buffer built in as well to handle delayed games, since we query by the *scheduled* start time.
                 lastRunDate.setHours(lastRunDate.getHours() - 5);
-                startDateIsoString = convertDateToString(lastRunDate);
+
+                // format the start date as a proper ISO 8601 date with a UTC offset, because the API expects it that way
+                startDateIsoString = moment(lastRunDate).format();
             }
         } else {
             // else if the last run date is null, it means this is the first time we're downloading scores for this tournament.
-            // So download scores for all games in the tournament, starting just before the tourny began.
+            // So download scores for all games in the tournament, starting just before the tourney began.
             startDateIsoString = TOURNAMENT_START_TIME;
         }
 
@@ -135,8 +140,7 @@ function downloadGamesAndUpdateFirebase() {
         // startDateIsoString = '2015-03-16T08:00:00-04:00';
         // endDateIsoString = '2015-03-20T08:00:00-04:00';
         
-        // var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, endDateIsoString);
-        var eventsUrlForDate = eventsUrlTemplate;
+        var eventsUrlForDate = util.format(eventsUrlTemplate, startDateIsoString, endDateIsoString);
 
         console.log('lastRunDate =', lastRunDateIsoString, '| startDateTime =', startDateIsoString, '| eventsUrlForDate =', eventsUrlForDate);
 
@@ -145,22 +149,27 @@ function downloadGamesAndUpdateFirebase() {
 
     function updateFirebaseWithGameData(games) {
         var numGamesUpdated = 0;
-        console.log(games.length + ' games returned from API, loading into firebase...');
 
-        games.forEach(function (game) {
-            // don't store results for play-in games, because teams don't participate in brackets until they've won the play-in,
-            // and they don't earn any points for winning a play-in game
-            if (game.tournament_name === API_TOURNAMENT_NAME && getRound(game) > 0) {
-                updateTeamInfo(game);
-                updateGameInfo(game);
-                updateAllBrackets(game);
-                numGamesUpdated++;
-            }
-        });
+        console.log(games.length + ' games returned from API.');
+
+        // if there are no games found, the rest.get() call returns an empty string instead of an array, without a forEach() function
+        if (games.length > 0) {
+            games.forEach(function (game) {
+                // don't store results for play-in games, because teams don't participate in brackets until they've won the play-in,
+                // and they don't earn any points for winning a play-in game
+                if(game.tournament_name === API_TOURNAMENT_NAME && getRound(game) > 0) {
+                    updateTeamInfo(game);
+                    updateGameInfo(game);
+                    updateAllBrackets(game);
+
+                    numGamesUpdated++;
+                }
+            });
+
+            console.log('Finished updating ' + numGamesUpdated + ' games in firebase, but the asynchronous writes might still be happening in the background.');
+        }
 
         updateNewAndChangedBrackets();
-
-        console.log('Finished updating ' + numGamesUpdated + ' games in firebase, but the aysnchronous writes might still be happening in the background.');
     }
 
     function updateTeamInfo(game) {
@@ -200,7 +209,7 @@ function downloadGamesAndUpdateFirebase() {
         
         teamInFirebase.once('value', function(teamSnapshot) {
             if (!teamSnapshot.exists()) {
-                console.log('team', teamSnapshot.name(), 'is new and will be added to the list of teams in firebase!');
+                console.log('team', teamSnapshot.key(), 'is new and will be added to the list of teams in firebase!');
 
                 // we're using the short name of the team as its ID, to make foreign keys in firebase more intuitive
                 teamInFirebase.set({
@@ -270,6 +279,11 @@ function downloadGamesAndUpdateFirebase() {
             bracket.child('teams').forEach(function (teamId) {
                 var team = allTeamsSnapshot.child(teamId.val());
 
+                if (!team.exists()) {
+                    console.log('ERROR: found team', teamId.val(), 'in bracket', bracket.val().name, 'that does not exist in tourney!');
+                    return;
+                }
+
                 var teamPointsForRound = team.child('/rounds/' + round).val();
                 totalBracketPointsForRound += teamPointsForRound || 0;
 
@@ -304,7 +318,7 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function updateNewAndChangedBrackets() {
-            allBracketsSnapshot.forEach(function (bracketSnapshot) {
+        allBracketsSnapshot.forEach(function (bracketSnapshot) {
             var bracket = bracketSnapshot.val();
 
             if (bracket.isNewOrUpdated) {
@@ -312,7 +326,7 @@ function downloadGamesAndUpdateFirebase() {
 
                 // we have to (re)calculate the points for each round
                 tournamentRef.child('rounds').on('child_added', function (round) {
-                    updatePointsForBracket(bracketSnapshot, round.name());
+                    updatePointsForBracket(bracketSnapshot, round.key());
                 });
 
                 // clear the flag when we're done, so we don't have to do this update next time
