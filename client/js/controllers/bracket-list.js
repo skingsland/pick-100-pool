@@ -73,7 +73,8 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 var arrayLength = $scope.allBracketsInPool.length;
 
                 for (var i = 0; i < arrayLength; i++) {
-                    if ($scope.allBracketsInPool[i].id === bracketId) {
+                    // for some reason, when brackets are updated, they don't (always?) have an "id" property
+                    if ($scope.allBracketsInPool[i].id && $scope.allBracketsInPool[i].id === bracketId) {
 
                         // If the bracket has already been added to the scope, remove it so we can add it again.
                         // Note that removing the element from the array, calling $scope.apply(), and then re-adding it is the

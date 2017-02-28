@@ -35,9 +35,9 @@ angular.module('myApp.service.firebase', ['firebase'])
       }
    }])
 
-    .factory('tournamentRef', ['syncData', 'FIREBASE_TOURNAMENT_NAME',
-                       function(syncData,   FIREBASE_TOURNAMENT_NAME) {
-        return syncData(['tournaments', FIREBASE_TOURNAMENT_NAME]);
+    .factory('tournamentRef', ['syncData', 'FIREBASE_TOURNAMENT_ID',
+                       function(syncData,   FIREBASE_TOURNAMENT_ID) {
+        return syncData(['tournaments', FIREBASE_TOURNAMENT_ID]);
     }])
     .factory('usersRef', ['syncData',
                   function(syncData) {

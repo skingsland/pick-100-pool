@@ -94,7 +94,8 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             // this happens after the bracket is deleted, for some reason
             if (totalPointsPerRound == null) return 0;
 
-            return totalPointsPerRound.reduce(function(previousValue, currentValue, currentIndex) {
+            // the value returned from the snapshot isn't a real array (in some scenarios), so convert it to an array first
+            return Array.from(totalPointsPerRound).reduce(function(previousValue, currentValue, currentIndex) {
                 // there is no zero index in the array, since the first position is the first round of the tourney
                 if (currentIndex === 0) return 0;
 
