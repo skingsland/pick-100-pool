@@ -7,13 +7,13 @@ var moment = require('moment');
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
 var API_SITE = 'thescore';
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2016';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2016';
+var FIREBASE_TOURNAMENT_ID = 'MarchMadness2017';
+var FIREBASE_TOURNAMENT_NAME = 'March Madness 2017';
 
 // the date and time of the first game in the second (i.e NOT play-in or "first four") round
-var TOURNAMENT_START_TIME = '2016-03-17T12:00:00-04:00'; // UTC-4 is EDT
+var TOURNAMENT_START_TIME = '2017-03-16T12:15:00-04:00'; // UTC-4 is EDT
 // the day after the final game, so we don't miss pulling the score for the final game
-var TOURNAMENT_END_TIME = '2016-04-05T12:00:00-04:00';
+var TOURNAMENT_END_TIME = '2017-04-04T12:00:00-04:00';
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
