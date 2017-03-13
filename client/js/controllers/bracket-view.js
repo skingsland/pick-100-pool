@@ -64,12 +64,12 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                     if (!teamRef.isTotalPointsCalculated) {
                         teamRef.isTotalPointsCalculated = true;
 
-                        var arrayLength = teamRef.rounds.length;
+                        var arrayLength = teamRef.rounds ? teamRef.rounds.length : 0;
 
                         for (var i = 1; i < arrayLength; i++) {
                             var points = teamRef.rounds[i];
 
-                            if (points != null) {
+                            if (points !== null) {
                                 // update the points-per-team, for row totals
                                 if (!teamRef.totalPoints) {
                                     teamRef.totalPoints = 0;
@@ -92,7 +92,7 @@ angular.module('myApp.controllers').controller('ViewBracketController',
 
         function getTotalPoints(totalPointsPerRound) {
             // this happens after the bracket is deleted, for some reason
-            if (totalPointsPerRound == null) return 0;
+            if (totalPointsPerRound === null) return 0;
 
             // the value returned from the snapshot isn't a real array (in some scenarios), so convert it to an array first
             return Array.from(totalPointsPerRound).reduce(function(previousValue, currentValue, currentIndex) {
