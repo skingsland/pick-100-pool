@@ -18,7 +18,7 @@
         </li>
       </ul>
       <span class="navbar-text tourney-countdown" ng-if="!hasTourneyStarted">
-        Tourney starts on {{tourneyStartTime | date:"MMM d 'at' h:mm a"}}.
+        Tourney starts on {{tourneyStartTime.utcOffset('-0400').format("MMM D [at] h:mm a [EDT]")}}.
         <timer end-time="tourneyStartTime">{{days}} days, {{hours}}h {{minutes}}m {{seconds}}s</timer>
         left to finalize your bracket!
       </span>

@@ -2,8 +2,8 @@
 
 // add this controller to the existing controllers module
 angular.module('myApp.controllers').controller('HeaderController',
-           ['$rootScope', '$scope', '$location', 'syncData', 'loginService', 'tournamentRef',
-    function($rootScope,   $scope,   $location,   syncData,   loginService,   tournamentRef) {
+           ['$rootScope', '$scope', '$location', 'syncData', 'loginService', 'tournamentRef', 'moment',
+    function($rootScope,   $scope,   $location,   syncData,   loginService,   tournamentRef,   moment) {
         // enable the jQuery-based tooltip on the "Reset Password" button
         $(function () {
           $('[data-toggle="tooltip"]').tooltip();
@@ -14,8 +14,8 @@ angular.module('myApp.controllers').controller('HeaderController',
         $scope.user = {};
 
         tournamentRef.$child('start_time').$getRef().once('value', function(startTime) {
-            $scope.tourneyStartTime = new Date(startTime.val());
-            $scope.hasTourneyStarted = new Date() >= $scope.tourneyStartTime;
+            $scope.tourneyStartTime = moment(startTime.val());
+            $scope.hasTourneyStarted = moment().isAfter($scope.tourneyStartTime);
         });
 
         // whenever a new user logs in, bind their user data to the $scope so we can show their username in the view

@@ -39,3 +39,6 @@ angular.module('myApp',
             return $sce.trustAsHtml(val);
         };
     })
+    .factory('moment', function ($window) {
+        return $window.moment;
+    })
