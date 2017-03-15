@@ -8,7 +8,7 @@ angular.module('myApp.controllers').controller('PoolsController',
         $scope.model = {};
 
         $scope.model.poolId = $routeParams.poolId;
-        $scope.pool = {};
+
         // need this so the 'Create bracket' button will be hidden by default, instead of shown briefly
         $scope.model.currentUserHasLoaded = false;
 
@@ -16,8 +16,10 @@ angular.module('myApp.controllers').controller('PoolsController',
             $scope.pools = poolService.findAll();
         };
         $scope.findOnePool = function () {
-            if ($scope.model.poolId) {
-
+            if (!$scope.model.poolId) {
+                $scope.pool = { hideBracketsBeforeTourney: true };
+            }
+            else {
                 var $pool = poolService.findById($scope.model.poolId);
                 $pool.$bind($scope, 'pool');
 
@@ -53,11 +55,17 @@ angular.module('myApp.controllers').controller('PoolsController',
                     .then(function(results) {
                         $scope.model.isUserAllowedToCreateBracket = results['allowBracketChangesDuringTourney'] || !results['hasTourneyStarted'];
                 });
+
+                $q.all({'hasTourneyStarted': poolService.hasTourneyStarted(),
+                        'hideBracketsBeforeTourney': poolService.hideBracketsBeforeTourney($pool)})
+                    .then(function(results) {
+                        $scope.model.showBrackets = results['hasTourneyStarted'] || !results['hideBracketsBeforeTourney'];
+                });
             }
         };
         $scope.createPool = function () {
             var poolId = poolService.create($scope.pool, $scope.auth.user, function (err) {
-                if(!err) {
+                if (!err) {
                     $scope.pool = null;
                     $location.path('/pools/' + poolId);
                     $scope.$apply();

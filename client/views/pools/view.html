@@ -14,7 +14,7 @@
         Select Your Teams
       </a>
     </div>
-    <div class="col-md-4 col-md-offset-2" ng-if="pool.brackets" ng-init="enableBracketNameLink = true">
+    <div class="col-md-4 col-md-offset-2" ng-if="pool.brackets" ng-init="enableBracketNameLink = model.showBrackets">
       <div ng-init="poolId = model.poolId" ng-include="'views/brackets/list.html'"></div>
     </div>
   </div>
@@ -24,9 +24,14 @@
     <div ng-init="bracketId = model.currentUserBracketId" ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 
+  <div ng-if="!model.showBrackets">
+    <br/>
+    <h3><em>Brackets are hidden until the tournament starts.</em></h3>
+  </div>
+
   <!-- the orderByPriority filter converts the object to an array of bracketIds, and the excludeBracketForCurrentUser is used
        to remove the bracket for the logged-in user from the list, since it's displayed above and we don't want to repeat it. -->
-  <div ng-repeat="bracketId in pool.brackets | orderByPriority | excludeBracketForCurrentUser:model">
+  <div ng-if="model.showBrackets" ng-repeat="bracketId in pool.brackets | orderByPriority | excludeBracketForCurrentUser:model">
     <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 </div>

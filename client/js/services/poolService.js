@@ -18,7 +18,8 @@ angular.module('myApp.services').service('poolService',
                 name: pool.name,
                 managerId: manager.uid,
                 brackets: [],
-                allowBracketChangesDuringTourney: !!pool.allowBracketChangesDuringTourney
+                allowBracketChangesDuringTourney: !!pool.allowBracketChangesDuringTourney,
+                hideBracketsBeforeTourney: !!pool.hideBracketsBeforeTourney
             }, cb).name();  // returns the ID in firebase of the new pool
         };
 
@@ -41,6 +42,16 @@ angular.module('myApp.services').service('poolService',
 
             pool.$child('allowBracketChangesDuringTourney').$getRef().once('value', function(allowBracketChangesDuringTourney) {
                 deferred.resolve(allowBracketChangesDuringTourney.val());
+            });
+
+            return deferred.promise;
+        };
+
+        this.hideBracketsBeforeTourney = function(pool) {
+            var deferred = $q.defer();
+
+            pool.$child('hideBracketsBeforeTourney').$getRef().once('value', function(hideBracketsBeforeTourney) {
+                deferred.resolve(hideBracketsBeforeTourney.val());
             });
 
             return deferred.promise;
