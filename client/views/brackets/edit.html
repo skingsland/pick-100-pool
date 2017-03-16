@@ -32,14 +32,14 @@
           <div class="form-group pull-left" ng-class="{'has-error': !bracket.name}">
             <label class="col-md-5 control-label" for="name" style="text-align:left;">Bracket Name</label>
             <div class="col-md-7">
-              <input id="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required autofocus>
+              <input id="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required>
             </div>
           </div>
         </div>
         <br/>
         <div class="row">
           <div class="col-sm-1">
-              <a class="btn btn-default" href="#/pools/{{ poolId }}">Cancel</a>
+            <a class="btn btn-default" href="#/pools/{{ poolId }}">Cancel</a>
           </div>
           <div class="col-sm-1">
             <button data-ng-click="saveBracket()"
@@ -54,5 +54,4 @@
 
     </fieldset>
   </form>
-  <p data-ng-show="err" class="error">{{err}}</p>
 </div>
