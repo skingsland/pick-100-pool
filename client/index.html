@@ -11,7 +11,8 @@
 </head>
 <body id="bootstrap-overrides">
 
-  <header data-ng-include="'views/header.html'"></header>
+  <!-- add a version number to the URL, to force angular to reload cached html template "partial" in the user's browser -->
+  <header data-ng-include="'views/header.html?version=1'"></header>
 
   <section class="content">
     <section class="container">
