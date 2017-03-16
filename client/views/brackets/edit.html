@@ -1,17 +1,10 @@
 <div data-ng-init="findAllTeams().then(getBracketForEditing);" data-ng-controller="CreateEditBracketController">
+  <br/>
   <form class="form-horizontal" role="form">
     <fieldset>
       <legend style="margin-bottom: 0">{{isNewBracket ? 'Select' : 'Change'}} Your Teams</legend>
 
       <div class="container">
-        <div class="row">
-          <div class="form-group pull-left" ng-class="{'has-error': !bracket.name}">
-            <label class="col-md-3 control-label" for="name" style="text-align:left;">Name</label>
-            <div class="col-md-9">
-              <input id="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required autofocus>
-            </div>
-          </div>
-        </div>
         <div class="row">
           <h4>Select <strong>{{requiredNumTeams}}</strong> teams whose seeds add up to <strong>{{requiredSumOfSeeds}}</strong>:</h4>
           <br/>
@@ -34,6 +27,15 @@
         </div>
         <br/>
         <h4><em>NOTE: some teams won't be available for selection until <strong>after</strong> the play-in games are over.</em></h4>
+        <br/>
+        <div class="row">
+          <div class="form-group pull-left" ng-class="{'has-error': !bracket.name}">
+            <label class="col-md-5 control-label" for="name" style="text-align:left;">Bracket Name</label>
+            <div class="col-md-7">
+              <input id="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required autofocus>
+            </div>
+          </div>
+        </div>
         <br/>
         <div class="row">
           <div class="col-sm-1">
