@@ -25,7 +25,7 @@ Building the server and client (optional, since all dependencies are checked in)
 
 Running the full app locally:
 
-* `export FIREBASE_SECRET=`<copied from https://pick100pool.firebaseio.com/?page=Admin>
+* `export FIREBASE_SECRET=`<copied from https://console.firebase.google.com/u/0/project/pick100pool/settings/serviceaccounts/databasesecrets>
 * `node web.js` (or `foreman start`)
 
 Running just the web server, without the back-end to fetch scores:
