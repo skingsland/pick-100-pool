@@ -148,13 +148,15 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function updateFirebaseWithGameData(games) {
-        var numGamesUpdated = 0;
+        try {
+            var numGamesUpdated = 0;
 
-        console.log(games.length + ' games returned from API.');
+            console.log(games.length + ' games returned from API.');
 
-        // if there are no games found, the rest.get() call returns an empty string instead of an array, without a forEach() function
-        if (games.length > 0) {
-            games.forEach(function (game) {
+            for (i = 0; i < games.length; i++) {
+                game = games[i];
+                console.log('downloaded game #', i, game.home_region, 'region game from API with date:', game.game_date);
+
                 // don't store results for play-in games, because teams don't participate in brackets until they've won the play-in,
                 // and they don't earn any points for winning a play-in game
                 if(game.tournament_name === API_TOURNAMENT_NAME && getRound(game) > 0) {
@@ -164,12 +166,15 @@ function downloadGamesAndUpdateFirebase() {
 
                     numGamesUpdated++;
                 }
-            });
+            }
 
             console.log('Finished updating ' + numGamesUpdated + ' games in firebase, but the asynchronous writes might still be happening in the background.');
-        }
 
-        updateNewAndChangedBrackets();
+            updateNewAndChangedBrackets();
+        }
+        catch(error) {
+            console.error(error);
+        }
     }
 
     function updateTeamInfo(game) {
@@ -179,14 +184,14 @@ function downloadGamesAndUpdateFirebase() {
 
     function updateTeamInFirebase(team, seed, region, conference, game) {
         addTeamToFirebaseIfNotExists(team, seed, region, conference).then(function() {
-            var teamInFirebase = tournamentRef.child('teams').child(team.short_name);
+            var teamInFirebase = tournamentRef.child('teams').child(getTeamID(team));
             var pointsForRound, winningTeam;
 
             // now add the points for the team winning or losing the round
             if (isGameOver(game)) {
                 winningTeam = getWinningTeam(game);
 
-                if (team.short_name === winningTeam.short_name) {
+                if (getTeamID(team) === getTeamID(winningTeam)) {
                     pointsForRound = winningTeam.points_for_round;
 
                     // console.log(team.name, "won round", getRound(game), "for", pointsForRound, "points");
@@ -205,20 +210,25 @@ function downloadGamesAndUpdateFirebase() {
     function addTeamToFirebaseIfNotExists(team, seed, region, conference) {
         var deferred = Q.defer();
 
-        var teamInFirebase = tournamentRef.child('teams').child(team.short_name);
-        
+        var teamId = getTeamID(team);
+        console.log('checking to see whether team exists in firebase:', teamId);
+
+        var teamInFirebase = tournamentRef.child('teams').child(teamId);
+
         teamInFirebase.once('value', function(teamSnapshot) {
             if (!teamSnapshot.exists()) {
                 console.log('team', teamSnapshot.key(), 'is new and will be added to the list of teams in firebase!');
 
-                // we're using the short name of the team as its ID, to make foreign keys in firebase more intuitive
                 teamInFirebase.set({
-                    id: team.short_name,
+                    id: teamId,
                     full_name: team.full_name,
                     seed: seed,
                     region: region,
                     conference: conference
                 });
+            }
+            else {
+                console.log('team', teamSnapshot.key(), 'already exists in firebase, so will not be updated.');
             }
 
             deferred.resolve();
@@ -233,7 +243,7 @@ function downloadGamesAndUpdateFirebase() {
     // no point in holding up the write to Firebase waiting on a read.
     function updateGameInfo(game) {
         var round = getRound(game);
-        var gameId = game.away_team.short_name + '-' + game.home_team.short_name;
+        var gameId = getTeamID(game.away_team) + '-' + getTeamID(game.home_team);
         var gameInFirebase, score;
 
         gameInFirebase = tournamentRef.child('rounds').child(round).child('games').child(gameId);
@@ -261,7 +271,7 @@ function downloadGamesAndUpdateFirebase() {
 
                     // if the bracket contains one of the teams that just finished the game, update the bracket's total points
                     // for this round (if the team won) and num_teams_remaining (if the team lost)
-                    if(game.home_team.short_name === bracketTeam.val() || game.away_team.short_name === bracketTeam.val()) {
+                    if(getTeamID(game.home_team) === bracketTeam.val() || getTeamID(game.away_team) === bracketTeam.val()) {
                         updatePointsForBracket(bracket, round);
                     }
                 });
@@ -337,6 +347,14 @@ function downloadGamesAndUpdateFirebase() {
 
     // HELPER FUNCTIONS
 
+    function getTeamID(team) {
+        // Use the short name of the team as its ID, to make foreign keys in firebase more intuitive;
+        // however some teams share the same short name (e.g. San Diego State U and South Dakota State U),
+        // so append the team's id from the API to ensure the ID is unique. We can't use the medium or full name,
+        // since that can contain periods (e.g. "N.C. State") which aren't allowed in firebase paths.
+        return team.short_name + '_' + team.id;
+    }
+
     function getRound(game) {
         // the play-in game is returned as round 1 from the API, so we need to subtract 1 from the round number,
         // so the first real tournament game that we store in firebase will be round 1 (instead of round 2)
@@ -352,9 +370,9 @@ function downloadGamesAndUpdateFirebase() {
         var winningTeam;
 
         if (score.home.score > score.away.score) {
-            winningTeam = {short_name: game.home_team.short_name, seed: getSeedForHomeTeam(game)};
+            winningTeam = {id: game.home_team.id, short_name: game.home_team.short_name, seed: getSeedForHomeTeam(game)};
         } else {
-            winningTeam = {short_name: game.away_team.short_name, seed: getSeedForAwayTeam(game)};
+            winningTeam = {id: game.away_team.id, short_name: game.away_team.short_name, seed: getSeedForAwayTeam(game)};
         }
         winningTeam.points_for_round = getWinningTeamPointsForRound(winningTeam.seed, getRound(game));
 
@@ -395,7 +413,7 @@ function downloadGamesAndUpdateFirebase() {
 
 try {
     // are we running in standalone mode, i.e. "node theScore.js"
-    if (require.main == module) {
+    if (require.main === module) {
         downloadGamesAndUpdateFirebase();
 
         // this process will never end, because of the socket connections that firebase creates. So we must forcibly end it,
