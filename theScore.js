@@ -1,4 +1,4 @@
-var rest = require('restler');
+var got = require('got');
 var util = require('util');
 var Q = require("q");
 var Firebase = require('firebase');
@@ -68,37 +68,26 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function downloadGamesFromAPI(lastRunDateIsoString) {
-        var currentDate = convertDateToString(new Date());
-
-        tournamentRef.update({last_run_date: currentDate});
-
-        var eventsUrlForDate = getEventsUrlForDate(lastRunDateIsoString);
-
-        var requestHeaders = {
-            'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'Accept-Encoding': 'gzip,deflate,sdch',
-            'Accept-Language': 'en-US,en;q=0.8',
-            'Connection': 'keep-alive',
-            'Host': 'api.' + API_SITE + '.com',
-            'If-Modified-Since': new Date(lastRunDateIsoString).toUTCString(),
-            'Origin': 'http://www.' + API_SITE + '.com',
-            'Referer': 'http://www.' + API_SITE + '.com/ncaab/events/day/' + currentDate + '/Top%2025',
-            'User-Agent':
-        'Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_2 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8H7 Safari/6533.18.5',
-            'X-Api-Version': '1.6.17',
-            'X-Country-Code': 'CA'
-        };
-
         var deferred = Q.defer();
 
-        rest.get(eventsUrlForDate, {timeout: 10000, headers: requestHeaders}).on('complete', function(result) {
-            if (result instanceof Error) {
-                console.log('api call returned with error result:' + result);
-                deferred.reject(result);
-            } else {
-                deferred.resolve(result);
-            }
-        });
+        try {
+            var currentDate = convertDateToString(new Date());
+
+            tournamentRef.update({last_run_date: currentDate});
+
+            var eventsUrlForDate = getEventsUrlForDate(lastRunDateIsoString);
+
+            got(eventsUrlForDate, { json: true }).then(function(response) {
+                deferred.resolve(response.body);
+            }).catch(function(error) {
+                console.log('API call returned with error result:' + error.response.body);
+                deferred.reject(error.response.body);
+            });
+        }
+        catch(error) {
+            console.error(error);
+            deferred.reject(error);
+        }
 
         return deferred.promise;
     }

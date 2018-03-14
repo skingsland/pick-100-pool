@@ -7,7 +7,7 @@
   "author": "skingsland",
   "dependencies": {
     "express": "~3.2.6",
-    "restler": "~3.1.0",
+    "got": "~8.3.0",
     "firebase": "~2.4.1",
     "q": "~1.0.0",
     "moment": "~2.19.3"
