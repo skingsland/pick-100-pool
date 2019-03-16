@@ -11,9 +11,9 @@ var FIREBASE_TOURNAMENT_ID = 'MarchMadness2019';
 var FIREBASE_TOURNAMENT_NAME = 'March Madness 2019';
 
 // the date and time of the first game in the second (i.e NOT play-in or "first four") round; brackets are read-only after this
-var TOURNAMENT_START_TIME = '2018-03-15T12:14:00-04:00'; // UTC-4 is EDT
+var TOURNAMENT_START_TIME = '2019-03-21T12:00:00-04:00'; // UTC-4 is EDT
 // the day AFTER the final game, so we don't miss pulling the score for the final game
-var TOURNAMENT_END_TIME = '2018-04-03T12:00:00-04:00';
+var TOURNAMENT_END_TIME = '2019-04-09T12:00:00-04:00';
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
