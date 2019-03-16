@@ -13,11 +13,11 @@
 <body id="bootstrap-overrides">
 
   <!-- add a version number to the URL, to force angular to reload cached html template "partial" in the user's browser -->
-  <header data-ng-include="'views/header.html?version=2'"></header>
+  <header ng-include="'views/header.html?version=2'"></header>
 
   <section class="content">
     <section class="container">
-      <div data-ng-view></div>
+      <div ng-view></div>
     </section>
   </section>
 
@@ -43,7 +43,6 @@
   <script src="js/app.js"></script>
   <script src="js/config.js"></script>
   <script src="js/controllers.js"></script>
-  <script src="js/directives.js"></script>
   <script src="js/routes.js"></script>
   <script src="js/service.firebase.js"></script>
   <script src="js/ngcloak/ngcloak-decorator.js"></script>

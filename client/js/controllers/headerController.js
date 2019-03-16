@@ -10,8 +10,10 @@ angular.module('myApp.controllers').controller('HeaderController',
         });
 
         // bind the user's data to the scope, once they're logged in
-
         $scope.user = {};
+
+        // this allows the view to check for null to see if this has been loaded yet
+        $scope.hasTourneyStarted = null;
 
         tournamentRef.once('value').then(function(snapshot) {
             $scope.tourneyStartTime = moment(snapshot.val()['start_time']);

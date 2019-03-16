@@ -3,7 +3,8 @@
 /* Controllers */
 
 angular.module('myApp.controllers', ['firebase', 'ui.bootstrap'])
-   .controller('LoginCtrl', ['$scope', '$location', 'firebaseRef', function($scope, $location, firebaseRef) {
+   .controller('LoginCtrl', ['$scope', '$location', '$route', 'firebaseRef',
+                     function($scope,   $location,   $route,   firebaseRef) {
       $scope.email = null;
       $scope.pass = null;
       $scope.confirm = null;
@@ -28,7 +29,8 @@ angular.module('myApp.controllers', ['firebase', 'ui.bootstrap'])
                // $scope.isLoggedIn = true;
                // $scope.currentUserId = firebaseUser.uid;
 
-               $location.path('/pools');
+               // reload the current page, so the parts that should be displayed or hidden based on isLoggedIn will be rendered correctly
+               $route.reload();
             }).catch(function(error) {
                console.error("Authentication failed:", error);
 

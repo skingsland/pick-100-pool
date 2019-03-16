@@ -7,7 +7,6 @@ angular.module('myApp',
      'myApp.security',
      'myApp.routes',
      'myApp.services',
-     'myApp.directives',
      'myApp.controllers',
      'ngGrid',
      'smart-table',
@@ -17,7 +16,7 @@ angular.module('myApp',
         // https://github.com/firebase/angularfire/blob/master/docs/reference.md#firebaseauth
         $rootScope.auth = $firebaseAuth();
 
-        // $rootScope.isLoggedIn = false;
+        $rootScope.isLoggedIn = null;
         // $rootScope.currentUserId = null;
 
         $rootScope.auth.$onAuthStateChanged(function(firebaseUser) {

@@ -1,8 +1,6 @@
 'use strict';
 
 angular.module('myApp.config', ['firebase'])
-    .constant('version', '2.0.0')
-
    // where to redirect users if they need to authenticate (see myApp.security module)
    .constant('loginRedirectPath', '/login')
 

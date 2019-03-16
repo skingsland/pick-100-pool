@@ -110,7 +110,7 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 $scope.bracket.updated_on = new Date();
 
                 // because we bound the bracket to the scope, that enabled 3 way data binding, so we don't (and can't) call
-                // $scope.bracket.$save() to save the bracket. The changes have already been persisted.
+                // $scope.bracket.$save() to save the bracket. The changes have already been synced to firebase.
                 afterSuccessfulSave();
             }
         };

@@ -7,6 +7,10 @@ angular.module('myApp.controllers').controller('PoolsController',
         // prototypical inheritance doesn't work with primitives. Not sure if this matters though, since I'm not using ng-model.
         $scope.model = {};
 
+        // initialized these so things are hidden by default in the view, and then they will get automatically displayed once the data syncs from firebase
+        $scope.model.showBrackets = null;
+        $scope.model.isUserAllowedToCreateBracket = false;
+
         $scope.model.poolId = $routeParams.poolId;
 
         $scope.findPools = function () {

@@ -3,7 +3,7 @@ This is basically just an excuse for me to learn AngularJS and get better at Jav
 
 One-time Heroku setup:
 
-* install the Heroku toolbelt (which includes the heroku CLI and foreman)
+* install the Heroku toolbelt (which includes the heroku CLI and foreman): `brew install heroku/brew/heroku`
 * upload public key file to heroku.com
 * `heroku login`
 * `heroku config:set FIREBASE_SECRET=... --remote heroku`
