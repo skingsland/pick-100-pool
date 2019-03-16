@@ -7,8 +7,8 @@ var moment = require('moment');
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
 var API_SITE = 'thescore';
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2018';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2018';
+var FIREBASE_TOURNAMENT_ID = 'MarchMadness2019';
+var FIREBASE_TOURNAMENT_NAME = 'March Madness 2019';
 
 // the date and time of the first game in the second (i.e NOT play-in or "first four") round; brackets are read-only after this
 var TOURNAMENT_START_TIME = '2018-03-15T12:14:00-04:00'; // UTC-4 is EDT
