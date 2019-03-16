@@ -8,6 +8,8 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
         $scope.allBracketsInPool = [];
 
+        // console.log('enableBracketNameLink:', $scope.enableBracketNameLink);
+
         function getCellTemplateForBracketNameColumn() {
             if ($scope.enableBracketNameLink) {
                 return '<div class="ngCellText" ng-class="col.colIndex()">'
@@ -51,22 +53,25 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         };
 
         // any time a new bracket is added to the pool's list, add the full bracket object to the scope
-        bracketService.findBracketIdsByPool($scope.poolId).$on('child_added', function(bracketIdSnapshot) {
-            var bracketId = bracketIdSnapshot.snapshot.value;
-            
+        bracketService.findAllBracketIdsByPool($scope.poolId).on('child_added', function(bracketIdSnapshot) {
+            var bracketId = bracketIdSnapshot.val();
+
             // happens after a bracket is deleted, for some reason
             if (!bracketId) return;
 
+            var bracket = bracketService.findById(bracketId);
+
             // Listen for changes to the bracket; this will be called first with the complete data, then again later if/when
             // any fields in the bracket change (e.g. total points or teams remaining).
-            bracketService.findById(bracketId).$getRef().on('value', function(bracketSnapshot) {
-                var bracket = bracketSnapshot.val();
 
+            bracket.$loaded().then(function() {
+                // TODO: still need this check?
                 // this will happen right after the bracket is removed
-                if (bracket === null) {
-                    return;
-                }
+                // if (bracket === null) {
+                //     return;
+                // }
 
+                // TODO: still need to do this???
                 bracket.id = bracketId; // save the bracketId for later, so we can find it again
 
                 // has the bracket already been added to the scope? If so, remove it before we re-add it
@@ -89,7 +94,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         });
 
         // when a bracket is removed, remove it from the backing array
-        bracketService.findBracketIdsByPool($scope.poolId).$getRef().on('child_removed', function(bracketId) {
+        bracketService.findAllBracketIdsByPool($scope.poolId).on('child_removed', function(bracketId) {
             var arrayLength = $scope.allBracketsInPool.length;
 
             for (var i = 0; i < arrayLength; i++) {

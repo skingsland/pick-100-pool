@@ -1,31 +1,32 @@
 'use strict';
 
 angular.module('myApp.services').service('bracketService',
-           ['$q', 'tournamentRef',
-    function($q,   tournamentRef) {
-        var allPools = tournamentRef.$child('pools');
-        var allBrackets = tournamentRef.$child('brackets');
+           ['$q', 'tournamentRef', '$firebaseObject', '$firebaseArray',
+    function($q,   tournamentRef,   $firebaseObject,   $firebaseArray) {
+        var self = this;
 
         this.findById = function(bracketId) {
-          return allBrackets.$child(bracketId);
+          return $firebaseObject(tournamentRef.child('brackets').child(bracketId));
         };
 
-        this.findBracketIdsByPool = function(poolId) {
-            var pool = allPools.$child(poolId);
-            return pool.$child('brackets');
+        this.findAllBracketIdsByPool = function(poolId) {
+            return tournamentRef.child('pools').child(poolId).child('brackets');
+        };
+
+        this.findBracketIdByPoolAndOwner = function(poolId, ownerId) {
+            return this.findAllBracketIdsByPool(poolId).child(ownerId);
         };
 
         this.create = function(bracket) {
             var deferred = $q.defer();
 
              // first add the bracket to the list of ALL brackets
-            allBrackets.$add(bracket).then(function (newBracketRef) {
-                var bracketId = newBracketRef.name();
+            $firebaseArray(tournamentRef.child('brackets')).$add(bracket).then(function (newBracketRef) {
+                var bracketId = newBracketRef.key;
 
-                // add the bracket id to the list of brackets for the pool
-                var pool = allPools.$child(bracket.poolId);
+                // add the bracket id to the list of brackets for the pool;
                 // key the bracket by the owner's user id, to allow for easy lookup of the current user's bracket in the pool
-                pool.$child('brackets').$child(bracket.ownerId).$set(bracketId);
+                self.findBracketIdByPoolAndOwner(bracket.poolId, bracket.ownerId).set(bracketId);
 
                 deferred.resolve(bracketId);
             });
@@ -33,19 +34,17 @@ angular.module('myApp.services').service('bracketService',
         };
 
         this.removeBracket = function (bracketId) {
-            console.log('about to remove bracketId ' + bracketId);
-
             var $bracket = this.findById(bracketId);
 
             // first remove the bracket from the list of brackets in the pool
-            $bracket.$getRef().once('value', function (snapshot) {
-                var bracket = snapshot.val();
-                console.log('removing bracket', JSON.stringify(bracket), 'from pool', bracket.poolId);
-                var bracketRefToRemove = allPools.$child(bracket.poolId).$child('brackets').$child(bracket.ownerId);
-                bracketRefToRemove.$remove();
-            });
+            $bracket.$loaded().then(function () {
+                console.log('removing bracket', bracketId, 'from pool', $bracket.poolId);
 
-            // then remove the actual bracket itself
-            $bracket.$remove();
+                self.findBracketIdByPoolAndOwner($bracket.poolId, $bracket.ownerId).remove();
+
+                // then remove the actual bracket itself
+                $bracket.$remove();
+            });
         };
-    }]);
+    }
+]);

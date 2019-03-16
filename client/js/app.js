@@ -2,19 +2,37 @@
 
 // Declare app level module which depends on filters, and services
 angular.module('myApp',
-      ['myApp.config',
-       'myApp.routes',
-       'myApp.services',
-       'myApp.directives',
-       'myApp.controllers',
-       'simpleLoginTools',
-       'routeSecurity',
-       'ngGrid',
-       'smart-table',
-       'timer'
+    ['firebase',
+     'myApp.config',
+     'myApp.security',
+     'myApp.routes',
+     'myApp.services',
+     'myApp.directives',
+     'myApp.controllers',
+     'ngGrid',
+     'smart-table',
+     'timer'
     ])
-    .run(['loginService', '$rootScope', '$templateCache', function(loginService, $rootScope, $templateCache) {
-        $rootScope.auth = loginService.init();
+    .run(['firebase', '$rootScope', '$firebaseAuth', '$templateCache', function(firebase, $rootScope, $firebaseAuth, $templateCache) {
+        // https://github.com/firebase/angularfire/blob/master/docs/reference.md#firebaseauth
+        $rootScope.auth = $firebaseAuth();
+
+        // $rootScope.isLoggedIn = false;
+        // $rootScope.currentUserId = null;
+
+        $rootScope.auth.$onAuthStateChanged(function(firebaseUser) {
+            // Add a boolean variable to the scope that can be used by ng-show and ng-hide to control whether content is shown,
+            // based on whether a user is logged in or not.
+            $rootScope.isLoggedIn = !!firebaseUser;
+
+            // console.log('$onAuthStateChanged() fired, isLoggedIn:', $rootScope.isLoggedIn, 'firebaseUser:', firebaseUser);
+
+            if ($rootScope.isLoggedIn) {
+                $rootScope.currentUserId = firebaseUser.uid;
+            } else {
+                $rootScope.currentUserId = null;
+            }
+        });
 
         $templateCache.put('headerCellTemplate.html',
           "<div class=\"ngHeaderSortColumn {{col.headerClass}}\" ng-style=\"{'cursor': col.cursor}\" ng-class=\"{ 'ngSorted': !noSortVisible }\">\r" +
@@ -41,4 +59,7 @@ angular.module('myApp',
     })
     .factory('moment', function ($window) {
         return $window.moment;
-    })
+    });
+
+// TODO: is this needed, to declare the dependency from the 'myApp.services' module to the other two modules?
+angular.module('myApp.services', ['firebase', 'myApp.service.firebase']);

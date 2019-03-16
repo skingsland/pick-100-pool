@@ -2,15 +2,16 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', ['simpleLoginTools', 'firebase', 'ui.bootstrap'])
-   .controller('LoginCtrl', ['$scope', '$location', 'loginService', function($scope, $location, loginService) {
+angular.module('myApp.controllers', ['firebase', 'ui.bootstrap'])
+   .controller('LoginCtrl', ['$scope', '$location', 'firebaseRef', function($scope, $location, firebaseRef) {
       $scope.email = null;
       $scope.pass = null;
       $scope.confirm = null;
       $scope.createMode = false;
 
-      $scope.login = function(cb) {
+      $scope.login = function() {
          $scope.err = null;
+
          if( !$scope.email ) {
             $scope.err = 'Please enter an email address';
          }
@@ -18,10 +19,23 @@ angular.module('myApp.controllers', ['simpleLoginTools', 'firebase', 'ui.bootstr
             $scope.err = 'Please enter a password';
          }
          else {
-            loginService.login($scope.email, $scope.pass, function(err, user) {
-               $scope.err = err ? err + '' : null;
-               if( !err ) {
-                  cb && cb(user);
+            $scope.auth.$signInWithEmailAndPassword($scope.email, $scope.pass).then(function(firebaseUser) {
+               console.log("Logged in as:", firebaseUser.uid);
+
+               // TODO: should I set isLoggedIn and currentUserId here on the $rootScope,
+               //  and in createAccount() and other auth controller methods? Or is it sufficient to rely on the
+               //  $onAuthStateChanged() callback in app.js?
+               // $scope.isLoggedIn = true;
+               // $scope.currentUserId = firebaseUser.uid;
+
+               $location.path('/pools');
+            }).catch(function(error) {
+               console.error("Authentication failed:", error);
+
+               if (error.code === 'auth/wrong-password') {
+                  $scope.err = 'Incorrect password, please try again.';
+               } else {
+                  $scope.err = error.message;
                }
             });
          }
@@ -29,19 +43,28 @@ angular.module('myApp.controllers', ['simpleLoginTools', 'firebase', 'ui.bootstr
 
       $scope.createAccount = function() {
          $scope.err = null;
-         if( assertValidLoginAttempt() ) {
-            loginService.createAccount($scope.email, $scope.pass, function(err, user) {
-               if( err ) {
-                  $scope.err = err? err + '' : null;
-               }
-               else {
-                  // must be logged in before I can write to my profile
-                  $scope.login(function() {
-                     loginService.createProfile(user.uid, user.email);
-                     
+
+         if(isValidEmailAddressAndPassword()) {
+            $scope.auth.$createUserWithEmailAndPassword($scope.email, $scope.pass).then(function(firebaseUser) {
+               console.log("User " + firebaseUser.uid + " created successfully, and logged in!");
+
+               var firstPartOfEmail = $scope.email.substr(0, $scope.email.indexOf('@'));
+
+               // create their user profile, with an auto-generated username based on their email address
+               firebaseRef('users', firebaseUser.uid).set({
+                  email: $scope.email,
+                  name: firstPartOfEmail
+               }, function(error) {
+                  if (error) {
+                     console.error(error);
+                     $scope.err = error;
+                  } else {
                      $location.path('/pools');
-                  });
-               }
+                  }
+               });
+            }).catch(function(error) {
+               console.error(error);
+               $scope.err = error.message;
             });
          }
       };
@@ -52,22 +75,23 @@ angular.module('myApp.controllers', ['simpleLoginTools', 'firebase', 'ui.bootstr
             $scope.err = 'Please enter an email address';
          }
          else {
-            loginService.resetPassword($scope.email, function(err) {
-               if (err) {
-                  $scope.err = err + '';
-               }
-               else {
-                  $scope.msg = 'Just sent you a password reset email.'
-               }
+            $scope.auth.$sendPasswordResetEmail($scope.email).then(function() {
+               console.log("Password reset email sent successfully!");
+
+               $scope.msg = 'Just sent you a password reset email.'
+            }).catch(function(error) {
+               console.error(error);
+               
+               $scope.err = error;
             });
          }
       };
 
-      function assertValidLoginAttempt() {
+      function isValidEmailAddressAndPassword() {
          if( !$scope.email ) {
             $scope.err = 'Please enter an email address';
          }
-         else if( !$scope.pass ) {
+         else if( !$scope.pass || !$scope.confirm ) {
             $scope.err = 'Please enter a password';
          }
          else if( $scope.pass !== $scope.confirm ) {
@@ -77,8 +101,8 @@ angular.module('myApp.controllers', ['simpleLoginTools', 'firebase', 'ui.bootstr
       }
    }])
 
-   .controller('AccountCtrl', ['$scope', 'loginService', 'changeEmailService', 'firebaseRef', 'syncData',
-                       function($scope, loginService, changeEmailService, firebaseRef, syncData) {
+   .controller('AccountCtrl', ['$scope', '$timeout',
+                       function($scope,   $timeout) {
       $scope.oldpass = null;
       $scope.newpass = null;
       $scope.confirm = null;
@@ -90,31 +114,37 @@ angular.module('myApp.controllers', ['simpleLoginTools', 'firebase', 'ui.bootstr
          $scope.emailmsg = null;
       };
 
-      $scope.updatePassword = function() {
+      $scope.changePassword = function() {
          $scope.reset();
-         loginService.changePassword(buildPwdParms());
-      };
 
-      function buildPwdParms() {
-         return {
-            email: $scope.auth.user.email,
-            oldpass: $scope.oldpass,
-            newpass: $scope.newpass,
-            confirm: $scope.confirm,
-            callback: function(err) {
-               if( err ) {
-                  $scope.err = err;
+         if (!$scope.newpass) {
+            $timeout(function() { $scope.err = 'Please enter a new password'; });
+         }
+         else if ($scope.newpass !== $scope.confirm) {
+            $timeout(function() { $scope.err = 'Passwords do not match'; });
+         }
+         else {
+            $scope.auth.$updatePassword($scope.newpass).then(function() {
+               console.log("Password changed successfully!");
+
+               $scope.oldpass = null;
+               $scope.newpass = null;
+               $scope.confirm = null;
+               $scope.msg = 'Password updated!';
+
+               // not technically needed, but forces Angular to update the view a lot sooner
+               // $scope.$apply();
+            }).catch(function(error) {
+               console.error(error);
+
+               if (error.code === 'auth/requires-recent-login') {
+                  $scope.err = "Changing your password requires a more recent login. Please log out, log back in," +
+                      " and then try changing your password again. Sorry, I know it's a pain. - Steve";
+               } else {
+                  $scope.err = error.message;
                }
-               else {
-                  $scope.oldpass = null;
-                  $scope.newpass = null;
-                  $scope.confirm = null;
-                  $scope.msg = 'Password updated!';
-                  
-                  // not technically needed, but forces Angular to update the view a lot sooner
-                  $scope.$apply();
-               }
-            }
-         };
-      }
-   }]);
+            });
+         }
+      };
+   }]
+);

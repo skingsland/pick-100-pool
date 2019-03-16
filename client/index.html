@@ -13,7 +13,7 @@
 <body id="bootstrap-overrides">
 
   <!-- add a version number to the URL, to force angular to reload cached html template "partial" in the user's browser -->
-  <header data-ng-include="'views/header.html?version=1'"></header>
+  <header data-ng-include="'views/header.html?version=2'"></header>
 
   <section class="content">
     <section class="container">
@@ -24,15 +24,16 @@
   <script src="vendor/jquery/dist/jquery.min.js"></script>
   <script src="vendor/lodash/dist/lodash.min.js"></script>
   <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="vendor/firebase/firebase.js"></script>
-  <script src="vendor/firebase-simple-login/firebase-simple-login.js"></script>
+  <script src="vendor/firebase/firebase-app.js"></script>
+  <script src="vendor/firebase/firebase-auth.js"></script>
+  <script src="vendor/firebase/firebase-database.js"></script>
   <script src="vendor/angular/angular.min.js"></script>
   <script src="vendor/angular-route/angular-route.min.js"></script>
-  <script src="vendor/angularfire/angularfire.min.js"></script>
+  <script src="vendor/angularfire/dist/angularfire.min.js"></script>
   <script src="vendor/angular-smart-table/dist/smart-table.min.js"></script>
   <script src="vendor/ng-grid/build/ng-grid.min.js"></script>
-  <script src="vendor/momentjs/min/moment.min.js"></script>
-  <script src="vendor/momentjs/min/locales.min.js"></script>
+  <script src="vendor/moment/min/moment.min.js"></script>
+  <script src="vendor/moment/min/locales.min.js"></script>
   <script src="vendor/humanize-duration/humanize-duration.js"></script>
   <script src="vendor/angular-timer/dist/angular-timer.min.js"></script>
   <!-- allows ng-grid to dynamically change the height of the grid to fit all the elements in it. -->
@@ -44,12 +45,9 @@
   <script src="js/controllers.js"></script>
   <script src="js/directives.js"></script>
   <script src="js/routes.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/service.login.js"></script>
   <script src="js/service.firebase.js"></script>
-  <script src="js/service.changeEmail.js"></script>
-  <script src="js/module.simpleLoginTools.js"></script>
-  <script src="js/module.routeSecurity.js"></script>
+  <script src="js/ngcloak/ngcloak-decorator.js"></script>
+  <script src="js/security.js"></script>
 
   <script src="js/controllers/bracket-create-edit.js"></script>
   <script src="js/controllers/bracket-list.js"></script>

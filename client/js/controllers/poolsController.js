@@ -1,16 +1,13 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('PoolsController',
-           ['$scope', '$routeParams', '$location', '$q', 'poolService', 'syncData', 'waitForAuth',
-    function($scope,   $routeParams,   $location,   $q,   poolService,   syncData,   waitForAuth) {
+           ['$scope', '$routeParams', '$location', '$q', 'userService', 'poolService', 'bracketService', '$firebaseObject', '$firebaseArray', 'firebaseRef',
+    function($scope,   $routeParams,   $location,   $q,   userService,   poolService,   bracketService,   $firebaseObject,   $firebaseArray,   firebaseRef) {
         // the only reason I'm creating this object is so that I've got an object on the $scope to bind primitives to, since
         // prototypical inheritance doesn't work with primitives. Not sure if this matters though, since I'm not using ng-model.
         $scope.model = {};
 
         $scope.model.poolId = $routeParams.poolId;
-
-        // need this so the 'Create bracket' button will be hidden by default, instead of shown briefly
-        $scope.model.currentUserHasLoaded = false;
 
         $scope.findPools = function () {
             $scope.pools = poolService.findAll();
@@ -21,30 +18,23 @@ angular.module('myApp.controllers').controller('PoolsController',
             }
             else {
                 var $pool = poolService.findById($scope.model.poolId);
-                $pool.$bind($scope, 'pool');
-
-                // if we already have the user's auth info, update it on the scope, instead of waiting for auth to sync
-                if ($scope.auth.user) {
-                    $pool.$child('brackets').$child($scope.auth.user.uid).$bind($scope, 'model.currentUserBracketId');
-                    $scope.model.currentUserHasLoaded = true;
-                }
+                $pool.$bindTo($scope, 'pool');
 
                 // using the pool's managerId property, look up the user and bind their data to the scope
-                $pool.$getRef().child('managerId').once('value', function(managerId) {
-                    syncData(['users', managerId.val()]).$bind($scope, 'manager');
+                $pool.$ref().child('managerId').once('value', function(managerId) {
+                    userService.findById(managerId.val()).$bindTo($scope, 'manager');
                 });
 
-                // we can't get the id of the currently-logged-in user until their auth info has synced from firebase
-                waitForAuth.then(function() {
-                    // set the bracketId for the currently-logged-in user, if there is one
-                    if ($scope.auth.user) {
-                        var currentUserBracketId = $pool.$child('brackets').$child($scope.auth.user.uid);
+                // set the bracketId for the currently-logged-in user, if there is one
+                $scope.auth.$waitForSignIn().then(function(firebaseUser) {
+                    if (firebaseUser) {
+                        var currentUserBracketIdRef = bracketService.findBracketIdByPoolAndOwner($scope.model.poolId, firebaseUser.uid);
 
-                        currentUserBracketId.$bind($scope, 'model.currentUserBracketId').then(function() {
-                            $scope.model.currentUserHasLoaded = true;
-                        });
-                    } else {
-                        $scope.model.currentUserHasLoaded = true;
+                        // the current user might not have a bracket yet, in which case the path in firebase this refers to won't exist;
+                        // in that case, the on('value') method will return a snapshot where the value is null
+                        currentUserBracketIdRef.on('value', function (snapshot) {
+                            $scope.model.currentUserBracketId = snapshot.val();
+                        })
                     }
                 });
 
@@ -64,11 +54,10 @@ angular.module('myApp.controllers').controller('PoolsController',
             }
         };
         $scope.createPool = function () {
-            var poolId = poolService.create($scope.pool, $scope.auth.user, function (err) {
+            poolService.create($scope.pool, $scope.currentUserId, function (err, poolId) {
                 if (!err) {
                     $scope.pool = null;
                     $location.path('/pools/' + poolId);
-                    $scope.$apply();
                 }
             });
         };
@@ -80,7 +69,7 @@ angular.module('myApp.controllers').controller('PoolsController',
 .filter('excludeBracketForCurrentUser', function() {
     return function(bracketIds, model) {
         // if the user is logged in, and they've created a bracket in this pool, filter it out of the list
-        if (model.currentUserHasLoaded && model.currentUserBracketId) {
+        if (model.currentUserBracketId) {
             return _.filter(bracketIds, function (bracketId) {
                 return bracketId !== model.currentUserBracketId;
             });

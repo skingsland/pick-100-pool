@@ -26,15 +26,10 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         };
 
         $scope.findAllTeams = function () {
-            var deferred = $q.defer();
-
-            teamService.findAll().$getRef().once('value', function(teamsSnapshot) {
-                deferred.resolve(teamsSnapshot.val());
-            });
-
-            return deferred.promise;
+            return teamService.findAll().$loaded();
         };
 
+        // allTeams is a $firebaseArray that has been $loaded()
         $scope.getBracketWithScores = function (allTeams) {
             if (!$scope.bracketId) {
                 console.log(new Error('view bracket page requested without a bracketId!'));
@@ -42,21 +37,19 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             }
 
             var bracket = bracketService.findById($scope.bracketId);
-            bracket.$bind($scope, 'bracket');
+            bracket.$bindTo($scope, 'bracket');
 
-            bracket.$child('ownerId').$getRef().once('value', function(ownerId) {
+            bracket.$loaded().then(function() {
                 // this will be null immediately after the bracket has been deleted
-                if (ownerId.val()) {
-                    userService.findById(ownerId.val()).$bind($scope, 'owner');
+                if (bracket.ownerId) {
+                    userService.findById(bracket.ownerId).$bindTo($scope, 'owner');
                 }
-            });
 
-            bracket.$child('teams').$getRef().once('value', function(bracketTeams) {
                 var teamsWithScores = [];
 
                 // get the ID of each team in the bracket, and use the team ID to look up its team ref, containing the points for each round
-                bracketTeams.val().forEach(function(teamId) {
-                    var teamRef = allTeams[teamId];
+                bracket.teams.forEach(function(teamId) {
+                    var teamRef = allTeams.$getRecord(teamId);
 
                     teamsWithScores.push(teamRef);
 
@@ -85,7 +78,7 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             });
 
             // when a column total changes (total points per round), update the grand total (points for the whole bracket)
-            bracket.$child('total_bracket_points_for_round').$getRef().on('value', function(snapshot) {
+            bracket.$ref().child('total_bracket_points_for_round').on('value', function(snapshot) {
                 $scope.sumOfPoints = getTotalPoints(snapshot.val());
             });
         };

@@ -2,8 +2,8 @@
 
 // add this controller to the existing controllers module
 angular.module('myApp.controllers').controller('HeaderController',
-           ['$rootScope', '$scope', '$location', 'syncData', 'loginService', 'tournamentRef', 'moment',
-    function($rootScope,   $scope,   $location,   syncData,   loginService,   tournamentRef,   moment) {
+           ['$rootScope', '$scope', '$location', 'userService', 'tournamentRef', 'moment',
+    function($rootScope,   $scope,   $location,   userService,   tournamentRef,   moment) {
         // enable the jQuery-based tooltip on the "Reset Password" button
         $(function () {
           $('[data-toggle="tooltip"]').tooltip();
@@ -13,28 +13,37 @@ angular.module('myApp.controllers').controller('HeaderController',
 
         $scope.user = {};
 
-        tournamentRef.$child('start_time').$getRef().once('value', function(startTime) {
-            $scope.tourneyStartTime = moment(startTime.val());
+        tournamentRef.once('value').then(function(snapshot) {
+            $scope.tourneyStartTime = moment(snapshot.val()['start_time']);
             $scope.hasTourneyStarted = moment().isAfter($scope.tourneyStartTime);
         });
 
-        // whenever a new user logs in, bind their user data to the $scope so we can show their username in the view
-        $rootScope.$on('$firebaseSimpleLogin:login', function(event, user) {
+        // TODO: should this be in app.js, and/or on $rootScope?
+        $scope.auth.$onAuthStateChanged(function(firebaseUser) {
             $scope.user = {};
-            syncData(['users', user.uid]).$bind($scope, 'user').then(function(unBind) {
-                $scope.unBindUser = unBind;
-            });
+
+            // whenever a new user logs in, bind their user data to the $scope so we can show their username in the view
+            if (firebaseUser) {
+                userService.findById(firebaseUser.uid).$bindTo($scope, 'user').then(function (unBind) {
+                    $rootScope.unBindUser = unBind;
+                });
+            } else {
+                // otherwise the user logged out; clear their firebase and scope bindings
+                $rootScope.unBindUser();
+                $scope.user = {};
+            }
         });
 
         $scope.logout = function() {
-            loginService.logout();
+            $scope.auth.$signOut();
 
             // clear the old user's firebase and scope bindings
-            $scope.unBindUser();
+            $rootScope.unBindUser();
             $scope.user = {};
         };
 
         $scope.changePassword = function() {
+            // redirect the user to the account page where they can change their password
             $location.path('/account');
         };
 

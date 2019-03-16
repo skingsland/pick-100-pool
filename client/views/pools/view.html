@@ -9,8 +9,8 @@
       <!-- In order for the "create bracket" button to be displayed, the user needs to be logged in, they can't already have
            created a bracket in this pool (i.e. currentUserBracketId should be undefined), and the current date needs
            to be before the first game of the tournament UNLESS the pool has allowBracketChangesDuringTourney = true. -->
-      <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/create" ng-show-auth="'login'"
-         data-ng-show="model.currentUserHasLoaded && !model.currentUserBracketId && model.isUserAllowedToCreateBracket">
+      <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/create"
+         data-ng-show="isLoggedIn && !model.currentUserBracketId && model.isUserAllowedToCreateBracket">
         Select Your Teams
       </a>
     </div>
@@ -29,9 +29,9 @@
     <h3><em>Brackets are hidden until the tournament starts.</em></h3>
   </div>
 
-  <!-- the orderByPriority filter converts the object to an array of bracketIds, and the excludeBracketForCurrentUser is used
-       to remove the bracket for the logged-in user from the list, since it's displayed above and we don't want to repeat it. -->
-  <div ng-if="model.showBrackets" ng-repeat="bracketId in pool.brackets | orderByPriority | excludeBracketForCurrentUser:model">
+  <!-- the excludeBracketForCurrentUser filter is used to remove the bracket for the logged-in user from the list,
+       since it's displayed above and we don't want to repeat it. -->
+  <div ng-if="model.showBrackets" ng-repeat="bracketId in pool.brackets | excludeBracketForCurrentUser:model">
     <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 </div>

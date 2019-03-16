@@ -1,10 +1,10 @@
 <div data-ng-init="findPools()" class="poolsList">
   <h3>March Madness Pools</h3>
-  Select a pool<span ng-show-auth="'login'">, or create a new one</span>:<br><br>
-    <div data-ng-repeat="pool in pools | orderByPriority">
+  Select a pool<span ng-show="isLoggedIn">, or create a new one</span>:<br><br>
+    <div data-ng-repeat="pool in pools">
       <h4>
         <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
-        <span ng-show="pool.managerId === auth.user.uid">
+        <span ng-show="isLoggedIn && currentUserId === pool.managerId">
           (<a href="#/pools/{{ pool.$id }}/edit">Edit</a>)
           (<a href="" data-ng-click="removePool(pool.$id)" >Delete</a>)
         </span>
@@ -14,5 +14,5 @@
       </div>
       <br/>
     </div>
-  <a class="btn btn-primary" ng-href="#/pools/create" ng-show-auth="'login'">Create a Pool</a>
+  <a class="btn btn-primary" ng-href="#/pools/create" ng-show="isLoggedIn">Create a Pool</a>
 </div>

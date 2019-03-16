@@ -1,15 +1,10 @@
 'use strict';
 
 angular.module('myApp.services').service('teamService',
-           ['tournamentRef',
-    function(tournamentRef) {
-        var allTeams = tournamentRef.$child('teams');
-
+           ['tournamentRef', '$firebaseArray',
+    function(tournamentRef, $firebaseArray) {
         this.findAll = function() {
-            return allTeams;
-        };
-        this.findById = function(teamId) {
-            return allTeams.$child(teamId);
+            return $firebaseArray(tournamentRef.child('teams'));
         };
     }
 ]);

@@ -1,26 +1,32 @@
 'use strict';
 
 angular.module('myApp.services').service('poolService',
-           ['$q','tournamentRef',
-    function($q,  tournamentRef) {
-        var allPools = tournamentRef.$child('pools');
+           ['$q','tournamentRef', '$firebaseObject', '$firebaseArray',
+    function($q,  tournamentRef,   $firebaseObject,   $firebaseArray) {
+        var allPools = $firebaseArray(tournamentRef.child('pools'));
 
         this.findAll = function() {
             return allPools;
         };
         this.findById = function(poolId) {
-            return allPools.$child(poolId);
+            return $firebaseObject(tournamentRef.child('pools').child(poolId));
         };
 
-        // TODO: rewrite this to use allPools.$add().then(...)
-        this.create = function(pool, manager, cb) {
-            return allPools.$getRef().push({
+        this.create = function(pool, managerId, callback) {
+            console.log("pool == null?", pool == null);
+            console.log("manager == null?", managerId == null);
+            console.log("poolService.create() called with", pool, managerId);
+
+            return allPools.$add({
                 name: pool.name,
-                managerId: manager.uid,
-                brackets: [],
+                managerId: managerId,
+                brackets: {},
                 allowBracketChangesDuringTourney: !!pool.allowBracketChangesDuringTourney,
                 hideBracketsBeforeTourney: !!pool.hideBracketsBeforeTourney
-            }, cb).name();  // returns the ID in firebase of the new pool
+            }).then(function(ref) {
+                // callback function cb takes (error, poolId)
+                callback(null, ref.key); // returns the ID in firebase of the new pool
+            });
         };
 
         this.removePool = function(poolId) {
@@ -30,8 +36,10 @@ angular.module('myApp.services').service('poolService',
         this.hasTourneyStarted = function() {
             var deferred = $q.defer();
 
-            tournamentRef.$child('start_time').$getRef().once('value', function(startTime) {
-                deferred.resolve(new Date() > new Date(startTime.val()));
+            tournamentRef.once('value').then(function(snapshot) {
+                var startTime = new Date(snapshot.val()['start_time']);
+
+                deferred.resolve(new Date() > startTime);
             });
 
             return deferred.promise;
@@ -40,8 +48,8 @@ angular.module('myApp.services').service('poolService',
         this.allowBracketChangesDuringTourney = function(pool) {
             var deferred = $q.defer();
 
-            pool.$child('allowBracketChangesDuringTourney').$getRef().once('value', function(allowBracketChangesDuringTourney) {
-                deferred.resolve(allowBracketChangesDuringTourney.val());
+            pool.$loaded().then(function() {
+                deferred.resolve(pool.allowBracketChangesDuringTourney);
             });
 
             return deferred.promise;
@@ -50,8 +58,8 @@ angular.module('myApp.services').service('poolService',
         this.hideBracketsBeforeTourney = function(pool) {
             var deferred = $q.defer();
 
-            pool.$child('hideBracketsBeforeTourney').$getRef().once('value', function(hideBracketsBeforeTourney) {
-                deferred.resolve(hideBracketsBeforeTourney.val());
+            pool.$loaded().then(function() {
+                deferred.resolve(pool.hideBracketsBeforeTourney);
             });
 
             return deferred.promise;

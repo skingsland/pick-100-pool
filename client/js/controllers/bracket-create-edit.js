@@ -32,18 +32,9 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
         $scope.findAllTeams = function () {
             var deferred = $q.defer();
 
-            teamService.findAll().$getRef().once('value', function(teamsSnapshot) {
-                var allTeams = teamsSnapshot.val();
+            $scope.teams = teamService.findAll();
 
-                // this will be null if there aren't any teams yet
-                if (allTeams) {
-                    // we don't want to just return the direct children of /teams, because each team is stored as a key-value,
-                    // pair where the key is the team id, and the value is the team object (which *also* includes its id).
-                    $scope.teams = Object.keys(allTeams).map(function (key) {
-                        return allTeams[key];
-                    });
-                }
-
+            $scope.teams.$loaded().then(function() {
                 deferred.resolve();
             });
             return deferred.promise;
@@ -70,13 +61,17 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             // are we editing an existing bracket? If so, we will have a bracketId.
             if ($scope.bracketId) {
                 var bracket = bracketService.findById($scope.bracketId);
-                bracket.$bind($scope, 'bracket');
+                bracket.$bindTo($scope, 'bracket');
 
                 // need to use a timeout, with a 0 sec delay, to ensure that ng-grid has finished loading the grid before we select rows
                 $timeout(function() {
                     // get an array of all teams in the bracket, so we can select them in the grid
-                    bracket.$child('teams').$getRef().once('value', function (bracketTeamsSnapshot) {
-                        var bracketTeamsArray = bracketTeamsSnapshot.val();
+
+                    // TODO: does the $loaded() call need to be on the 'teams' child instead?
+                    // bracket.$ref().child('teams').once('value', function (bracketTeamsSnapshot) {
+
+                    bracket.$loaded().then(function() {
+                        var bracketTeamsArray = bracket.teams;
 
                         angular.forEach($scope.teams, function (team, index) {
                             // is the team in the bracket? if so, select it
@@ -90,7 +85,7 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 }, 0);
             } else {
                 // create a new bracket object for the scope, since we're not editing an existing bracket
-                $scope.bracket = {poolId: $scope.poolId, ownerId: $scope.auth.user.uid};
+                $scope.bracket = {poolId: $scope.poolId, ownerId: $scope.currentUserId};
             }
         };
 
@@ -114,7 +109,9 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             } else {
                 $scope.bracket.updated_on = new Date();
 
-                $scope.bracket.$save().then(afterSuccessfulSave);
+                // because we bound the bracket to the scope, that enabled 3 way data binding, so we don't (and can't) call
+                // $scope.bracket.$save() to save the bracket. The changes have already been persisted.
+                afterSuccessfulSave();
             }
         };
 
