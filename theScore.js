@@ -11,7 +11,7 @@ var FIREBASE_TOURNAMENT_ID = 'MarchMadness2019';
 var FIREBASE_TOURNAMENT_NAME = 'March Madness 2019';
 
 // the date and time of the first game in the second (i.e NOT play-in or "first four") round; brackets are read-only after this
-var TOURNAMENT_START_TIME = '2019-03-21T12:00:00-04:00'; // UTC-4 is EDT
+var TOURNAMENT_START_TIME = '2019-03-21T12:15:00-04:00'; // UTC-4 is EDT
 // the day AFTER the final game, so we don't miss pulling the score for the final game
 var TOURNAMENT_END_TIME = '2019-04-09T12:00:00-04:00';
 
@@ -205,8 +205,10 @@ function downloadGamesAndUpdateFirebase() {
         var teamInFirebase = tournamentRef.child('teams').child(teamId);
 
         teamInFirebase.once('value', function(teamSnapshot) {
-            if (!teamSnapshot.exists()) {
-                console.log('team', teamSnapshot.key(), 'is new and will be added to the list of teams in firebase!');
+            // I don't know why, but for some reason the conference field wasn't set correctly for about half of the teams
+            // when they were first loaded on 3/17/2019, so I added this check to make sure we update them.
+            if (!teamSnapshot.exists() || teamSnapshot.val().conference !== conference) {
+                console.log('team', teamSnapshot.key(), 'is new and will be added to the list of teams in firebase, or needs to be updated');
 
                 teamInFirebase.set({
                     id: teamId,
