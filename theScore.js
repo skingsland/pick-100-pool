@@ -207,12 +207,12 @@ function downloadGamesAndUpdateFirebase() {
         teamInFirebase.once('value', function(teamSnapshot) {
             // I don't know why, but for some reason the conference field wasn't set correctly for about half of the teams
             // when they were first loaded on 3/17/2019, so I added this check to make sure we update them.
-            if (!teamSnapshot.exists() || teamSnapshot.val().conference !== conference) {
+            if (!teamSnapshot.exists() || teamSnapshot.val().conference !== conference || teamSnapshot.val().full_name !== team.medium_name) {
                 console.log('team', teamSnapshot.key(), 'is new and will be added to the list of teams in firebase, or needs to be updated');
 
                 teamInFirebase.set({
                     id: teamId,
-                    full_name: team.full_name,
+                    full_name: team.medium_name,
                     seed: seed,
                     region: region,
                     conference: conference
