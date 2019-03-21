@@ -82,9 +82,9 @@ body {
 .bracketTable th small {
     font-weight: normal;
 }
-/* picks (i.e. school/team name) column */
+/* picks column (contains school name and mascot) */
 .bracketTable th:nth-child(1) {
-    width: 150px;
+    width: 190px;
     min-width: 130px;
 }
 /* seed column */
