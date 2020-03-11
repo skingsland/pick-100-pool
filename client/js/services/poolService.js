@@ -13,8 +13,6 @@ angular.module('myApp.services').service('poolService',
         };
 
         this.create = function(pool, managerId, callback) {
-            console.log("pool == null?", pool == null);
-            console.log("manager == null?", managerId == null);
             console.log("poolService.create() called with", pool, managerId);
 
             return allPools.$add({

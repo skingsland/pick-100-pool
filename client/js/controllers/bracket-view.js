@@ -42,9 +42,12 @@ angular.module('myApp.controllers').controller('ViewBracketController',
             // use $watch() instead of $loaded(), so the teams in the bracket will auto refresh after the user changes their picks
             bracket.$watch(function() {
                 // this will be null immediately after the bracket has been deleted
-                if (bracket.ownerId) {
-                    userService.findById(bracket.ownerId).$bindTo($scope, 'owner');
+                if (!bracket.ownerId) {
+                    console.log('bracket can not reload because it has been deleted');
+                    return;
                 }
+
+                userService.findById(bracket.ownerId).$bindTo($scope, 'owner');
 
                 var teamsWithScores = [];
 

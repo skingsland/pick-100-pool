@@ -148,7 +148,7 @@ function downloadGamesAndUpdateFirebase() {
 
                 // don't store results for play-in games, because teams don't participate in brackets until they've won the play-in,
                 // and they don't earn any points for winning a play-in game
-                if(game.tournament_name === API_TOURNAMENT_NAME && getRound(game) > 0) {
+                if (game.tournament_name === API_TOURNAMENT_NAME && getRound(game) > 0) {
                     updateTeamInfo(game);
                     updateGameInfo(game);
                     updateAllBrackets(game);
@@ -271,9 +271,9 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function updatePointsForBracket(bracket, round) {
+        var bracketName = bracket.val().name;
         var totalBracketPointsForRoundRef = bracket.child('total_bracket_points_for_round').ref();
         var totalBracketPointsForRound = 0;
-        var totalBracketPoints = 0;
         var numTeamsRemaining = 0;
 
         tournamentRef.child('teams').once('value', function(allTeamsSnapshot) {
@@ -281,23 +281,21 @@ function downloadGamesAndUpdateFirebase() {
                 var team = allTeamsSnapshot.child(teamId.val());
 
                 if (!team.exists()) {
-                    console.log('ERROR: found team', teamId.val(), 'in bracket', bracket.val().name, 'that does not exist in tourney!');
+                    console.log('ERROR: found team', teamId.val(), 'in bracket', bracketName, 'that does not exist in tourney!');
                     return;
                 }
 
                 var teamPointsForRound = team.child('/rounds/' + round).val();
                 totalBracketPointsForRound += teamPointsForRound || 0;
+                var isTeamEliminated = team.child('is_eliminated').val();
 
-                console.log('updatePointsForBracket() for bracket =', bracket.val().name,
-                            'round =', round,
-                            'team =', team.val().id,
-                            'teamPointsForRound =', team.child('/rounds/' + round).val(),
-                            'is_eliminated =', team.child('is_eliminated').val());
+                console.log('updatePointsForBracket() for bracket =', bracketName,
+                            ', round =', round,
+                            ', team =', team.val().id,
+                            ', teamPointsForRound =', teamPointsForRound,
+                            ', is_eliminated =', isTeamEliminated);
 
-                // console.log('team =', team.val());
-
-                if (!team.child('is_eliminated').val()) {
-                    // console.log('is_eliminated != true');
+                if (!isTeamEliminated) {
                     numTeamsRemaining++;
                 }
             });
@@ -305,14 +303,18 @@ function downloadGamesAndUpdateFirebase() {
             totalBracketPointsForRoundRef.child(round).set(totalBracketPointsForRound);
 
             bracket.child('num_teams_remaining').ref().set(numTeamsRemaining);
-            console.log('updated bracket', bracket.val().name, 'to have', numTeamsRemaining, 'teams remaining');
+            console.log('updated bracket', bracketName, 'to have', numTeamsRemaining, 'teams remaining');
 
             // now recalculate the bracket's *total* points
+            // TODO: for some reason, the callback function is called 20 times, instead of just once
             totalBracketPointsForRoundRef.once('value', function (rounds) {
+                var totalBracketPoints = 0;
+
                 rounds.forEach(function (pointsForRound) {
                     totalBracketPoints += pointsForRound.val() || 0;
                 });
-                console.log('updating bracket', bracket.val().name, 'to have', totalBracketPoints, 'totalPoints');
+
+                console.log('updating bracket', bracketName, 'to have', totalBracketPoints, 'totalPoints');
                 bracket.child('totalPoints').ref().set(totalBracketPoints);
             });
         });
@@ -407,8 +409,9 @@ try {
     if (require.main === module) {
         downloadGamesAndUpdateFirebase();
 
-        // this process will never end, because of the socket connections that firebase creates. So we must forcibly end it,
-        // after a 15 second delay to ensure all data has been written to firebase.
+        // This process will never end, because of the socket connections that firebase creates. So we must forcibly end it,
+        // after a 15 second delay to ensure all data has been written to firebase. We can't call firebase.unauth(), since we
+        // don't know when the background writes to the database finish, and if we unauth too soon we'll get PERMISSION_DENIED errors.
         setTimeout(function() {
             process.exit();
         }, 15000);
