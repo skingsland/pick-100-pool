@@ -10,9 +10,8 @@ var server = http.createServer(router);
 
 router.use(express.static(path.resolve(__dirname, 'client')));
 
-// how often do we check for updated scores?
-var minutes = 2;
-var the_interval = minutes * 60 * 1000;
+// how often do we check for updated scores? In milliseconds.
+var the_interval = 30 * 1000;
 
 // call once right away, then schedule for repeated execution
 theScore.downloadGamesAndUpdateFirebase();

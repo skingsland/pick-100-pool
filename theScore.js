@@ -1,7 +1,7 @@
 var got = require('got');
 var util = require('util');
 var Q = require("q");
-var Firebase = require('firebase');
+const firebaseAdminSdk = require('firebase-admin');
 var moment = require('moment');
 
 var API_TOURNAMENT_NAME = 'NCAA Final 64';
@@ -15,32 +15,36 @@ var TOURNAMENT_START_TIME = '2019-03-21T12:15:00-04:00'; // UTC-4 is EDT
 // the day AFTER the final game, so we don't miss pulling the score for the final game
 var TOURNAMENT_END_TIME = '2019-04-09T12:00:00-04:00';
 
+const firebaseDatabaseRef = loginToFirebase();
+
+// login and return a ref to the root of the firebase
+function loginToFirebase() {
+    // JSON stored in this env variable must come from Firebase Admin SDK service account private key:
+    // https://console.firebase.google.com/u/0/project/pick100pool/settings/serviceaccounts/adminsdk
+    const googleAuthJson = process.env.GOOGLE_AUTH_JSON;
+    if (!googleAuthJson) throw new Error('The $GOOGLE_AUTH_JSON environment variable was not found!');
+
+    return firebaseAdminSdk.initializeApp({
+        credential: firebaseAdminSdk.credential.cert(JSON.parse(googleAuthJson)),
+        databaseURL: "https://pick100pool.firebaseio.com"
+    }).database();
+}
+
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
     var allBracketsSnapshot;
 
-    // login and return a ref to the root of the firebase
-    function loginToFirebase() {
-        var firebase = new Firebase('https://pick100pool.firebaseio.com');
-        var firebaseSecret = process.env.FIREBASE_SECRET;
-
-        if (!firebaseSecret) throw new Error('You need to define an environment variable called FIREBASE_SECRET');
-        firebase.auth(firebaseSecret);
-
-        return firebase;
-    }
-
     // this creates the tournament in Firebase, if it doesn't already exist
     function getTournamentRef(firebase) {
-        var tournamentRef = firebase.child('tournaments').child(FIREBASE_TOURNAMENT_ID);
+        var tournamentRef = firebase.ref('tournaments').child(FIREBASE_TOURNAMENT_ID);
 
         // example of conditionally setting a value in firebase, only if it doesn't already exist
         // (The reason for doing this is purely to save on calls to the firebaseio server.)
         tournamentRef.child('name').transaction(function (currentValue) {
-            if (currentValue === null) return FIREBASE_TOURNAMENT_NAME;
+            return currentValue || FIREBASE_TOURNAMENT_NAME;
         });
         tournamentRef.child('start_time').transaction(function (currentValue) {
-            if (currentValue === null) return TOURNAMENT_START_TIME;
+            return currentValue || TOURNAMENT_START_TIME;
         });
 
         return tournamentRef;
@@ -59,7 +63,7 @@ function downloadGamesAndUpdateFirebase() {
         var deferred = Q.defer();
 
         tournamentRef.child('brackets').once('value', function(snapshot) {
-            //console.log('Found', snapshot.numChildren(), 'bracket(s) in the tournament.');
+            console.log('Found', snapshot.numChildren(), 'bracket(s) in the tournament.');
 
             allBracketsSnapshot = snapshot;
             deferred.resolve();
@@ -72,13 +76,12 @@ function downloadGamesAndUpdateFirebase() {
 
         try {
             var currentDate = convertDateToString(new Date());
-
             tournamentRef.update({last_run_date: currentDate});
 
             var eventsUrlForDate = getEventsUrlForDate(lastRunDateIsoString);
 
-            got(eventsUrlForDate, { json: true }).then(function(response) {
-                deferred.resolve(response.body);
+            got(eventsUrlForDate).json().then(function(response) {
+                deferred.resolve(response);
             }).catch(function(error) {
                 console.log('API call returned with error result:' + error.response.body);
                 deferred.reject(error.response.body);
@@ -143,6 +146,7 @@ function downloadGamesAndUpdateFirebase() {
             console.log(games.length + ' games returned from API.');
 
             for (i = 0; i < games.length; i++) {
+            // for (i = 20; i < games.length; i++) {
                 game = games[i];
                 console.log('downloaded game #', i, game.home_region, 'region game from API with date:', game.game_date);
 
@@ -173,7 +177,7 @@ function downloadGamesAndUpdateFirebase() {
 
     function updateTeamInFirebase(team, seed, region, conference, game) {
         addTeamToFirebaseIfNotExists(team, seed, region, conference).then(function() {
-            var teamInFirebase = tournamentRef.child('teams').child(getTeamID(team));
+            var teamInFirebaseRef = tournamentRef.child('teams').child(getTeamID(team));
             var pointsForRound, winningTeam;
 
             // now add the points for the team winning or losing the round
@@ -183,15 +187,17 @@ function downloadGamesAndUpdateFirebase() {
                 if (getTeamID(team) === getTeamID(winningTeam)) {
                     pointsForRound = winningTeam.points_for_round;
 
-                    // console.log(team.name, "won round", getRound(game), "for", pointsForRound, "points");
+                    console.log(team.name, "won round", getRound(game), "for", pointsForRound, "points");
                 }
                 else {
                     pointsForRound = 0;
-                    teamInFirebase.update({is_eliminated: true});
+                    teamInFirebaseRef.update({is_eliminated: true});
 
-                    // console.log(team.name, "is eliminated in round", getRound(game));
+                    console.log(team.name, "is eliminated in round", getRound(game));
                 }
-                teamInFirebase.child('rounds').child(getRound(game)).set(pointsForRound);
+
+                // TODO: figure out why this sometimes overwrites the team's points from earlier rounds
+                teamInFirebaseRef.child('rounds').child(getRound(game)).set(pointsForRound);
             }
         })
     }
@@ -219,7 +225,7 @@ function downloadGamesAndUpdateFirebase() {
                 });
             }
             else {
-                console.log('team', teamSnapshot.key(), 'already exists in firebase, so will not be updated.');
+                console.log('team', teamSnapshot.key, 'already exists in firebase, so will not be updated.');
             }
 
             deferred.resolve();
@@ -254,30 +260,31 @@ function downloadGamesAndUpdateFirebase() {
         var round = getRound(game);
 
         if (isGameOver(game) && round) {
-
-            // find all brackets that contain the winning team, and recalculate their points for the round
-            allBracketsSnapshot.forEach(function(bracket) {
-
-                bracket.child('teams').forEach(function (bracketTeam) {
-
+            // find all brackets that contain either the winning or losing team
+            allBracketsSnapshot.forEach(function(bracketSnapshot) {
+                bracketSnapshot.child('teams').forEach(function (bracketTeam) {
                     // if the bracket contains one of the teams that just finished the game, update the bracket's total points
                     // for this round (if the team won) and num_teams_remaining (if the team lost)
-                    if(getTeamID(game.home_team) === bracketTeam.val() || getTeamID(game.away_team) === bracketTeam.val()) {
-                        updatePointsForBracket(bracket, round);
+                    if (getTeamID(game.home_team) === bracketTeam.val() || getTeamID(game.away_team) === bracketTeam.val()) {
+                        // console.log('updating points for bracket:', bracket.val().name, 'and round:', round,
+                        //     'home_team:', game.home_team.short_name, 'away_team:', game.away_team.short_name,
+                        //     'bracketTeam:', bracketTeam.val());
+                        updatePointsForBracket(bracketSnapshot, round);
                     }
                 });
             });
         }
     }
 
-    function updatePointsForBracket(bracket, round) {
-        var bracketName = bracket.val().name;
-        var totalBracketPointsForRoundRef = bracket.child('total_bracket_points_for_round').ref();
+    function updatePointsForBracket(bracketSnapshot, round) {
+        const bracketName = bracketSnapshot.val().name;
+        var totalBracketPointsForRoundRef = bracketSnapshot.child('total_bracket_points_for_round').ref;
         var totalBracketPointsForRound = 0;
         var numTeamsRemaining = 0;
 
         tournamentRef.child('teams').once('value', function(allTeamsSnapshot) {
-            bracket.child('teams').forEach(function (teamId) {
+            // calculate the bracket's total points for the round, and number of teams remaining (not eliminated)
+            bracketSnapshot.child('teams').forEach(function (teamId) {
                 var team = allTeamsSnapshot.child(teamId.val());
 
                 if (!team.exists()) {
@@ -289,11 +296,11 @@ function downloadGamesAndUpdateFirebase() {
                 totalBracketPointsForRound += teamPointsForRound || 0;
                 var isTeamEliminated = team.child('is_eliminated').val();
 
-                console.log('updatePointsForBracket() for bracket =', bracketName,
-                            ', round =', round,
-                            ', team =', team.val().id,
-                            ', teamPointsForRound =', teamPointsForRound,
-                            ', is_eliminated =', isTeamEliminated);
+                // console.log('updatePointsForBracket() for bracket =', bracketName,
+                //             ', round =', round,
+                //             ', team =', team.val().id,
+                //             ', teamPointsForRound =', teamPointsForRound,
+                //             ', is_eliminated =', isTeamEliminated);
 
                 if (!isTeamEliminated) {
                     numTeamsRemaining++;
@@ -301,21 +308,19 @@ function downloadGamesAndUpdateFirebase() {
             });
 
             totalBracketPointsForRoundRef.child(round).set(totalBracketPointsForRound);
+            bracketSnapshot.child('num_teams_remaining').ref.set(numTeamsRemaining);
+            console.log('updated bracket', bracketName, 'to have', totalBracketPointsForRound, 'points for round', round,
+                'and', numTeamsRemaining, 'teams remaining');
 
-            bracket.child('num_teams_remaining').ref().set(numTeamsRemaining);
-            console.log('updated bracket', bracketName, 'to have', numTeamsRemaining, 'teams remaining');
-
-            // now recalculate the bracket's *total* points
-            // TODO: for some reason, the callback function is called 20 times, instead of just once
+            // now recalculate the bracket's *total* points, by summing the points for all rounds
             totalBracketPointsForRoundRef.once('value', function (rounds) {
                 var totalBracketPoints = 0;
 
                 rounds.forEach(function (pointsForRound) {
                     totalBracketPoints += pointsForRound.val() || 0;
                 });
-
-                console.log('updating bracket', bracketName, 'to have', totalBracketPoints, 'totalPoints');
-                bracket.child('totalPoints').ref().set(totalBracketPoints);
+                bracketSnapshot.child('totalPoints').ref.set(totalBracketPoints);
+                console.log('updated bracket', bracketName, 'to have', totalBracketPoints, 'totalPoints for all rounds');
             });
         });
     }
@@ -329,11 +334,12 @@ function downloadGamesAndUpdateFirebase() {
 
                 // we have to (re)calculate the points for each round
                 tournamentRef.child('rounds').on('child_added', function (round) {
-                    updatePointsForBracket(bracketSnapshot, round.key());
+                    console.log('recalculating points for bracket:', bracket.name, 'and round:', round.key);
+                    updatePointsForBracket(bracketSnapshot, round.key);
                 });
 
                 // clear the flag when we're done, so we don't have to do this update next time
-                bracketSnapshot.child('isNewOrUpdated').ref().remove();
+                bracketSnapshot.child('isNewOrUpdated').ref.remove();
             }
         });
     }
@@ -396,7 +402,7 @@ function downloadGamesAndUpdateFirebase() {
     // Firebase.enableLogging(true);
 
     // this is basically a "global variable", because it's needed by several of the functions above
-    tournamentRef = getTournamentRef(loginToFirebase());
+    tournamentRef = getTournamentRef(firebaseDatabaseRef);
 
     fetchAllBrackets()
         .then(getLastRunDate)

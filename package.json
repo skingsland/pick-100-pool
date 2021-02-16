@@ -1,18 +1,18 @@
 {
   "name": "pick-100-pool",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "The web server for pick100pool.com, which has backend logic to download game info and calculate scores",
   "main": "web.js",
   "repository": "https://github.com/skingsland/pick-100-pool",
   "author": "skingsland",
   "dependencies": {
-    "express": "~3.2.6",
-    "got": "~8.3.0",
-    "firebase": "~2.4.1",
-    "q": "~1.0.0",
-    "moment": "~2.19.3"
+    "express": "^4.17.1",
+    "firebase-admin": "^9.5.0",
+    "got": "^11.8.1",
+    "moment": "^2.29.1",
+    "q": "^1.5.1"
   },
   "engines": {
-    "node": "4.8.4"
+    "node": "14.x"
   }
 }

@@ -6,7 +6,7 @@ One-time Heroku setup:
 * install the Heroku toolbelt (which includes the heroku CLI and foreman): `brew install heroku/brew/heroku`
 * upload public key file to heroku.com
 * `heroku login`
-* `heroku config:set FIREBASE_SECRET=... --remote heroku`
+* `heroku config:set GOOGLE_AUTH_JSON=... --remote heroku`
 
 Deployment to heroku:
 
@@ -25,7 +25,7 @@ Building the server and client (optional, since all dependencies are checked in)
 
 Running the full app locally:
 
-* `export FIREBASE_SECRET=`<copied from https://console.firebase.google.com/u/0/project/pick100pool/settings/serviceaccounts/databasesecrets>
+* `export GOOGLE_AUTH_JSON=`<contents of service account's private key>
 * `node web.js` (or `foreman start`)
 
 Running just the web server, without the back-end to fetch scores:
