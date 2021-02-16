@@ -7,8 +7,8 @@ var moment = require('moment');
 var API_TOURNAMENT_NAME = "NCAA Men's Division I Basketball Tournament";
 var API_SITE = 'thescore';
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2021';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2021';
+var FIREBASE_TOURNAMENT_ID = 'Development';
+var FIREBASE_TOURNAMENT_NAME = 'Dev only tourney for testing';
 
 // the date and time of the first game in the second (i.e NOT play-in or "first four") round; brackets are read-only after this
 var TOURNAMENT_START_TIME = '2021-03-19T12:00:00-04:00'; // UTC-4 is EDT
