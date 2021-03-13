@@ -5,7 +5,7 @@ angular.module('myApp.config', ['firebase'])
    .constant('loginRedirectPath', '/login')
 
    .constant('FBURL', 'https://pick100pool.firebaseio.com')
-   .constant('FIREBASE_TOURNAMENT_ID', 'MarchMadness2019')
+   .constant('FIREBASE_TOURNAMENT_ID', 'MarchMadness2021')
    .constant('NUMBER_OF_TEAMS_PER_BRACKET', 13)
    .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 100)
 
