@@ -4,7 +4,7 @@ var Q = require("q");
 const firebaseAdminSdk = require('firebase-admin');
 var moment = require('moment');
 
-var API_TOURNAMENT_NAME = 'NCAA Final 64';
+var API_TOURNAMENT_NAME = "NCAA Men's Division I Basketball Tournament";
 var API_SITE = 'thescore';
 
 var FIREBASE_TOURNAMENT_ID = 'MarchMadness2021';
@@ -230,7 +230,7 @@ function downloadGamesAndUpdateFirebase() {
             // I don't know why, but for some reason the conference field wasn't set correctly for about half of the teams
             // when they were first loaded on 3/17/2019, so I added this check to make sure we update them.
             if (!teamSnapshot.exists() || teamSnapshot.val().conference !== conference || teamSnapshot.val().full_name !== team.medium_name) {
-                console.log('team', teamSnapshot.key(), 'is new and will be added to the list of teams in firebase, or needs to be updated');
+                console.log('team', teamSnapshot.key, 'is new and will be added to the list of teams in firebase, or needs to be updated');
 
                 teamInFirebase.set({
                     id: teamId,
