@@ -3,14 +3,13 @@ This is basically just an excuse for me to learn AngularJS and get better at Jav
 
 One-time Heroku setup:
 
-* install the Heroku toolbelt (which includes the heroku CLI and foreman): `brew install heroku/brew/heroku`
-* upload public key file to heroku.com
+* install the Heroku toolbelt (which includes the heroku CLI and foreman): `brew tap heroku/brew && brew install heroku`
 * `heroku login`
-* `heroku config:set GOOGLE_AUTH_JSON=... --remote heroku`
+* upload public key file to heroku.com: `heroku config:set GOOGLE_AUTH_JSON=... --remote heroku`
+* add the git remote: `heroku git:remote -a pick100pool`
 
 Deployment to heroku:
 
-* `git commit ...`
 * `git push heroku master`
 * `heroku logs --tail --app pick100pool`
 
@@ -35,6 +34,10 @@ Running just the web server, without the back-end to fetch scores:
 
 Running just the backend program to fetch scores, teams, etc.:
 
+* `export GOOGLE_AUTH_JSON='<contents of service account's private key>'`
 * `node theScore.js`
+
+You can generate a new private key for the service account here: 
+https://console.firebase.google.com/project/pick100pool/settings/serviceaccounts/adminsdk
 
 https://devcenter.heroku.com/articles/git

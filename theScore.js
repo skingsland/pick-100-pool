@@ -20,7 +20,7 @@ const firebaseDatabaseRef = loginToFirebase();
 // login and return a ref to the root of the firebase
 function loginToFirebase() {
     // JSON stored in this env variable must come from Firebase Admin SDK service account private key:
-    // https://console.firebase.google.com/u/0/project/pick100pool/settings/serviceaccounts/adminsdk
+    // https://console.firebase.google.com/project/pick100pool/settings/serviceaccounts/adminsdk
     const googleAuthJson = process.env.GOOGLE_AUTH_JSON;
     if (!googleAuthJson) throw new Error('The $GOOGLE_AUTH_JSON environment variable was not found!');
 
@@ -167,17 +167,23 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     function updateFirebaseForGame(game) {
-        // even if the game hasn't happened yet, we still want to update the list of teams and games
-        updateTeamInfo(game).then(function() {
-            updateGameInfo(game);
+        // In the hours after selection sunday, the tourney seed ("away_ranking", "home_ranking", and "top_25_rankings"
+        // fields) is null in the API, for many of the teams.
+        // It eventually gets filled in later, so we wait to update firebase until we've got the seed for both teams.
+        if (getSeedForHomeTeam(game) && getSeedForAwayTeam(game)) {
+            // even if the game hasn't happened yet, we still want to update the list of teams and games
+            updateTeamInfo(game).then(function() {
+                updateGameInfo(game);
 
-            // but brackets are only updated after the game is over
-            if (isGameOver(game)) {
-                updateAllBrackets(game);
-            }
-        });
+                // but brackets are only updated after the game is over
+                if (isGameOver(game)) {
+                    updateAllBrackets(game);
+                }
+            });
+        } else {
+            console.log('ERROR: this game has no seed for the home and/or away team:', game);
+        }
     }
-
 
     function updateTeamInfo(game) {
         return Q.all([
