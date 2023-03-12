@@ -3,7 +3,7 @@ This is basically just an excuse for me to learn AngularJS and get better at Jav
 
 One-time Heroku setup:
 
-* install the Heroku toolbelt (which includes the heroku CLI and foreman): `brew tap heroku/brew && brew install heroku`
+* install the Heroku CLI: `brew tap heroku/brew && brew install heroku`
 * `heroku login`
 * upload public key file to heroku.com: `heroku config:set GOOGLE_AUTH_JSON=... --remote heroku`
 * add the git remote: `heroku git:remote -a pick100pool`
