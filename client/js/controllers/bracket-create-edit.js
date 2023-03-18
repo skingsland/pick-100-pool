@@ -89,6 +89,32 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             }
         };
 
+        $scope.randomPicks = function () {
+            $scope.clearPicks();
+
+            $scope.teams.$loaded().then(function() {
+                let randomPicks = randomlyPickTeams($scope.teams);
+
+                while (randomPicks.length < 13) {
+                    randomPicks = randomlyPickTeams($scope.teams);
+                }
+
+                angular.forEach($scope.teams, function (team, index) {
+                    if (randomPicks.indexOf(team.id) >= 0) {
+                        // need to use the ng-grid API to directly select the row for each team in the bracket, because
+                        // ng-grid doesn't support auto-updating the grid if we were to update $scope.selectedTeams manually
+                        $scope.selectTeamsGridOptions.selectItem(index, true);
+                    }
+                });
+            });
+        }
+
+        $scope.clearPicks = function () {
+            // unselect all items
+            $scope.selectedTeams.length = 0;
+            $scope.selectTeamsGridOptions.selectAll();
+        }
+
         $scope.saveBracket = function () {
             // update the bracket being created/saved with the user's selected teams
             $scope.bracket.teams = $scope.selectedTeams.map(function(selectedTeam) {
@@ -114,6 +140,52 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 afterSuccessfulSave();
             }
         };
+
+        function randomlyPickTeams(teams) {
+            let totalSeed = 0;
+            let pickedTeams = [];
+            let remainingTeams = teams.slice();
+
+            // Keep picking teams until we have 13 or we can't reach 100 with the remaining teams
+            while (pickedTeams.length < 13 && remainingTeams.length > 0) {
+                // special-case picking the last team
+                if (pickedTeams.length === 12) {
+                    while (remainingTeams.length > 0) {
+                        // Pick a random team from the remaining teams
+                        let randomIndex = Math.floor(Math.random() * remainingTeams.length);
+                        let pickedTeam = remainingTeams[randomIndex];
+
+                        if (totalSeed + pickedTeam.seed === 100) {
+                            pickedTeams.push(pickedTeam.id);
+
+                            // success!
+                            return pickedTeams;
+                        }
+                        remainingTeams.splice(randomIndex, 1);
+                    }
+
+                    // we failed; return a bad array and let the caller retry calling us
+                    return pickedTeams;
+                }
+
+                // Pick a random team from the remaining teams
+                let randomIndex = Math.floor(Math.random() * remainingTeams.length);
+                let pickedTeam = remainingTeams[randomIndex];
+
+                // If the total seed value of the picked teams plus the seed value of the picked team is less than or equal to 100,
+                // add the picked team to the picked teams array and remove it from the remaining teams array.
+                if (totalSeed + pickedTeam.seed <= 100) {
+                    totalSeed += pickedTeam.seed;
+                    pickedTeams.push(pickedTeam.id);
+                }
+
+                // regardless of whether we could actually use it, remove it from the remaining teams
+                remainingTeams.splice(randomIndex, 1);
+            }
+
+            // it shouldn't be possible to reach this, but it definitely means we failed
+            return pickedTeams;
+        }
 
         function afterSuccessfulSave() {
             // after the bracket was successfully updated, send the user back to the pool overview page,
