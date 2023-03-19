@@ -32,15 +32,13 @@
       <br/>
 
       <div class="form-group">
-        <div class="col-md-offset-2 col-md-2">
+        <div class="btn-toolbar">
           <a class="btn btn-default" href="#/pools">Cancel</a>
-        </div>
-        <div class="col-md-4">
           <!-- if the user is editing an already-existing pool, the form fields are bound to db,
                so "save" button just needs to take user back to the pools page: -->
-          <a class="btn btn-primary" href="#/pools" ng-show="model.poolId">Save</a>
+          <a class="btn btn-success" href="#/pools" ng-show="model.poolId">Save</a>
           <!-- else the user is creating a new pool: -->
-          <button class="btn btn-primary" id="createpool" name="createpool" ng-click="createPool()" ng-show="!model.poolId">Create Pool</button>
+          <button class="btn btn-success" id="createpool" name="createpool" ng-click="createPool()" ng-show="!model.poolId">Create Pool</button>
         </div>
       </div>
     </fieldset>

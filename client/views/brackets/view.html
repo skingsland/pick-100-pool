@@ -1,6 +1,6 @@
 <div id="{{ bracketId }}" class="viewBracket" data-ng-controller="ViewBracketController" data-ng-init="findAllTeams().then(getBracketWithScores);">
   <h3>{{ bracket.name }}</h3>
-  <span class="bracketOwner">by {{ owner.name }}</span>
+  <span class="text-nowrap bracketOwner">by {{ owner.name }}</span>
 
   <div class="table-responsive">
     <table st-table="displayedCollection" st-safe-src="teamsWithScores" class="bracketTable table table-striped table-bordered table-condensed">
