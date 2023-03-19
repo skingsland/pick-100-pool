@@ -1,3 +1,7 @@
 <div ng-controller="ListBracketsController">
   <div class="allBracketsGrid" ng-grid="allBracketsGridOptions"></div>
+  <div class="checkbox" ng-show="displayShowOwner">
+    <label>
+      <input type="checkbox" id="showOwners" name="showOwners" ng-model="showOwners">Show owners?</label>
+  </div>
 </div>
