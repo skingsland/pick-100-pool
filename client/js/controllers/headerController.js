@@ -31,7 +31,7 @@ angular.module('myApp.controllers').controller('HeaderController',
                 });
             } else {
                 // otherwise the user logged out; clear their firebase and scope bindings
-                $rootScope.unBindUser();
+                // $rootScope.unBindUser();
                 $scope.user = {};
             }
         });
