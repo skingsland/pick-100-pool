@@ -1,25 +1,22 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('ListBracketsController',
-           ['$scope', '$routeParams', 'bracketService', 'userService', '$anchorScroll', '$location',
-    function($scope,   $routeParams,   bracketService,   userService,   $anchorScroll,   $location) {
+           ['$scope', '$routeParams', 'bracketService', '$anchorScroll', '$location',
+    function($scope,   $routeParams,   bracketService,   $anchorScroll,   $location) {
         // the poolId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /pool/1/brackets)
         $scope.poolId = $scope.poolId || $routeParams.poolId;
 
         $scope.allBracketsInPool = [];
-        $scope.showOwners = false;
+
+        // console.log('enableBracketNameLink:', $scope.enableBracketNameLink);
 
         function getCellTemplateForBracketNameColumn() {
             if ($scope.enableBracketNameLink) {
                 return '<div class="ngCellText" ng-class="col.colIndex()">'
-                         + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>' +
-                    '<span ng-show="showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
-                    '</div>';
-            } else {
-                return '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}}' +
-                    '<span ng-show="showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
-                    '</div>';
+                         + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>'
+                     + '</div>';
             }
+            return ''; // use the normal, built-in cell template
         }
 
         $scope.allBracketsGridOptions = {
@@ -30,7 +27,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                           displayName:'Bracket',
                           cellTemplate: getCellTemplateForBracketNameColumn()},
                          {field:'totalPoints', displayName:'Points', width:60},
-                         {field:'num_teams_remaining', displayName:'Teams', width:60}
+                         {field:'num_teams_remaining', displayName:'Teams left', width:85}
                         ],
             // TODO: bold the row for the current user
             sortInfo: {fields: ['totalPoints'], directions: ['desc']},
@@ -76,14 +73,6 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
                 // TODO: still need to do this???
                 bracket.id = bracketId; // save the bracketId for later, so we can find it again
-
-                // this will be null immediately after the bracket has been deleted
-                if (bracket.ownerId) {
-                    var owner = userService.findById(bracket.ownerId);
-                    owner.$loaded().then(function() {
-                        bracket.owner = owner.name;
-                    })
-                }
 
                 // has the bracket already been added to the scope? If so, remove it before we re-add it
                 var arrayLength = $scope.allBracketsInPool.length;

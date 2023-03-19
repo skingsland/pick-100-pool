@@ -1,6 +1,6 @@
 <div data-ng-init="findOnePool()">
   <div class="row">
-    <div class="col-md-5">
+    <div class="col-md-6">
       <h2 style="display: inline-block; padding-right: 30px">{{ pool.name }}</h2>
       <span class="text-nowrap"><strong>Manager: </strong>{{ manager.name }}</span>
       <br/><br/>
@@ -14,8 +14,8 @@
         Select Your Teams
       </a>
     </div>
-    <div class="col-md-5 col-md-offset-2" ng-if="pool.brackets && model.showBrackets != null" ng-init="enableBracketNameLink = model.showBrackets">
-      <div ng-init="poolId = model.poolId; displayShowOwner=true" ng-include="'views/brackets/list.html'"></div>
+    <div class="col-md-4 col-md-offset-2" ng-if="pool.brackets && model.showBrackets != null" ng-init="enableBracketNameLink = model.showBrackets">
+      <div ng-init="poolId = model.poolId" ng-include="'views/brackets/list.html'"></div>
     </div>
   </div>
 
