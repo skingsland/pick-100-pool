@@ -27,11 +27,9 @@
         </div>
         <br/>
         <div class="row">
-          <div class="col-sm-1">
-            <a data-ng-click="randomPicks()" class="btn btn-info">Pick for me</a>
-          </div>
-          <div class="col-sm-1">
-            <a data-ng-click="clearPicks()" class="btn btn-info pull-right">Clear</a>
+          <div class="btn-toolbar">
+            <button data-ng-click="randomPicks()" class="btn btn-info">Pick for me</button>
+            <button data-ng-click="clearPicks()" class="btn btn-danger">Clear</button>
           </div>
         </div>
         <br/>
@@ -41,26 +39,23 @@
           <div class="form-group pull-left" ng-class="{'has-error': !bracket.name}">
             <label class="col-md-5 control-label" for="name" style="text-align:left;">Bracket Name</label>
             <div class="col-md-7">
-              <input id="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md" required>
+              <input id="name" data-ng-model="bracket.name" type="text" placeholder="name of bracket" class="form-control input-md">
             </div>
           </div>
         </div>
         <br/>
         <div class="row">
-          <div class="col-sm-1">
+          <div class="btn-toolbar">
             <a class="btn btn-default" href="#/pools/{{ poolId }}">Cancel</a>
-          </div>
-          <div class="col-sm-1">
             <button data-ng-click="saveBracket()"
                     ng-disabled="!bracket.name || selectedTeams.length !== requiredNumTeams || sumOfSeeds !== requiredSumOfSeeds"
                     ng-class="{'btn-danger': selectedTeams.length > requiredNumTeams || sumOfSeeds > requiredSumOfSeeds}"
-                    class="btn pull-right btn-success">
+                    class="btn btn-success">
               {{isNewBracket ? 'Save' : 'Update'}}
             </button>
           </div>
         </div>
       </div>
-
     </fieldset>
   </form>
 </div>
