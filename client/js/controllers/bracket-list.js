@@ -7,17 +7,18 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         $scope.poolId = $scope.poolId || $routeParams.poolId;
 
         $scope.allBracketsInPool = [];
-        $scope.showOwners = false;
+        $scope.model = {};
+        $scope.model.showOwners = false;
 
         function getCellTemplateForBracketNameColumn() {
             if ($scope.enableBracketNameLink) {
                 return '<div class="ngCellText" ng-class="col.colIndex()">'
                          + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>' +
-                    '<span ng-show="showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
+                    '<span ng-show="model.showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
                     '</div>';
             } else {
                 return '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}}' +
-                    '<span ng-show="showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
+                    '<span ng-show="model.showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
                     '</div>';
             }
         }
