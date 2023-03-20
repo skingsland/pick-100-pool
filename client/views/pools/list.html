@@ -10,7 +10,7 @@
         </span>
       </h4>
       <div ng-if="pool.brackets">
-        <div ng-init="poolId = pool.$id" ng-include="'views/brackets/list.html'"></div>
+        <div ng-init="poolId = pool.$id; displayShowOwner=false" ng-include="'views/brackets/list.html'"></div>
       </div>
       <br/>
     </div>
