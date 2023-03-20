@@ -95,7 +95,7 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             $scope.teams.$loaded().then(function() {
                 let randomPicks = randomlyPickTeams($scope.teams);
 
-                while (randomPicks.length < 13) {
+                while (randomPicks.length !== 13) {
                     randomPicks = randomlyPickTeams($scope.teams);
                 }
 
@@ -172,9 +172,8 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 let randomIndex = Math.floor(Math.random() * remainingTeams.length);
                 let pickedTeam = remainingTeams[randomIndex];
 
-                // If the total seed value of the picked teams plus the seed value of the picked team is less than or equal to 100,
-                // add the picked team to the picked teams array and remove it from the remaining teams array.
-                if (totalSeed + pickedTeam.seed <= 100) {
+                // for the first 12 teams picked, the total seed needs to be *less* than 100; we pick the 13th team with special logic
+                if (totalSeed + pickedTeam.seed < 100) {
                     totalSeed += pickedTeam.seed;
                     pickedTeams.push(pickedTeam.id);
                 }
