@@ -24,7 +24,7 @@ Building the server and client (optional, since all dependencies are checked in)
 
 Running the full app locally:
 
-* `export GOOGLE_AUTH_JSON=`<contents of service account's private key>
+* `export GOOGLE_AUTH_JSON='<contents of service account's private key>'`
 * `node web.js` (or `foreman start`)
 
 Running just the web server, without the back-end to fetch scores:
