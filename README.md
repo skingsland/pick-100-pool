@@ -30,7 +30,7 @@ Running the full app locally:
 Running just the web server, without the back-end to fetch scores:
 
 * `npm install -g http-server`
-* `http-server client -p 5000`
+* `http-server client -p 5001`
 
 Running just the backend program to fetch scores, teams, etc.:
 
