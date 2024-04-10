@@ -6,7 +6,7 @@
   "repository": "https://github.com/skingsland/pick-100-pool",
   "author": "skingsland",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "firebase-admin": "^12.0.0",
     "got": "^11.8.6",
     "moment": "^2.29.1",
