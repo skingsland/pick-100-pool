@@ -7,7 +7,7 @@
   "author": "skingsland",
   "dependencies": {
     "express": "^4.18.2",
-    "firebase-admin": "^11.5.0",
+    "firebase-admin": "^12.0.0",
     "got": "^11.8.6",
     "moment": "^2.29.1",
     "q": "^1.5.1"
