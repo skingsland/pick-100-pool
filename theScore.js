@@ -7,13 +7,13 @@ var moment = require('moment');
 var API_TOURNAMENT_NAME = "NCAA Men's Division I Basketball Tournament";
 var API_SITE = 'thescore';
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2024';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2024';
+var FIREBASE_TOURNAMENT_ID = 'MarchMadness2025';
+var FIREBASE_TOURNAMENT_NAME = 'March Madness 2025';
 
 // the date and time of the first game in the second (i.e NOT play-in or "first four") round; brackets are read-only after this
-var TOURNAMENT_START_TIME = '2024-03-21T12:15:00-04:00'; // UTC-4 is EDT
+var TOURNAMENT_START_TIME = '2025-03-20T12:15:00-04:00'; // UTC-4 is EDT
 // the day AFTER the final game, so we don't miss pulling the score for the final game
-var TOURNAMENT_END_TIME = '2024-04-09T12:00:00-04:00';
+var TOURNAMENT_END_TIME = '2025-04-08T12:00:00-04:00';
 
 const firebaseDatabaseRef = loginToFirebase();
 
