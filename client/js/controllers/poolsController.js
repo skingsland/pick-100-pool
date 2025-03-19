@@ -14,8 +14,33 @@ angular.module('myApp.controllers').controller('PoolsController',
         $scope.model.poolId = $routeParams.poolId;
 
         $scope.findPools = function () {
-            $scope.pools = poolService.findAll();
+            userService.getCurrentUserId().then(function(currentUserId) {
+                if (currentUserId) {
+                    poolService.findAll().$loaded().then(function (pools) {
+                        $scope.pools = pools.sort((poolA, poolB) => {
+                            // Checks to see if either pool has any brackets owned by currentUserId
+                            const poolAHasUserBracket = poolA.brackets && (currentUserId in poolA.brackets);
+                            const poolBHasUserBracket = poolB.brackets && (currentUserId in poolB.brackets);
+
+                            // If poolA has user's bracket but poolB doesn't, poolA comes first
+                            if (poolAHasUserBracket && !poolBHasUserBracket) {
+                                return -1;
+                            }
+                            // If poolB has user's bracket but poolA doesn't, poolB comes first
+                            if (!poolAHasUserBracket && poolBHasUserBracket) {
+                                return 1;
+                            }
+
+                            // If both or neither have user's brackets, maintain original order
+                            return 0;
+                        });
+                    });
+                } else {
+                    $scope.pools = poolService.findAll();
+                }
+            });
         };
+
         $scope.findOnePool = function () {
             if (!$scope.model.poolId) {
                 $scope.pool = { hideBracketsBeforeTourney: true };
