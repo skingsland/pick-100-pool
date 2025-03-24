@@ -34,7 +34,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                          {field:'num_teams_remaining', displayName:'Teams', width:60}
                         ],
             // TODO: bold the row for the current user
-            sortInfo: {fields: ['totalPoints'], directions: ['desc']},
+            sortInfo: {fields: ['totalPoints', 'num_teams_remaining'], directions: ['desc', 'desc']},
             plugins: [new ngGridFlexibleHeightPlugin()]
         };
 

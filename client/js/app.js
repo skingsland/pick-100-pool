@@ -44,7 +44,6 @@ angular.module('myApp',
 
           "    <div class=\"ngSortButtonDown\" ng-show=\"col.showSortButtonDown()\"></div>\r" +
           "    <div class=\"ngSortButtonUp\" ng-show=\"col.showSortButtonUp()\"></div>\r" +
-          "    <div class=\"ngSortPriority\">{{col.sortPriority}}</div>\r" +
           "    <div ng-class=\"{ ngPinnedIcon: col.pinned, ngUnPinnedIcon: !col.pinned }\" ng-click=\"togglePin(col)\" ng-show=\"col.pinnable\"></div>\r" +
           "</div>\r" +
           "<div ng-show=\"col.resizable\" class=\"ngHeaderGrip\" ng-click=\"col.gripClick($event)\" ng-mousedown=\"col.gripOnMouseDown($event)\"></div>"
