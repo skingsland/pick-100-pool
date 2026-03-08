@@ -22,6 +22,10 @@ Building the server and client (optional, since all dependencies are checked in)
 * `npm install`
 * `bower install`
 
+Running tests:
+* `npm test` (unit and integration tests only)
+* `GOOGLE_AUTH_JSON='...' npm test` (all tests, including end-to-end tests against the Firebase Development tournament)
+
 Running the full app locally:
 
 * `export GOOGLE_AUTH_JSON='<contents of service account's private key>'`
@@ -37,7 +41,16 @@ Running just the backend program to fetch scores, teams, etc.:
 * `export GOOGLE_AUTH_JSON='<contents of service account's private key>'`
 * `node theScore.js`
 
-You can generate a new private key for the service account here: 
+Adding play-in ("First Four") opponents to Firebase after Selection Sunday:
+
+* `export GOOGLE_AUTH_JSON='<contents of service account's private key>'`
+* `node addPlayInOpponents.js --dry-run` (preview what would be inserted)
+* `node addPlayInOpponents.js` (write to production tournament)
+* `node addPlayInOpponents.js --tournament Development` (write to Development tournament for testing)
+
+The script tries to auto-detect C teams (the 1-seeds and 6-seeds that face play-in winners) from the NCAA scoreboard API. If that data isn't available yet, it falls back to interactive prompts where you type each team name manually.
+
+For the `GOOGLE_AUTH_JSON` contents, you can generate a new private key for the service account here: 
 https://console.firebase.google.com/project/pick100pool/settings/serviceaccounts/adminsdk
 
 https://devcenter.heroku.com/articles/git

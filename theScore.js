@@ -1,34 +1,21 @@
 var got = require('got');
 var util = require('util');
 var Q = require("q");
-const firebaseAdminSdk = require('firebase-admin');
 var moment = require('moment');
+var {
+    FIREBASE_TOURNAMENT_ID,
+    FIREBASE_TOURNAMENT_NAME,
+    TOURNAMENT_START_TIME,
+    TOURNAMENT_END_TIME,
+    API_TOURNAMENT_NAME,
+    loginToFirebase,
+    getTeamID,
+    getRound,
+} = require('./tournamentConfig');
 
-var API_TOURNAMENT_NAME = "NCAA Men's Division I Basketball Tournament";
 var API_SITE = 'thescore';
 
-var FIREBASE_TOURNAMENT_ID = 'MarchMadness2025';
-var FIREBASE_TOURNAMENT_NAME = 'March Madness 2025';
-
-// the date and time of the first game in the second (i.e NOT play-in or "first four") round; brackets are read-only after this
-var TOURNAMENT_START_TIME = '2025-03-20T12:15:00-04:00'; // UTC-4 is EDT
-// the day AFTER the final game, so we don't miss pulling the score for the final game
-var TOURNAMENT_END_TIME = '2025-04-08T12:00:00-04:00';
-
 const firebaseDatabaseRef = loginToFirebase();
-
-// login and return a ref to the root of the firebase
-function loginToFirebase() {
-    // JSON stored in this env variable must come from Firebase Admin SDK service account private key:
-    // https://console.firebase.google.com/project/pick100pool/settings/serviceaccounts/adminsdk
-    const googleAuthJson = process.env.GOOGLE_AUTH_JSON;
-    if (!googleAuthJson) throw new Error('The $GOOGLE_AUTH_JSON environment variable was not found!');
-
-    return firebaseAdminSdk.initializeApp({
-        credential: firebaseAdminSdk.credential.cert(JSON.parse(googleAuthJson)),
-        databaseURL: "https://pick100pool.firebaseio.com"
-    }).database();
-}
 
 function downloadGamesAndUpdateFirebase() {
     var tournamentRef;
@@ -373,20 +360,6 @@ function downloadGamesAndUpdateFirebase() {
     }
 
     // HELPER FUNCTIONS
-
-    function getTeamID(team) {
-        // Use the short name of the team as its ID, to make foreign keys in firebase more intuitive;
-        // however some teams share the same short name (e.g. San Diego State U and South Dakota State U),
-        // so append the team's id from the API to ensure the ID is unique. We can't use the medium or full name,
-        // since that can contain periods (e.g. "N.C. State") which aren't allowed in firebase paths.
-        return team.short_name + '_' + team.id;
-    }
-
-    function getRound(game) {
-        // the play-in game is returned as round 1 from the API, so we need to subtract 1 from the round number,
-        // so the first real tournament game that we store in firebase will be round 1 (instead of round 2)
-        return (game.round || game.playoff.round) - 1;
-    }
 
     function isGameOver(game) {
         return game.event_status === 'final' && game.box_score !== null;

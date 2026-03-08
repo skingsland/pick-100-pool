@@ -3,6 +3,9 @@
   "version": "2.0.0",
   "description": "The web server for pick100pool.com, which has backend logic to download game info and calculate scores",
   "main": "web.js",
+  "scripts": {
+    "test": "jest"
+  },
   "repository": "https://github.com/skingsland/pick-100-pool",
   "author": "skingsland",
   "dependencies": {
@@ -11,6 +14,9 @@
     "got": "^11.8.6",
     "moment": "^2.29.1",
     "q": "^1.5.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   },
   "engines": {
     "node": "19.x"
