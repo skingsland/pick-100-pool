@@ -26,6 +26,13 @@ Running tests:
 * `npm test` (unit and integration tests only)
 * `GOOGLE_AUTH_JSON='...' npm test` (all tests, including end-to-end tests against the Firebase Development tournament)
 
+Running E2E tests (Playwright):
+* One-time setup: `npx playwright install chromium`
+* One-time setup: populate the Testing tournament in Firebase: `GOOGLE_AUTH_JSON='...' npm run test:setup-fixtures`
+* Create a `.env` file with `E2E_TEST_PASSWORD='<password for e2e-tests@pick100pool.com>'`
+* `npm run test:e2e` (headless)
+* `npm run test:e2e:headed` (visible browser)
+
 Running the full app locally:
 
 * `export GOOGLE_AUTH_JSON='<contents of service account's private key>'`

@@ -3,3 +3,8 @@
 *.iws
 .shelf
 .DS_Store
+node_modules/
+.env
+*-adminsdk-*.json
+test-results/
+playwright-report/

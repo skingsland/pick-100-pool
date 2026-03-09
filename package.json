@@ -4,7 +4,10 @@
   "description": "The web server for pick100pool.com, which has backend logic to download game info and calculate scores",
   "main": "web.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test:e2e": "npx playwright test",
+    "test:e2e:headed": "npx playwright test --headed",
+    "test:setup-fixtures": "node e2e/fixtures/setup-testing-tournament.js"
   },
   "repository": "https://github.com/skingsland/pick-100-pool",
   "author": "skingsland",
@@ -16,6 +19,8 @@
     "q": "^1.5.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "dotenv": "^17.3.1",
     "jest": "^29.7.0"
   },
   "engines": {

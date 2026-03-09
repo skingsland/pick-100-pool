@@ -5,7 +5,11 @@ angular.module('myApp.config', ['firebase'])
    .constant('loginRedirectPath', '/login')
 
    .constant('FBURL', 'https://pick100pool.firebaseio.com')
-   .constant('FIREBASE_TOURNAMENT_ID', 'MarchMadness2025')
+   .constant('FIREBASE_TOURNAMENT_ID', (function() {
+      var raw = new URLSearchParams(window.location.search).get('tournament');
+      var tournament = (raw && /^[A-Za-z0-9_-]+$/.test(raw)) ? raw : null;
+      return tournament || 'MarchMadness' + new Date().getFullYear();
+   })())
    .constant('NUMBER_OF_TEAMS_PER_BRACKET', 13)
    .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 100)
 
