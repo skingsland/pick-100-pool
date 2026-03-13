@@ -43,6 +43,17 @@ angular.module('myApp.services').service('poolService',
             return deferred.promise;
         };
 
+        this.hasTourneyEnded = function() {
+            var deferred = $q.defer();
+
+            tournamentRef.once('value').then(function(snapshot) {
+                var endTime = snapshot.val()['end_time'];
+                deferred.resolve(endTime ? new Date() > new Date(endTime) : false);
+            });
+
+            return deferred.promise;
+        };
+
         this.allowBracketChangesDuringTourney = function(pool) {
             var deferred = $q.defer();
 

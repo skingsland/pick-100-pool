@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('ViewBracketController',
-           ['$scope', '$routeParams', '$q', 'poolService', 'bracketService', 'teamService', 'userService', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
-    function($scope,   $routeParams,   $q,   poolService,   bracketService,   teamService,   userService,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
+           ['$scope', '$routeParams', '$q', 'poolService', 'bracketService', 'teamService', 'userService', 'SUM_OF_TEAM_SEEDS_PER_BRACKET', 'ceilingCalculator', 'FINAL_FOUR_PAIRINGS',
+    function($scope,   $routeParams,   $q,   poolService,   bracketService,   teamService,   userService,   SUM_OF_TEAM_SEEDS_PER_BRACKET,   ceilingCalculator,   FINAL_FOUR_PAIRINGS) {
         $scope.sumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
         $scope.poolId = $routeParams.poolId;
 
@@ -11,9 +11,11 @@ angular.module('myApp.controllers').controller('ViewBracketController',
         // Fetch two pieces of data from the server in parallel: whether the tourney has started, and whether users are
         // allowed to create or change brackets after it has started. Then combine then into a single flag on the scope.
         $q.all({'hasTourneyStarted': poolService.hasTourneyStarted(),
+                'hasTourneyEnded': poolService.hasTourneyEnded(),
                 'allowBracketChangesDuringTourney': poolService.allowBracketChangesDuringTourney($pool)})
             .then(function(results) {
                 $scope.isUserAllowedToEditBracket = results['allowBracketChangesDuringTourney'] || !results['hasTourneyStarted'];
+                $scope.tourneyStarted = results['hasTourneyStarted'] && !results['hasTourneyEnded'];
             });
 
 
@@ -77,8 +79,15 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                     }
                 });
 
-                    // add all the teams with scores to the scope at the same time, at the very end
+                // add all the teams with scores to the scope at the same time, at the very end
                 $scope.teamsWithScores = teamsWithScores;
+
+                // Collision-aware bracket ceiling (displayed next to bracket name)
+                // Store on $scope, NOT on $scope.bracket (which is Firebase-bound)
+                var bracketTeams = $scope.teamsWithScores.map(function(team) {
+                    return ceilingCalculator.buildTeamData(team);
+                });
+                $scope.bracketCeiling = ceilingCalculator.computeBracketCeiling(bracketTeams, FINAL_FOUR_PAIRINGS);
             });
 
             // when a column total changes (total points per round), update the grand total (points for the whole bracket)

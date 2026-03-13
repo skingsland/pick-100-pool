@@ -42,6 +42,17 @@ Running just the web server, without the back-end to fetch scores:
 
 * `npm install -g http-server`
 * `http-server client -p 5001`
+* Visit `http://localhost:5001` (loads the current production tournament)
+* Add `?tournament=Testing` to load the E2E test tournament instead
+
+Viewing different tournament scenarios locally (useful for testing the ceiling feature):
+
+* One-time setup: `GOOGLE_AUTH_JSON='...' node e2e/fixtures/setup-scenario-tournaments.js`
+* Pre-tourney (no ceiling): `http://localhost:5001/?tournament=Testing_PreTourney#/pools/e2eTestPoolA`
+* Day 1, no games played (max ceiling): `http://localhost:5001/?tournament=Testing_Day1#/pools/e2eTestPoolA`
+* After Round 2 (mid-tournament): `http://localhost:5001/?tournament=Testing#/pools/e2eTestPoolA`
+* After Round 5 (championship pending, one bracket with 0 teams): `http://localhost:5001/?tournament=Testing_Round5#/pools/e2eTestPoolA`
+* Tournament over (no ceiling): `http://localhost:5001/?tournament=Testing_Final#/pools/e2eTestPoolA`
 
 Running just the backend program to fetch scores, teams, etc.:
 

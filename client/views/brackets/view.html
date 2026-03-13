@@ -1,6 +1,7 @@
 <div id="{{ bracketId }}" class="viewBracket" data-ng-controller="ViewBracketController" data-ng-init="findAllTeams().then(getBracketWithScores);">
   <h3>{{ bracket.name }}</h3>
   <span class="text-nowrap bracketOwner">by {{ owner.name }}</span>
+  <span ng-if="tourneyStarted" class="text-nowrap bracketCeiling">Max possible points: {{ bracketCeiling }}</span>
 
   <div class="table-responsive">
     <table st-table="displayedCollection" st-safe-src="teamsWithScores" class="bracketTable table table-striped table-bordered table-condensed">
@@ -14,7 +15,7 @@
            <th st-skip-natural="true" st-sort="rounds[4]">Round 4<br/><small>Seed # + 8 points</small></th>
            <th st-skip-natural="true" st-sort="rounds[5]">Round 5<br/><small>Seed # + 16 points</small></th>
            <th st-skip-natural="true" st-sort="rounds[6]">Round 6<br/><small>Seed # + 32 points</small></th>
-           <th st-skip-natural="true" st-sort="totalPoints">Team Total</th>
+           <th st-skip-natural="true" st-sort="totalPoints" class="team-total">Team Total</th>
         </tr>
       </thead>
       <tbody>

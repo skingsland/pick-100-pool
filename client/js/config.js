@@ -12,6 +12,8 @@ angular.module('myApp.config', ['firebase'])
    })())
    .constant('NUMBER_OF_TEAMS_PER_BRACKET', 13)
    .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 100)
+   // NOTE: Update alongside FIREBASE_TOURNAMENT_ID each year on Selection Sunday
+   .constant('FINAL_FOUR_PAIRINGS', [['South', 'West'], ['East', 'Midwest']])
 
     // unsubscribe listeners when elements are destroyed
     .config(function ($provide) {

@@ -59,7 +59,8 @@ body {
     /* this allows the .bracketOwner to follow on the same line */
     display: inline-block;
 }
-.viewBracket .bracketOwner {
+.viewBracket .bracketOwner,
+.viewBracket .bracketCeiling {
     margin-left: 15px;
 }
 .bracketTable {
@@ -92,14 +93,17 @@ body {
     min-width: 45px;
     max-width: 60px;
 }
-/* team total column */
-.bracketTable th:nth-child(9) {
+/* team total column (use class instead of fragile nth-child) */
+.bracketTable .team-total {
     min-width: 85px;
     max-width: 100px;
 }
+.eliminated,
+.eliminated a {
+    color: darkgray;
+}
 .bracketTable .eliminated td:nth-child(1),
 .bracketTable .eliminated td:nth-child(2) {
-    color: darkgray;
     text-decoration: line-through;
 }
 /* make the striping on every other row a lighter shade of gray */

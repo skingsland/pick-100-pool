@@ -39,18 +39,6 @@ function buildTeamData(team) {
     };
 }
 
-function getNaiveTeamCeiling(seed, roundPoints, isEliminated) {
-    seed = parseInt(seed, 10) || 0;
-    var earned = sumRoundPoints(roundPoints);
-    if (isEliminated) return earned;
-    var highestWon = getHighestRoundWon(roundPoints);
-    var remaining = 0;
-    for (var r = highestWon + 1; r <= 6; r++) {
-        if (roundPoints && parseInt(roundPoints[r], 10) === 0) break;
-        remaining += seed + Math.pow(2, r - 1);
-    }
-    return earned + remaining;
-}
 
 function pointsForRound(team, round) {
     if (round <= 0) return 0;
@@ -176,25 +164,24 @@ function computeBracketCeiling(teams, finalFourPairings) {
 
     totalPoints += computeFinalFourCeiling(regionResults, finalFourPairings);
 
+    var earnedTotal = 0;
     teams.forEach(function(t) {
-        if (t.isEliminated === true) totalPoints += (t.totalEarnedPoints || 0);
+        var earned = t.totalEarnedPoints || 0;
+        if (t.isEliminated === true) totalPoints += earned;
+        earnedTotal += earned;
     });
 
-    return totalPoints;
+    // Floor guarantee: ceiling can never be less than already-earned points.
+    // The collision-aware algorithm can underestimate when its greedy heuristic
+    // picks a blocked team to advance, losing an active team's earned points.
+    return Math.max(totalPoints, earnedTotal);
 }
 
 // 2. Angular service registration - GUARDED for Jest compatibility
 if (typeof angular !== 'undefined') {
     angular.module('myApp.services').service('ceilingCalculator', [function() {
-        this.computeBracketCeiling = computeBracketCeiling;
-        this.computeRegionCeiling = computeRegionCeiling;
-        this.computeFinalFourCeiling = computeFinalFourCeiling;
-        this.getHighestRoundWon = getHighestRoundWon;
-        this.getNaiveTeamCeiling = getNaiveTeamCeiling;
         this.buildTeamData = buildTeamData;
-        this.sumRoundPoints = sumRoundPoints;
-        this.pointsForRound = pointsForRound;
-        this.isLeaf = isLeaf;
+        this.computeBracketCeiling = computeBracketCeiling;
     }]);
 }
 
@@ -205,7 +192,6 @@ if (typeof module !== 'undefined' && module.exports) {
         computeRegionCeiling: computeRegionCeiling,
         computeFinalFourCeiling: computeFinalFourCeiling,
         getHighestRoundWon: getHighestRoundWon,
-        getNaiveTeamCeiling: getNaiveTeamCeiling,
         buildTeamData: buildTeamData,
         sumRoundPoints: sumRoundPoints,
         pointsForRound: pointsForRound,

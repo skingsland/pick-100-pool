@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('ListBracketsController',
-           ['$scope', '$routeParams', 'bracketService', 'userService', '$anchorScroll', '$location',
-    function($scope,   $routeParams,   bracketService,   userService,   $anchorScroll,   $location) {
+           ['$scope', '$routeParams', 'bracketService', 'userService', '$anchorScroll', '$location', 'ceilingCalculator', 'poolService', 'teamService', 'FINAL_FOUR_PAIRINGS',
+    function($scope,   $routeParams,   bracketService,   userService,   $anchorScroll,   $location,   ceilingCalculator,   poolService,   teamService,   FINAL_FOUR_PAIRINGS) {
         // the poolId can be supplied in two different ways: from the parent scope, or via a route param (e.g. /pool/1/brackets)
         $scope.poolId = $scope.poolId || $routeParams.poolId;
 
@@ -11,28 +11,44 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         $scope.model.showOwners = false;
 
         function getCellTemplateForBracketNameColumn() {
+            var finishedSpan = '<span ng-class="{\'eliminated\': model.tourneyInProgress && row.getProperty(\'num_teams_remaining\') === 0}">';
             if ($scope.enableBracketNameLink) {
                 return '<div class="ngCellText" ng-class="col.colIndex()">'
+                         + finishedSpan
                          + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>' +
                     '<span ng-show="model.showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
-                    '</div>';
+                    '</span></div>';
             } else {
-                return '<div class="ngCellText" ng-class="col.colIndex()">{{row.getProperty(col.field)}}' +
+                return '<div class="ngCellText" ng-class="col.colIndex()">'
+                    + finishedSpan + '{{row.getProperty(col.field)}}' +
                     '<span ng-show="model.showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
-                    '</div>';
+                    '</span></div>';
             }
         }
+
+        function getColumnDefs() {
+            var cols = [
+                {field:'name', displayName:'Bracket', cellTemplate: getCellTemplateForBracketNameColumn()},
+                {field:'totalPoints', displayName:'Points', width:60}
+            ];
+            if ($scope.model.showCeiling) {
+                cols.push({
+                    field: 'ceilingPoints',
+                    displayName: 'Ceiling',
+                    width: 65
+                });
+            }
+            cols.push({field:'num_teams_remaining', displayName:'Teams', width:60});
+            return cols;
+        }
+
+        $scope.myColumnDefs = getColumnDefs();
 
         $scope.allBracketsGridOptions = {
             data: 'allBracketsInPool',
             enableRowSelection: false,
             rowHeight: 25,
-            columnDefs: [{field:'name',
-                          displayName:'Bracket',
-                          cellTemplate: getCellTemplateForBracketNameColumn()},
-                         {field:'totalPoints', displayName:'Points', width:60},
-                         {field:'num_teams_remaining', displayName:'Teams', width:60}
-                        ],
+            columnDefs: 'myColumnDefs',
             // TODO: bold the row for the current user
             sortInfo: {fields: ['totalPoints', 'num_teams_remaining'], directions: ['desc', 'desc']},
             plugins: [new ngGridFlexibleHeightPlugin()]
@@ -55,6 +71,65 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             // reset to old to keep any additional routing logic from kicking in
             $location.hash(old);
         };
+
+        // Ceiling computation: runs on all pages that use this controller
+        var allTeams = teamService.findAll();
+        var teamsLoaded = allTeams.$loaded();
+
+        poolService.hasTourneyStarted().then(function(started) {
+            if (!started) return;
+
+            poolService.hasTourneyEnded().then(function(ended) {
+                $scope.model.tourneyInProgress = started && !ended;
+                if (ended) return;
+                // Setting showCeiling triggers the $watch which rebuilds column defs
+                $scope.model.showCeiling = true;
+            });
+        });
+
+        var recomputeDebounceTimer = null;
+        $scope.$on('$destroy', function() {
+            allTeams.$destroy();
+            if (recomputeDebounceTimer) clearTimeout(recomputeDebounceTimer);
+        });
+
+        function scheduleRecomputeCeilings() {
+            if (recomputeDebounceTimer) clearTimeout(recomputeDebounceTimer);
+            recomputeDebounceTimer = setTimeout(function() {
+                $scope.$evalAsync(recomputeCeilings);
+            }, 200);
+        }
+
+        function recomputeCeilings() {
+            teamsLoaded.then(function() {
+                if ($scope.allBracketsInPool.length === 0) return;
+                if (!$scope.model.showCeiling) return;
+
+                $scope.allBracketsInPool.forEach(function(bracket) {
+                    if (!bracket.teams) return;
+                    var bracketTeams = bracket.teams.map(function(teamId) {
+                        var team = allTeams.$getRecord(teamId);
+                        if (!team) return null;
+                        return ceilingCalculator.buildTeamData(team);
+                    }).filter(Boolean);
+
+                    // Store directly on bracket for ng-grid display and sorting.
+                    // trimKeys will wipe it on Firebase sync, but recomputeCeilings
+                    // re-runs after every sync via the debounced watch.
+                    bracket.ceilingPoints = ceilingCalculator.computeBracketCeiling(bracketTeams, FINAL_FOUR_PAIRINGS);
+                });
+            }).catch(function(err) {
+                console.error('Failed to load teams for ceiling calculation:', err);
+            });
+        }
+
+        // Live updates when team data changes
+        allTeams.$watch(scheduleRecomputeCeilings);
+
+        // Update column defs when ceiling toggle changes
+        $scope.$watch('model.showCeiling', function() {
+            $scope.myColumnDefs = getColumnDefs();
+        });
 
         // any time a new bracket is added to the pool's list, add the full bracket object to the scope
         bracketService.findAllBracketIdsByPool($scope.poolId).on('child_added', function(bracketIdSnapshot) {
@@ -102,6 +177,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 }
 
                 $scope.allBracketsInPool.push(bracket);
+                scheduleRecomputeCeilings();
             });
         });
 

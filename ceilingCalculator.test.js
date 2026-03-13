@@ -1,11 +1,33 @@
 var calc = require('./client/js/services/ceilingCalculator');
 
+// Mirrors e2e/fixtures/setup-testing-tournament.js TEAMS data (after round 2)
+function fixtureTeams() {
+    return {
+        'UConn_1':     { seed: 1,  region: 'East',    is_eliminated: false, rounds: [null, 2, 3, null, null, null, null] },
+        'Houston_2':   { seed: 2,  region: 'South',   is_eliminated: false, rounds: [null, 3, 4, null, null, null, null] },
+        'Purdue_3':    { seed: 1,  region: 'Midwest', is_eliminated: false, rounds: [null, 2, 3, null, null, null, null] },
+        'Duke_4':      { seed: 4,  region: 'East',    is_eliminated: true,  rounds: [null, 5, 0, null, null, null, null] },
+        'Marquette_5': { seed: 2,  region: 'West',    is_eliminated: false, rounds: [null, 3, 4, null, null, null, null] },
+        'Auburn_6':    { seed: 4,  region: 'Midwest', is_eliminated: true,  rounds: [null, 5, 0, null, null, null, null] },
+        'Iowa_7':      { seed: 5,  region: 'South',   is_eliminated: false, rounds: [null, 6, 7, null, null, null, null] },
+        'Gonzaga_8':   { seed: 5,  region: 'West',    is_eliminated: true,  rounds: [null, 6, 0, null, null, null, null] },
+        'Creighton_9': { seed: 3,  region: 'South',   is_eliminated: true,  rounds: [null, 4, 0, null, null, null, null] },
+        'Oregon_10':   { seed: 11, region: 'South',   is_eliminated: true,  rounds: [null, 12, 0, null, null, null, null] },
+        'NCST_11':     { seed: 11, region: 'East',    is_eliminated: false, rounds: [null, 12, 13, null, null, null, null] },
+        'Yale_12':     { seed: 13, region: 'East',    is_eliminated: true,  rounds: [null, 14, 0, null, null, null, null] },
+        'Oakland_13':  { seed: 14, region: 'Midwest', is_eliminated: true,  rounds: [null, 15, 0, null, null, null, null] },
+        'JMU_14':      { seed: 12, region: 'South',   is_eliminated: true,  rounds: [null, 13, 0, null, null, null, null] },
+        'Vermont_15':  { seed: 16, region: 'West',    is_eliminated: true,  rounds: [null, 0, null, null, null, null, null] },
+        'Wagner_16':   { seed: 16, region: 'East',    is_eliminated: true,  rounds: [null, 0, null, null, null, null, null] },
+    };
+}
+
 describe('ceilingCalculator', function() {
     test('module loads and exports expected functions', function() {
         expect(typeof calc.sumRoundPoints).toBe('function');
         expect(typeof calc.getHighestRoundWon).toBe('function');
         expect(typeof calc.buildTeamData).toBe('function');
-        expect(typeof calc.getNaiveTeamCeiling).toBe('function');
+
         expect(typeof calc.pointsForRound).toBe('function');
         expect(typeof calc.isLeaf).toBe('function');
         expect(typeof calc.computeRegionCeiling).toBe('function');
@@ -131,44 +153,6 @@ describe('ceilingCalculator', function() {
         test('staleness detects string "0" as a loss', function() {
             var team = {seed: 8, highestRoundWon: 1, roundPoints: {1: 9, 2: "0"}};
             expect(calc.pointsForRound(team, 3)).toBe(0);
-        });
-    });
-
-    describe('getNaiveTeamCeiling', function() {
-        test('seed 1, no games, not eliminated -> 69', function() {
-            // R1: 1+1=2, R2: 1+2=3, R3: 1+4=5, R4: 1+8=9, R5: 1+16=17, R6: 1+32=33 => 69
-            expect(calc.getNaiveTeamCeiling(1, {}, false)).toBe(69);
-        });
-
-        test('seed 13, no games, not eliminated -> 141', function() {
-            // R1: 13+1=14, R2: 13+2=15, R3: 13+4=17, R4: 13+8=21, R5: 13+16=29, R6: 13+32=45 => 141
-            expect(calc.getNaiveTeamCeiling(13, {}, false)).toBe(141);
-        });
-
-        test('seed 5, won R1-R3, not eliminated -> 93', function() {
-            // earned: 6+7+9=22, remaining: R4: 5+8=13, R5: 5+16=21, R6: 5+32=37 => 22+71=93
-            expect(calc.getNaiveTeamCeiling(5, {1: 6, 2: 7, 3: 9}, false)).toBe(93);
-        });
-
-        test('seed 8, eliminated, roundPoints={1:9, 2:0} -> 9', function() {
-            expect(calc.getNaiveTeamCeiling(8, {1: 9, 2: 0}, true)).toBe(9);
-        });
-
-        test('staleness: seed 12, roundPoints={1:13, 2:14, 3:0}, not eliminated -> 27', function() {
-            expect(calc.getNaiveTeamCeiling(12, {1: 13, 2: 14, 3: 0}, false)).toBe(27);
-        });
-
-        test('null roundPoints, not eliminated -> projects all rounds', function() {
-            expect(calc.getNaiveTeamCeiling(1, null, false)).toBe(69);
-        });
-
-        test('staleness detects string "0" as a loss', function() {
-            expect(calc.getNaiveTeamCeiling(12, {1: 13, 2: 14, 3: "0"}, false)).toBe(27);
-        });
-
-        test('Firebase array format works correctly', function() {
-            // [null, 3, 4, 6, 0, null, null] - won R1-R3, lost R4
-            expect(calc.getNaiveTeamCeiling(2, [null, 3, 4, 6, 0, null, null], false)).toBe(13);
         });
     });
 
@@ -302,9 +286,19 @@ describe('ceilingCalculator', function() {
             };
         }
 
+        // Invariant: ceiling must always be >= sum of earned points
+        function assertCeilingFloor(teams, result) {
+            var earnedTotal = teams.reduce(function(sum, t) {
+                return sum + (t.totalEarnedPoints || 0);
+            }, 0);
+            expect(result).toBeGreaterThanOrEqual(earnedTotal);
+        }
+
         test('seed 3 East + seed 7 West, cross-region championship -> 151', function() {
             var teams = [makeTeam(3, 'East'), makeTeam(7, 'West')];
-            expect(calc.computeBracketCeiling(teams, pairings)).toBe(151);
+            var result = calc.computeBracketCeiling(teams, pairings);
+            expect(result).toBe(151);
+            assertCeilingFloor(teams, result);
         });
 
         test('all eliminated: 3 teams earned 14, 20, 8 -> 42', function() {
@@ -313,7 +307,9 @@ describe('ceilingCalculator', function() {
                 makeTeam(8, 'West', {isEliminated: true, totalEarnedPoints: 20}),
                 makeTeam(3, 'South', {isEliminated: true, totalEarnedPoints: 8})
             ];
-            expect(calc.computeBracketCeiling(teams, pairings)).toBe(42);
+            var result = calc.computeBracketCeiling(teams, pairings);
+            expect(result).toBe(42);
+            assertCeilingFloor(teams, result);
         });
 
         test('empty bracket -> 0', function() {
@@ -352,7 +348,9 @@ describe('ceilingCalculator', function() {
 
         test('seed 11 alone in South -> 129 (R1-R6)', function() {
             var teams = [makeTeam(11, 'South')];
-            expect(calc.computeBracketCeiling(teams, pairings)).toBe(129);
+            var result = calc.computeBracketCeiling(teams, pairings);
+            expect(result).toBe(129);
+            assertCeilingFloor(teams, result);
         });
 
         test('sparse array rounds: [null, 6, 0] -> highestRoundWon=1, earned=6', function() {
@@ -363,6 +361,7 @@ describe('ceilingCalculator', function() {
             })];
             var result = calc.computeBracketCeiling(teams, pairings);
             expect(result).toBe(6);
+            assertCeilingFloor(teams, result);
         });
 
         test('object rounds {"1": 6, "2": 0} -> same behavior as array', function() {
@@ -373,6 +372,7 @@ describe('ceilingCalculator', function() {
             })];
             var result = calc.computeBracketCeiling(teams, pairings);
             expect(result).toBe(6);
+            assertCeilingFloor(teams, result);
         });
 
         test('staleness full path: roundPoints={1:13, 2:14, 3:0}, alone in region -> 27', function() {
@@ -381,7 +381,9 @@ describe('ceilingCalculator', function() {
                 roundPoints: {1: 13, 2: 14, 3: 0},
                 totalEarnedPoints: 27
             })];
-            expect(calc.computeBracketCeiling(teams, pairings)).toBe(27);
+            var result = calc.computeBracketCeiling(teams, pairings);
+            expect(result).toBe(27);
+            assertCeilingFloor(teams, result);
         });
 
         test('FINAL_FOUR_PAIRINGS mismatch warning', function() {
@@ -394,6 +396,53 @@ describe('ceilingCalculator', function() {
             );
             spy.mockRestore();
         });
+
+        test('ceiling is never less than sum of earned points', function() {
+            // Bug: greedy "pick highest seed" collision resolution can drop earned points.
+            // Seed 11 is picked over seed 1 to advance from East (11 > 1), but seed 11
+            // is blocked (rounds[5]=0) while seed 1 already won through R6.
+            // Seed 1's R4-R6 earned points (59) are lost, making ceiling < earned total.
+            var teams = [
+                {seed: 1, region: 'East', isEliminated: false, highestRoundWon: 6,
+                 roundPoints: {1: 2, 2: 3, 3: 5, 4: 9, 5: 17, 6: 33}, totalEarnedPoints: 69},
+                {seed: 11, region: 'East', isEliminated: false, highestRoundWon: 4,
+                 roundPoints: {1: 12, 2: 13, 3: 15, 4: 19, 5: 0}, totalEarnedPoints: 59}
+            ];
+            var result = calc.computeBracketCeiling(teams, pairings);
+            // Earned total = 69 + 59 = 128. Must never be less than that.
+            expect(result).toBeGreaterThanOrEqual(128);
+        });
+
+        test('fixture data: bracket 1 (Test User) ceiling is 310', function() {
+            var FINAL_FOUR = [['South', 'West'], ['East', 'Midwest']];
+            var TEAMS = fixtureTeams();
+            var ids = ['Houston_2', 'Purdue_3', 'Duke_4', 'Marquette_5', 'Auburn_6', 'Iowa_7', 'Gonzaga_8', 'Oregon_10', 'NCST_11', 'Yale_12', 'Oakland_13', 'JMU_14', 'Vermont_15'];
+            var data = ids.map(function(id) { return calc.buildTeamData(TEAMS[id]); });
+            var result = calc.computeBracketCeiling(data, FINAL_FOUR);
+            expect(result).toBe(310);
+            assertCeilingFloor(data, result);
+        });
+
+        test('fixture data: bracket 2 (Alice) ceiling is 281', function() {
+            var FINAL_FOUR = [['South', 'West'], ['East', 'Midwest']];
+            var TEAMS = fixtureTeams();
+            var ids = ['UConn_1', 'Houston_2', 'Purdue_3', 'Duke_4', 'Auburn_6', 'Iowa_7', 'Creighton_9', 'Oregon_10', 'NCST_11', 'Oakland_13', 'JMU_14', 'Vermont_15', 'Wagner_16'];
+            var data = ids.map(function(id) { return calc.buildTeamData(TEAMS[id]); });
+            var result = calc.computeBracketCeiling(data, FINAL_FOUR);
+            expect(result).toBe(281);
+            assertCeilingFloor(data, result);
+        });
+
+        test('fixture data: bracket 3 (Bob) ceiling is 262', function() {
+            var FINAL_FOUR = [['South', 'West'], ['East', 'Midwest']];
+            var TEAMS = fixtureTeams();
+            var ids = ['UConn_1', 'Houston_2', 'Duke_4', 'Marquette_5', 'Auburn_6', 'Gonzaga_8', 'Creighton_9', 'Oregon_10', 'NCST_11', 'Yale_12', 'JMU_14', 'Vermont_15', 'Wagner_16'];
+            var data = ids.map(function(id) { return calc.buildTeamData(TEAMS[id]); });
+            var result = calc.computeBracketCeiling(data, FINAL_FOUR);
+            expect(result).toBe(262);
+            assertCeilingFloor(data, result);
+        });
+
 
         test('full integration: 13 teams across 4 regions', function() {
             // East: seeds 3 (at [3,14]), 14 (at [3,14]), 7 (at [7,10]), 2 (at [2,15])
@@ -485,7 +534,9 @@ describe('ceilingCalculator', function() {
             // Eliminated: seed 9 earned 10
 
             // Total = 91 + 62 + 82 + 67 + 103 + 10 = 415
-            expect(calc.computeBracketCeiling(teams, pairings)).toBe(415);
+            var result = calc.computeBracketCeiling(teams, pairings);
+            expect(result).toBe(415);
+            assertCeilingFloor(teams, result);
         });
     });
 });
