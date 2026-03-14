@@ -55,11 +55,11 @@ body {
 }
 .poolJumpTo .jump-to-label {
     font-weight: bold;
-    margin-right: 14px;
+    padding-right: 14px;
 }
 .poolJumpTo .sep {
     color: #999;
-    margin: 0 7px;
+    padding: 0 7px;
 }
 .poolJumpTo a {
     text-decoration: none;

@@ -7,7 +7,9 @@
       <a href="" ng-click="scrollToPool(pool.$id)" ng-class="{'font-bold': isUserPool(pool)}">{{pool.name}}</a><span class="sep" ng-if="!$last">|</span>
     </span>
   </div>
-  <a class="btn btn-primary" ng-href="#/pools/create" ng-show="isLoggedIn" style="margin-bottom: 25px">Create a Pool</a>
+  <div ng-show="isLoggedIn" style="margin-bottom: 25px">
+    <a class="btn btn-primary" ng-href="#/pools/create">Create a Pool</a>
+  </div>
 
     <div data-ng-repeat="pool in pools" id="pool-{{ pool.$id }}">
       <h4>

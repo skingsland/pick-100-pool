@@ -430,6 +430,35 @@ test('header has navigation links', async ({ page }) => {
 
 // ─── Mobile viewport tests ───────────────────────────────────────────────────
 
+test('mobile: jump-to links have adequate spacing', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
+    const page = await context.newPage();
+
+    await page.goto('http://localhost:5001/?tournament=Testing#/pools');
+    await expect(page.locator('h3')).toContainText('March Madness Pools');
+
+    const jumpTo = page.locator('.poolJumpTo');
+    await expect(jumpTo).toBeVisible({ timeout: 10000 });
+
+    // Separators should have visible margin on each side (not collapsed to zero)
+    const sep = page.locator('.poolJumpTo .sep').first();
+    await expect(sep).toBeVisible();
+    const sepBox = await sep.boundingBox();
+    // The separator ("|") plus its margins should be at least 10px wide
+    expect(sepBox.width).toBeGreaterThanOrEqual(10);
+
+    // Jump-to links should have at least 10px vertical gap to the Create button (if visible)
+    const createBtn = page.locator('a.btn-primary', { hasText: 'Create a Pool' });
+    if (await createBtn.isVisible()) {
+        const jumpToBox = await jumpTo.boundingBox();
+        const btnBox = await createBtn.boundingBox();
+        const gap = btnBox.y - (jumpToBox.y + jumpToBox.height);
+        expect(gap).toBeGreaterThanOrEqual(10);
+    }
+
+    await context.close();
+});
+
 test('mobile: pool view renders without errors', async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
     const page = await context.newPage();
