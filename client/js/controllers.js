@@ -54,7 +54,6 @@ angular.module('myApp.controllers', ['firebase', 'ui.bootstrap'])
 
                // create their user profile, with an auto-generated username based on their email address
                firebaseRef('users', firebaseUser.uid).set({
-                  email: $scope.email,
                   name: firstPartOfEmail
                }, function(error) {
                   if (error) {

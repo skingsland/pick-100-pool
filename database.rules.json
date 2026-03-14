@@ -1,0 +1,62 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "users": {
+       "$user": {
+          ".read": true,
+          ".write": "auth.uid === $user && (!newData.exists() || newData.hasChildren())",
+
+          "name": {
+             ".validate": "newData.isString() && newData.val().length <= 100"
+          },
+          "$other": {
+             ".validate": false
+          }
+       }
+    },
+
+    "tournaments": {
+      ".read": true,
+      ".write": "auth != null",
+
+      "$tournament": {
+        ".validate": "newData.hasChildren(['name'])",
+
+        "name": {
+          ".validate": "newData.isString() && newData.val().length <= 100"
+        },
+        "pools": {
+          "$pool": {
+            ".write": "auth != null && (data.child('managerId').val() == auth.uid || data.child('managerId').val() == null)",
+            ".validate": "newData.hasChildren(['managerId','name'])",
+
+            "managerId": {
+              ".validate": "auth.uid == newData.val()"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 100"
+            }
+          }
+        },
+        "brackets": {
+          "$bracket": {
+            ".write": "auth != null && (data.child('ownerId').val() == auth.uid || data.child('ownerId').val() == null)",
+            ".validate": "newData.hasChildren(['ownerId', 'poolId', 'name', 'teams'])",
+
+            "ownerId": {
+               ".validate": "auth.uid == newData.val()"
+            },
+            "poolId": {
+              ".validate": "newData.val() != ''"
+            },
+            "name": {
+              ".validate": "newData.isString() && newData.val().length <= 100"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -115,8 +115,8 @@ function buildPools(testUserId) {
 
 function buildFakeUsers() {
     return {
-        [FAKE_USER_1]: { email: 'alice@example.com', name: 'Alice Tester' },
-        [FAKE_USER_2]: { email: 'bob@example.com', name: 'Bob Tester' },
+        [FAKE_USER_1]: { name: 'Alice Tester' },
+        [FAKE_USER_2]: { name: 'Bob Tester' },
     };
 }
 
@@ -177,7 +177,7 @@ async function main() {
 
     // Write test user profile and fake user profiles
     console.log('Writing user profiles...');
-    await db.ref(`users/${testUserId}`).update({ email: TEST_USER_EMAIL, name: 'E2E Test User' });
+    await db.ref(`users/${testUserId}`).update({ name: 'E2E Test User' });
     for (const [userId, profile] of Object.entries(fakeUsers)) {
         await db.ref(`users/${userId}`).set(profile);
     }

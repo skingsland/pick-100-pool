@@ -312,10 +312,10 @@ async function main() {
     }
 
     // Write user profiles (shared across all tournaments)
-    await db.ref(`users/${testUserId}`).update({ email: 'e2e-tests@pick100pool.com', name: 'E2E Test User' });
-    await db.ref('users/fakeUser001').set({ email: 'alice@example.com', name: 'Alice Tester' });
-    await db.ref('users/fakeUser002').set({ email: 'bob@example.com', name: 'Bob Tester' });
-    await db.ref('users/fakeUser003').set({ email: 'dave@example.com', name: 'Dave Tester' });
+    await db.ref(`users/${testUserId}`).update({ name: 'E2E Test User' });
+    await db.ref('users/fakeUser001').set({ name: 'Alice Tester' });
+    await db.ref('users/fakeUser002').set({ name: 'Bob Tester' });
+    await db.ref('users/fakeUser003').set({ name: 'Dave Tester' });
 
     console.log('\nDone! Visit these URLs to see each scenario:');
     console.log('  Pre-tourney:  http://localhost:5001/?tournament=Testing_PreTourney#/pools/e2eTestPoolA');
