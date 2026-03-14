@@ -52,10 +52,10 @@
        owner of the bracket, and the current date needs to be before the first game of the tournament UNLESS the pool has
        allowBracketChangesDuringTourney = true. -->
   <div ng-show="isLoggedIn && currentUserId === bracket.ownerId && isUserAllowedToEditBracket" class="row currentUserBracket">
-    <div class="col-md-2">
+    <div class="col-xs-6 col-md-2">
       <a class="btn btn-primary" ng-href="#/pools/{{ pool.$id }}/brackets/{{ bracketId }}/edit">Change Your Teams</a>
     </div>
-    <div class="col-md-2">
+    <div class="col-xs-6 col-md-2">
       <button ng-click="removeBracket()" class="btn btn-danger">Delete Your Bracket</button>
     </div>
   </div>

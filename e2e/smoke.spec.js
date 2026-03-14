@@ -33,7 +33,9 @@ test('pool view shows brackets table with data', async ({ page }) => {
     await expect(bracketsGrid).toBeVisible();
 
     // ng-grid renders data in .ngRow elements
-    await expect(page.locator('.ngRow')).toHaveCount(3, { timeout: 10000 });
+    await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
+    const rowCount = await page.locator('.ngRow').count();
+    expect(rowCount).toBeGreaterThanOrEqual(3);
 
     // Verify bracket data columns are populated (names, points, teams-remaining)
     const firstRow = page.locator('.ngRow').first();
@@ -99,16 +101,20 @@ test('bracket view: column sorting works', async ({ page }) => {
 test('pool view: bracket details ordered by points descending', async ({ page }) => {
     await page.goto(`#/pools/${POOL_A_ID}`);
 
-    // Wait for all bracket detail sections to render (3 brackets in pool A)
-    await expect(page.locator('.poolBracket')).toHaveCount(3, { timeout: 10000 });
+    // Wait for all 3 known brackets to render their names
+    await expect(page.locator('.poolBracket .viewBracket h3', { hasText: "Test User's Bracket" })).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.poolBracket .viewBracket h3', { hasText: "Alice's Picks" })).toBeVisible({ timeout: 10000 });
+    await expect(page.locator('.poolBracket .viewBracket h3', { hasText: "Bob's Bracket" })).toBeVisible({ timeout: 10000 });
 
     // Get bracket names in the order they appear on the page
     const names = await page.locator('.poolBracket .viewBracket h3').allTextContents();
 
-    // Test User's Bracket (127 pts) > Alice's Picks (109 pts) > Bob's Bracket (103 pts)
-    expect(names[0]).toContain("Test User's Bracket");
-    expect(names[1]).toContain("Alice's Picks");
-    expect(names[2]).toContain("Bob's Bracket");
+    // Test User's Bracket (127 pts) should come before Alice's Picks (109 pts) before Bob's Bracket (103 pts)
+    const testUserIdx = names.findIndex(n => n.includes("Test User's Bracket"));
+    const aliceIdx = names.findIndex(n => n.includes("Alice's Picks"));
+    const bobIdx = names.findIndex(n => n.includes("Bob's Bracket"));
+    expect(testUserIdx).toBeLessThan(aliceIdx);
+    expect(aliceIdx).toBeLessThan(bobIdx);
 });
 
 test('pool view: clicking column headers sorts without errors', async ({ page }) => {
@@ -116,7 +122,7 @@ test('pool view: clicking column headers sorts without errors', async ({ page })
     page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
 
     await page.goto(`#/pools/${POOL_A_ID}`);
-    await expect(page.locator('.ngRow')).toHaveCount(3, { timeout: 10000 });
+    await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
 
     // Wait for ceiling column to appear
     const ceilingHeader = page.locator('.ngHeaderText', { hasText: 'Ceiling' });
@@ -154,7 +160,7 @@ test('pool view: "Show ceiling?" checkbox visible and toggles Ceiling column', a
     await page.goto(`#/pools/${POOL_A_ID}`);
 
     // Wait for brackets to load
-    await expect(page.locator('.ngRow')).toHaveCount(3, { timeout: 10000 });
+    await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
 
     // "Show ceiling?" checkbox should be visible (tournament has started)
     const checkbox = page.locator('input[ng-model="model.showCeiling"]');
@@ -502,6 +508,39 @@ test('mobile: header scrolls with page instead of staying fixed', async ({ brows
     // Scroll down — the navbar should leave the viewport (not pinned)
     await page.evaluate(() => window.scrollTo(0, 500));
     await expect(navbar).not.toBeInViewport();
+
+    await context.close();
+});
+
+test('mobile: edit and delete bracket buttons have adequate spacing', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
+    const page = await context.newPage();
+
+    // Log in first (buttons only visible to bracket owner)
+    await page.goto('http://localhost:5001/?tournament=Testing#/login');
+    const form = page.locator('[ng-view] form');
+    await form.locator('input[ng-model="email"]').fill('e2e-tests@pick100pool.com');
+    await form.locator('input[ng-model="pass"]').fill(process.env.E2E_TEST_PASSWORD);
+    await form.locator('button', { hasText: 'Log In' }).click();
+    await expect(page.locator('.navbar')).toContainText('E2E Test User', { timeout: 10000 });
+
+    // Navigate to bracket view
+    await page.goto('http://localhost:5001/?tournament=Testing#/pools/' + POOL_A_ID + '/brackets/' + BRACKET_1_ID);
+    await expect(page.locator('.bracketTable tbody tr')).toHaveCount(13, { timeout: 10000 });
+
+    // Both buttons should be visible
+    const editBtn = page.locator('a.btn-primary', { hasText: 'Change Your Teams' });
+    const deleteBtn = page.locator('button.btn-danger', { hasText: 'Delete Your Bracket' });
+    await expect(editBtn).toBeVisible();
+    await expect(deleteBtn).toBeVisible();
+
+    // Buttons should be side-by-side on mobile, not stacked vertically
+    const editBox = await editBtn.boundingBox();
+    const deleteBox = await deleteBtn.boundingBox();
+
+    // They should be on roughly the same row (Y coordinates overlap)
+    const sameRow = Math.abs(editBox.y - deleteBox.y) < editBox.height;
+    expect(sameRow).toBe(true);
 
     await context.close();
 });

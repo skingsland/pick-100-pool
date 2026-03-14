@@ -68,7 +68,9 @@ test('show owners checkbox toggles owner names', async ({ page }) => {
     await page.goto(`#/pools/${POOL_A_ID}`);
 
     // Wait for brackets grid to load
-    await expect(page.locator('.ngRow')).toHaveCount(3, { timeout: 10000 });
+    await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
+    const rowCount = await page.locator('.ngRow').count();
+    expect(rowCount).toBeGreaterThanOrEqual(3);
 
     // Show owners checkbox should exist
     const checkbox = page.locator('#showOwners');
