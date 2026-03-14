@@ -545,6 +545,38 @@ test('mobile: edit and delete bracket buttons have adequate spacing', async ({ b
     await context.close();
 });
 
+test('mobile: bracket name label and input on same line', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
+    const page = await context.newPage();
+
+    // Log in first
+    await page.goto('http://localhost:5001/?tournament=Testing#/login');
+    const form = page.locator('[ng-view] form');
+    await form.locator('input[ng-model="email"]').fill('e2e-tests@pick100pool.com');
+    await form.locator('input[ng-model="pass"]').fill(process.env.E2E_TEST_PASSWORD);
+    await form.locator('button', { hasText: 'Log In' }).click();
+    await expect(page.locator('.navbar')).toContainText('E2E Test User', { timeout: 10000 });
+
+    // Navigate to edit bracket page
+    await page.goto('http://localhost:5001/?tournament=Testing#/pools/' + POOL_A_ID + '/brackets/' + BRACKET_1_ID + '/edit');
+    await expect(page.locator('.selectTeamsGrid .ngRow')).toHaveCount(16, { timeout: 10000 });
+
+    // Label and input should be on the same row
+    const label = page.locator('label[for="name"]');
+    const input = page.locator('#name');
+    await expect(label).toBeVisible();
+    await expect(input).toBeVisible();
+
+    const labelBox = await label.boundingBox();
+    const inputBox = await input.boundingBox();
+
+    // They should overlap vertically (same row), not be stacked
+    const sameRow = Math.abs(labelBox.y - inputBox.y) < labelBox.height;
+    expect(sameRow).toBe(true);
+
+    await context.close();
+});
+
 test('mobile: create bracket page renders ceiling with percentile', async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
     const page = await context.newPage();
