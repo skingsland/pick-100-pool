@@ -5,6 +5,8 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
     function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   userService,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET,   ceilingCalculator,   FINAL_FOUR_PAIRINGS,   CEILING_PERCENTILES) {
         $scope.requiredNumTeams = NUMBER_OF_TEAMS_PER_BRACKET;
         $scope.requiredSumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
+        $scope.tourneyEnded = false;
+        poolService.hasTourneyEnded().then(function(ended) { $scope.tourneyEnded = ended; });
         $scope.sumOfSeeds = 0;
 
         $scope.poolId = $routeParams.poolId;
@@ -58,7 +60,7 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
             $scope.seedsProgressBarType = calculateSeedsProgressBarType($scope.sumOfSeeds);
 
             // Live ceiling: compute max possible points for the current selection
-            if (selectedTeamsNewValue.length === 0) {
+            if (selectedTeamsNewValue.length === 0 || $scope.tourneyEnded) {
                 $scope.bracketCeiling = null;
                 $scope.ceilingPercentile = null;
                 $scope.ceilingColorClass = '';
