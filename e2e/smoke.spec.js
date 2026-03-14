@@ -96,6 +96,21 @@ test('bracket view: column sorting works', async ({ page }) => {
     expect(newFirstTotal).toBeLessThanOrEqual(firstTotalValue);
 });
 
+test('pool view: bracket details ordered by points descending', async ({ page }) => {
+    await page.goto(`#/pools/${POOL_A_ID}`);
+
+    // Wait for all bracket detail sections to render (3 brackets in pool A)
+    await expect(page.locator('.poolBracket')).toHaveCount(3, { timeout: 10000 });
+
+    // Get bracket names in the order they appear on the page
+    const names = await page.locator('.poolBracket .viewBracket h3').allTextContents();
+
+    // Test User's Bracket (127 pts) > Alice's Picks (109 pts) > Bob's Bracket (103 pts)
+    expect(names[0]).toContain("Test User's Bracket");
+    expect(names[1]).toContain("Alice's Picks");
+    expect(names[2]).toContain("Bob's Bracket");
+});
+
 test('pool view: clicking column headers sorts without errors', async ({ page }) => {
     const errors = [];
     page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });

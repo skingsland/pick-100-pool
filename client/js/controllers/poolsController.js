@@ -80,6 +80,24 @@ angular.module('myApp.controllers').controller('PoolsController',
                     .then(function(results) {
                         $scope.model.showBrackets = results['hasTourneyStarted'] || !results['hideBracketsBeforeTourney'];
                 });
+
+                // Build a sorted array of bracket IDs (by totalPoints desc) for the detail views
+                $scope.$watchCollection('pool.brackets', function(brackets) {
+                    if (!brackets) return;
+                    var bracketIds = [];
+                    angular.forEach(brackets, function(bracketId) {
+                        if (bracketId) bracketIds.push(bracketId);
+                    });
+                    var loadPromises = bracketIds.map(function(id) {
+                        return bracketService.findById(id).$loaded();
+                    });
+                    $q.all(loadPromises).then(function(loadedBrackets) {
+                        loadedBrackets.sort(function(a, b) {
+                            return (b.totalPoints || 0) - (a.totalPoints || 0);
+                        });
+                        $scope.sortedBracketIds = loadedBrackets.map(function(b) { return b.$id; });
+                    });
+                });
             }
         };
         $scope.createPool = function () {

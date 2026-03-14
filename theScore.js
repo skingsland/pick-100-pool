@@ -33,6 +33,9 @@ function downloadGamesAndUpdateFirebase() {
         tournamentRef.child('start_time').transaction(function (currentValue) {
             return currentValue || TOURNAMENT_START_TIME;
         });
+        tournamentRef.child('end_time').transaction(function (currentValue) {
+            return currentValue || TOURNAMENT_END_TIME;
+        });
 
         return tournamentRef;
     }

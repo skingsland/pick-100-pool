@@ -30,8 +30,8 @@
   </div>
 
   <!-- the excludeBracketForCurrentUser filter is used to remove the bracket for the logged-in user from the list,
-       since it's displayed above and we don't want to repeat it. -->
-  <div ng-if="model.showBrackets != null && model.showBrackets" ng-repeat="bracketId in pool.brackets | excludeBracketForCurrentUser:model">
+       since it's displayed above and we don't want to repeat it. Sorted by totalPoints desc. -->
+  <div ng-if="model.showBrackets != null && model.showBrackets" ng-repeat="bracketId in sortedBracketIds | excludeBracketForCurrentUser:model">
     <div ng-include="'views/brackets/view.html'" class="poolBracket"></div>
   </div>
 </div>
