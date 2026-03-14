@@ -458,6 +458,30 @@ test('mobile: bracket view renders ceiling without errors', async ({ browser }) 
     await context.close();
 });
 
+test('mobile: navigating to a new route scrolls to top', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
+    const page = await context.newPage();
+
+    // Navigate to a pool page with brackets (long enough to scroll)
+    await page.goto('http://localhost:5001/?tournament=Testing#/pools/' + POOL_A_ID);
+    await expect(page.locator('.poolBracket').first()).toBeVisible({ timeout: 10000 });
+
+    // Scroll down significantly
+    await page.evaluate(() => window.scrollTo(0, 1000));
+    const scrolledY = await page.evaluate(() => window.scrollY);
+    expect(scrolledY).toBeGreaterThan(0);
+
+    // Navigate to the home page via hash routing
+    await page.evaluate(() => window.location.hash = '#/home');
+    await expect(page.locator('h1')).toContainText('Pick 100 Tournament Pool');
+
+    // Scroll position should be reset to 0
+    const newScrollY = await page.evaluate(() => window.scrollY);
+    expect(newScrollY).toBe(0);
+
+    await context.close();
+});
+
 test('mobile: header scrolls with page instead of staying fixed', async ({ browser }) => {
     const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
     const page = await context.newPage();

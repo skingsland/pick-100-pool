@@ -26,19 +26,27 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             }
         }
 
+        function getNumericCellTemplate() {
+            return '<div class="ngCellText" ng-class="col.colIndex()">'
+                + '<span ng-class="{\'current-user-bracket\': row.getProperty(\'isCurrentUser\')}">'
+                + '{{row.getProperty(col.field)}}</span></div>';
+        }
+
         function getColumnDefs() {
+            var numericCell = getNumericCellTemplate();
             var cols = [
                 {field:'name', displayName:'Bracket', cellTemplate: getCellTemplateForBracketNameColumn()},
-                {field:'totalPoints', displayName:'Points', width:60}
+                {field:'totalPoints', displayName:'Points', width:60, cellTemplate: numericCell}
             ];
             if ($scope.model.showCeiling) {
                 cols.push({
                     field: 'ceilingPoints',
                     displayName: 'Ceiling',
-                    width: 65
+                    width: 65,
+                    cellTemplate: numericCell
                 });
             }
-            cols.push({field:'num_teams_remaining', displayName:'Teams', width:60});
+            cols.push({field:'num_teams_remaining', displayName:'Teams', width:60, cellTemplate: numericCell});
             return cols;
         }
 

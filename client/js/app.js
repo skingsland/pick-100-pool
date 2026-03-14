@@ -12,9 +12,14 @@ angular.module('myApp',
      'smart-table',
      'timer'
     ])
-    .run(['firebase', '$rootScope', '$firebaseAuth', '$templateCache', function(firebase, $rootScope, $firebaseAuth, $templateCache) {
+    .run(['firebase', '$rootScope', '$firebaseAuth', '$templateCache', '$window', function(firebase, $rootScope, $firebaseAuth, $templateCache, $window) {
         // https://github.com/firebase/angularfire/blob/master/docs/reference.md#firebaseauth
         $rootScope.auth = $firebaseAuth();
+
+        // Hash routing doesn't reset scroll position on navigation, so do it manually.
+        $rootScope.$on('$routeChangeSuccess', function() {
+            $window.scrollTo(0, 0);
+        });
 
         $rootScope.isLoggedIn = null;
         // $rootScope.currentUserId = null;
