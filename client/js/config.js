@@ -8,7 +8,7 @@ angular.module('myApp.config', ['firebase'])
    .constant('FIREBASE_TOURNAMENT_ID', (function() {
       var raw = new URLSearchParams(window.location.search).get('tournament');
       var tournament = (raw && /^[A-Za-z0-9_-]+$/.test(raw)) ? raw : null;
-      return tournament || 'MarchMadness2025';
+      return tournament || 'MarchMadness2026';
    })())
    .constant('NUMBER_OF_TEAMS_PER_BRACKET', 13)
    .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 100)

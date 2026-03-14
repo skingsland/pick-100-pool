@@ -68,15 +68,14 @@ Adding play-in ("First Four") opponents to Firebase after Selection Sunday:
 * `node addPlayInOpponents.js` (write to production tournament)
 * `node addPlayInOpponents.js --tournament Development` (write to Development tournament for testing)
 
-The script tries to auto-detect C teams (the 1-seeds and 6-seeds that face play-in winners) from the NCAA scoreboard API. If that data isn't available yet, it falls back to interactive prompts where you type each team name manually.
+The script tries to auto-detect the 1-seeds and 6-seeds that face play-in winners from the NCAA scoreboard API. If that data isn't available yet, it falls back to interactive prompts where you type each team name manually.
 
 Annual Selection Sunday checklist:
 
 1. Update tournament constants in two files:
-   * `tournamentConfig.js`: update `FIREBASE_TOURNAMENT_ID` (e.g. `MarchMadness2027`), `FIREBASE_TOURNAMENT_NAME`, `TOURNAMENT_START_TIME` (first game of Round 1, NOT the play-in round), and `TOURNAMENT_END_TIME` (day after the championship game)
+   * `tournamentConfig.js`: update `FIREBASE_TOURNAMENT_ID` (e.g. `MarchMadness2026`), `FIREBASE_TOURNAMENT_NAME`, `TOURNAMENT_START_TIME` (first game of Round 1, NOT the play-in round), and `TOURNAMENT_END_TIME` (day after the championship game)
    * `client/js/config.js`: update the year in the `FIREBASE_TOURNAMENT_ID` default fallback, and update `FINAL_FOUR_PAIRINGS` if the NCAA changes region names or pairings
    * Google "march madness first round tv schedule with times" to find the exact start time
-   * Example commit: https://github.com/skingsland/pick-100-pool/commit/859e191bad4bb243e76bed6b9514bb868b75cbbe
 2. Deploy to Heroku so `theScore.js` starts pulling teams: `git push heroku master`
 3. Verify the 60 non-play-in teams appear in Firebase (usually by ~10pm ET on Selection Sunday)
 4. Create pools: "Delta Phis", "Opower", "XP", "Ashlawn"
