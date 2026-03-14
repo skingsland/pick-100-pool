@@ -252,12 +252,22 @@ function computeBracketCeiling(teams, finalFourPairings) {
     return Math.max(totalPoints, earnedTotal);
 }
 
+function formatRemainingTeams(teams) {
+    if (!teams || teams.length === 0) return '';
+    return teams
+        .filter(function(t) { return t && t.is_eliminated !== true; })
+        .sort(function(a, b) { return (parseInt(a.seed, 10) || 0) - (parseInt(b.seed, 10) || 0); })
+        .map(function(t) { return t.full_name; })
+        .join(', ');
+}
+
 // 2. Angular service registration - GUARDED for Jest compatibility
 if (typeof angular !== 'undefined') {
     angular.module('myApp.services').service('ceilingCalculator', [function() {
         this.buildTeamData = buildTeamData;
         this.computeBracketCeiling = computeBracketCeiling;
         this.findCollisions = findCollisions;
+        this.formatRemainingTeams = formatRemainingTeams;
     }]);
 }
 
@@ -273,6 +283,7 @@ if (typeof module !== 'undefined' && module.exports) {
         sumRoundPoints: sumRoundPoints,
         pointsForRound: pointsForRound,
         isLeaf: isLeaf,
+        formatRemainingTeams: formatRemainingTeams,
         REGION_BRACKET: REGION_BRACKET
     };
 }

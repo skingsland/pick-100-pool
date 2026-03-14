@@ -65,6 +65,23 @@ angular.module('myApp',
     })
     .factory('moment', function ($window) {
         return $window.moment;
+    })
+    .directive('bsTooltip', function() {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                attrs.$observe('bsTooltip', function(val) {
+                    if (val) {
+                        element.tooltip({title: val, container: 'body', placement: 'bottom'});
+                    } else {
+                        element.tooltip('destroy');
+                    }
+                });
+                scope.$on('$destroy', function() {
+                    element.tooltip('destroy');
+                });
+            }
+        };
     });
 
 // TODO: is this needed, to declare the dependency from the 'myApp.services' module to the other two modules?

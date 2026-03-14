@@ -32,6 +32,13 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 + '{{row.getProperty(col.field)}}</span></div>';
         }
 
+        function getTeamsCellTemplate() {
+            return '<div class="ngCellText" ng-class="col.colIndex()"'
+                + ' bs-tooltip="{{row.entity.remainingTeamsTooltip}}">'
+                + '<span ng-class="{\'current-user-bracket\': row.getProperty(\'isCurrentUser\')}">'
+                + '{{row.getProperty(col.field)}}</span></div>';
+        }
+
         function getColumnDefs() {
             var numericCell = getNumericCellTemplate();
             var cols = [
@@ -46,7 +53,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                     cellTemplate: numericCell
                 });
             }
-            cols.push({field:'num_teams_remaining', displayName:'Teams', width:60, cellTemplate: numericCell});
+            cols.push({field:'num_teams_remaining', displayName:'Teams', width:60, cellTemplate: getTeamsCellTemplate()});
             return cols;
         }
 
@@ -98,6 +105,8 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 if (ended) return;
                 // Setting showCeiling triggers the $watch which rebuilds column defs
                 $scope.model.showCeiling = true;
+                // Recompute in case brackets loaded before tourneyInProgress was set
+                scheduleRecomputeCeilings();
             });
         });
 
@@ -117,15 +126,21 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         function recomputeCeilings() {
             teamsLoaded.then(function() {
                 if ($scope.allBracketsInPool.length === 0) return;
-                if (!$scope.model.showCeiling) return;
 
                 $scope.allBracketsInPool.forEach(function(bracket) {
                     if (!bracket.teams) return;
-                    var bracketTeams = bracket.teams.map(function(teamId) {
-                        var team = allTeams.$getRecord(teamId);
-                        if (!team) return null;
+                    var rawTeams = bracket.teams.map(function(teamId) {
+                        return allTeams.$getRecord(teamId);
+                    });
+
+                    if ($scope.model.tourneyInProgress) {
+                        bracket.remainingTeamsTooltip = ceilingCalculator.formatRemainingTeams(rawTeams);
+                    }
+
+                    if (!$scope.model.showCeiling) return;
+                    var bracketTeams = rawTeams.filter(Boolean).map(function(team) {
                         return ceilingCalculator.buildTeamData(team);
-                    }).filter(Boolean);
+                    });
 
                     // Store directly on bracket for ng-grid display and sorting.
                     // trimKeys will wipe it on Firebase sync, but recomputeCeilings

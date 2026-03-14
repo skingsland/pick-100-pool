@@ -540,6 +540,63 @@ describe('ceilingCalculator', function() {
         });
     });
 
+    describe('formatRemainingTeams', function() {
+        function team(seed, region, name, eliminated) {
+            return { seed: seed, region: region, full_name: name, is_eliminated: eliminated || false };
+        }
+
+        test('is exported as a function', function() {
+            expect(typeof calc.formatRemainingTeams).toBe('function');
+        });
+
+        test('empty array returns empty string', function() {
+            expect(calc.formatRemainingTeams([])).toBe('');
+        });
+
+        test('single surviving team returns its name', function() {
+            var teams = [team(1, 'East', 'UConn')];
+            expect(calc.formatRemainingTeams(teams)).toBe('UConn');
+        });
+
+        test('eliminated teams are excluded', function() {
+            var teams = [
+                team(1, 'East', 'UConn', false),
+                team(4, 'East', 'Duke', true)
+            ];
+            expect(calc.formatRemainingTeams(teams)).toBe('UConn');
+        });
+
+        test('all eliminated returns empty string', function() {
+            var teams = [
+                team(4, 'East', 'Duke', true),
+                team(5, 'West', 'Gonzaga', true)
+            ];
+            expect(calc.formatRemainingTeams(teams)).toBe('');
+        });
+
+        test('teams are sorted by seed ascending', function() {
+            var teams = [
+                team(11, 'East', 'NCST'),
+                team(2, 'South', 'Houston'),
+                team(5, 'West', 'Marquette')
+            ];
+            expect(calc.formatRemainingTeams(teams)).toBe('Houston, Marquette, NCST');
+        });
+
+        test('null entries in array are skipped', function() {
+            var teams = [null, team(3, 'East', 'Purdue'), null];
+            expect(calc.formatRemainingTeams(teams)).toBe('Purdue');
+        });
+
+        test('string seeds are sorted numerically', function() {
+            var teams = [
+                team('11', 'East', 'NCST'),
+                team('2', 'South', 'Houston')
+            ];
+            expect(calc.formatRemainingTeams(teams)).toBe('Houston, NCST');
+        });
+    });
+
     describe('findCollisions', function() {
         function team(seed, region, name) {
             return { seed: seed, region: region, full_name: name || ('Team ' + seed) };
