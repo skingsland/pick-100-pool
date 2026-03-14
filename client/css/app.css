@@ -20,7 +20,7 @@ body {
     text-decoration: none;
 }
 /** On mobile screens, don't pin the header to the top — it wastes valuable screen space. */
-@media (max-width: 767px) {
+@media (max-width: 980px) {
   .navbar-fixed-top {
       position: static;
   }
