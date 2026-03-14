@@ -11,7 +11,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         $scope.model.showOwners = false;
 
         function getCellTemplateForBracketNameColumn() {
-            var finishedSpan = '<span ng-class="{\'eliminated\': model.tourneyInProgress && row.getProperty(\'num_teams_remaining\') === 0}">';
+            var finishedSpan = '<span ng-class="{\'eliminated\': model.tourneyInProgress && row.getProperty(\'num_teams_remaining\') === 0, \'current-user-bracket\': row.getProperty(\'isCurrentUser\')}">';
             if ($scope.enableBracketNameLink) {
                 return '<div class="ngCellText" ng-class="col.colIndex()">'
                          + finishedSpan
@@ -49,7 +49,6 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             enableRowSelection: false,
             rowHeight: 25,
             columnDefs: 'myColumnDefs',
-            // TODO: bold the row for the current user
             sortInfo: {fields: ['totalPoints', 'num_teams_remaining'], directions: ['desc', 'desc']},
             plugins: [new ngGridFlexibleHeightPlugin()]
         };
@@ -155,6 +154,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
 
                 // this will be null immediately after the bracket has been deleted
                 if (bracket.ownerId) {
+                    bracket.isCurrentUser = (bracket.ownerId === $scope.currentUserId);
                     var owner = userService.findById(bracket.ownerId);
                     owner.$loaded().then(function() {
                         bracket.owner = owner.name;

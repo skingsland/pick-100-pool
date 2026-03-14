@@ -102,6 +102,9 @@ body {
 .eliminated a {
     color: darkgray;
 }
+.current-user-bracket {
+    font-weight: bold;
+}
 .bracketTable .eliminated td:nth-child(1),
 .bracketTable .eliminated td:nth-child(2) {
     text-decoration: line-through;
