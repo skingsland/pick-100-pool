@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { POOL_A_ID, BRACKET_1_ID } = require('./helpers');
+const { POOL_A_ID, BRACKET_1_ID, login } = require('./helpers');
 
 test('home page loads with heading and rules, no console errors', async ({ page }) => {
     const errors = [];
@@ -212,7 +212,8 @@ test('pre-tourney: no ceiling anywhere', async ({ page }) => {
 
     // Pool view: no ceiling column, no checkbox
     await page.goto('/?tournament=Testing_PreTourney#/pools/e2eTestPoolA');
-    await expect(page.locator('.ngRow')).toHaveCount(3, { timeout: 10000 });
+    // Wait for at least 3 brackets to load (may have extra from previous test runs)
+    await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
     await expect(page.locator('.ngHeaderText', { hasText: 'Ceiling' })).toHaveCount(0);
     const checkbox = page.locator('input[ng-model="model.showCeiling"]');
     if (await checkbox.count() > 0) {
@@ -313,6 +314,59 @@ test('post-tourney: no ceiling, no gray brackets, no errors', async ({ page }) =
     expect(errors).toEqual([]);
 });
 
+test('edit bracket page: live ceiling with percentile and color', async ({ page }) => {
+    await login(page);
+
+    // Navigate to edit bracket page (13 teams pre-selected in the Testing tournament)
+    await page.goto(`#/pools/${POOL_A_ID}/brackets/${BRACKET_1_ID}/edit`);
+
+    // Wait for team grid to load (16 teams)
+    await expect(page.locator('.selectTeamsGrid .ngRow')).toHaveCount(16, { timeout: 10000 });
+
+    // Ceiling should be visible with a positive number and percentile context
+    const ceilingDisplay = page.locator('.bracketCeiling');
+    await expect(ceilingDisplay).toBeVisible({ timeout: 5000 });
+    await expect(ceilingDisplay).toContainText('Max possible points:');
+    await expect(ceilingDisplay).toContainText('better than');
+
+    // The ceiling value should be color-coded (has a ceiling-color-* class)
+    const coloredValue = ceilingDisplay.locator('[class*="ceiling-color"]');
+    await expect(coloredValue).toBeVisible();
+
+    // Clear all picks — ceiling should disappear
+    await page.locator('button', { hasText: 'Clear' }).click();
+    await expect(ceilingDisplay).toBeHidden();
+});
+
+test('create bracket page: ceiling appears after "Pick for me"', async ({ page }) => {
+    const errors = [];
+    page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+
+    await login(page);
+
+    // Navigate to create bracket page (pre-tourney, no round data)
+    await page.goto('/?tournament=Testing_PreTourney#/pools/' + POOL_A_ID + '/brackets/create');
+
+    // Wait for team grid to load
+    await expect(page.locator('.selectTeamsGrid .ngRow')).toHaveCount(16, { timeout: 10000 });
+
+    // No teams selected yet — ceiling should not be visible
+    const ceilingDisplay = page.locator('.bracketCeiling');
+    await expect(ceilingDisplay).toBeHidden();
+
+    // Click "Pick for me" to auto-select 13 teams
+    await page.locator('button', { hasText: 'Pick for me' }).click();
+
+    // Wait for seeds to reach 100 (confirms teams are selected)
+    await expect(page.locator('.selectedItems', { hasText: 'Seeds: 100 / 100' })).toBeVisible({ timeout: 5000 });
+
+    // Ceiling should now be visible with a positive number
+    await expect(ceilingDisplay).toBeVisible({ timeout: 5000 });
+    await expect(ceilingDisplay).toContainText('Max possible points:');
+
+    expect(errors).toEqual([]);
+});
+
 test('header has navigation links', async ({ page }) => {
     await page.goto('#/home');
 
@@ -323,4 +377,86 @@ test('header has navigation links', async ({ page }) => {
     // Log in / Register dropdowns visible when not logged in
     await expect(page.locator('.navbar', { hasText: 'Log in' })).toBeVisible();
     await expect(page.locator('.navbar', { hasText: 'Register' })).toBeVisible();
+});
+
+// ─── Mobile viewport tests ───────────────────────────────────────────────────
+
+test('mobile: pool view renders without errors', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
+    const page = await context.newPage();
+    const errors = [];
+    page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+
+    await page.goto('http://localhost:5001/?tournament=Testing#/pools/' + POOL_A_ID);
+
+    // Pool name visible
+    await expect(page.locator('h2')).toContainText('Test Pool A');
+
+    // Bracket grid loads with data
+    await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
+
+    // Ceiling column visible (tournament is in progress)
+    const ceilingHeader = page.locator('.ngHeaderText', { hasText: 'Ceiling' });
+    await expect(ceilingHeader).toBeVisible({ timeout: 5000 });
+
+    expect(errors).toEqual([]);
+    await context.close();
+});
+
+test('mobile: bracket view renders ceiling without errors', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
+    const page = await context.newPage();
+    const errors = [];
+    page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+
+    await page.goto('http://localhost:5001/?tournament=Testing#/pools/' + POOL_A_ID + '/brackets/' + BRACKET_1_ID);
+
+    // Bracket name visible
+    await expect(page.locator('.viewBracket h3')).toContainText("Test User's Bracket");
+
+    // Team table loads
+    await expect(page.locator('.bracketTable tbody tr')).toHaveCount(13, { timeout: 10000 });
+
+    // "Max possible points" visible (not hidden or overflowing)
+    const ceilingLabel = page.locator('.bracketCeiling');
+    await expect(ceilingLabel).toBeVisible();
+    await expect(ceilingLabel).toContainText('Max possible points:');
+
+    expect(errors).toEqual([]);
+    await context.close();
+});
+
+test('mobile: create bracket page renders ceiling with percentile', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 375, height: 667 } });
+    const page = await context.newPage();
+    const errors = [];
+    page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
+
+    // Log in first
+    await page.goto('http://localhost:5001/?tournament=Testing_PreTourney#/login');
+    const form = page.locator('[ng-view] form');
+    await form.locator('input[ng-model="email"]').fill('e2e-tests@pick100pool.com');
+    await form.locator('input[ng-model="pass"]').fill(process.env.E2E_TEST_PASSWORD);
+    await form.locator('button', { hasText: 'Log In' }).click();
+    await expect(page.locator('.navbar')).toContainText('E2E Test User', { timeout: 10000 });
+
+    // Navigate to create bracket
+    await page.goto('http://localhost:5001/?tournament=Testing_PreTourney#/pools/' + POOL_A_ID + '/brackets/create');
+    await expect(page.locator('.selectTeamsGrid .ngRow')).toHaveCount(16, { timeout: 10000 });
+
+    // Pick teams
+    await page.locator('button', { hasText: 'Pick for me' }).click();
+    await expect(page.locator('.selectedItems', { hasText: 'Seeds: 100 / 100' })).toBeVisible({ timeout: 5000 });
+
+    // Ceiling with percentile visible
+    const ceilingDisplay = page.locator('.bracketCeiling');
+    await expect(ceilingDisplay).toBeVisible({ timeout: 5000 });
+    await expect(ceilingDisplay).toContainText('Max possible points:');
+    await expect(ceilingDisplay).toContainText('better than');
+
+    // Progress bars still visible at mobile width
+    await expect(page.locator('.selectedItems', { hasText: 'Teams: 13 / 13' })).toBeVisible();
+
+    expect(errors).toEqual([]);
+    await context.close();
 });

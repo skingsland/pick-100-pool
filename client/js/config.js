@@ -14,6 +14,10 @@ angular.module('myApp.config', ['firebase'])
    .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 100)
    // NOTE: Update alongside FIREBASE_TOURNAMENT_ID each year on Selection Sunday
    .constant('FINAL_FOUR_PAIRINGS', [['South', 'West'], ['East', 'Midwest']])
+   // Historical ceiling distribution from 488 brackets across 2013-2025 tournaments.
+   // Used to show percentile context on the team-picking page.
+   // Recompute with: GOOGLE_AUTH_JSON='...' node /tmp/historical-ceilings.js
+   .constant('CEILING_PERCENTILES', [415, 460, 471, 488, 504, 517, 528, 535, 555])
 
     // unsubscribe listeners when elements are destroyed
     .config(function ($provide) {

@@ -199,6 +199,12 @@ fieldset {
    padding: 25px;
 }
 
+/* Ceiling color classes for the team-picking page */
+.ceiling-color-great { color: #2e7d32; font-weight: bold; }
+.ceiling-color-good { color: #558b2f; }
+.ceiling-color-fair { color: #f57f17; }
+.ceiling-color-low { color: #c62828; }
+
 /* Smart-Table styles */
 .st-sort-ascent:before {
     content: '\25B2  '; /* up arrow */

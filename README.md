@@ -68,7 +68,22 @@ Adding play-in ("First Four") opponents to Firebase after Selection Sunday:
 
 The script tries to auto-detect C teams (the 1-seeds and 6-seeds that face play-in winners) from the NCAA scoreboard API. If that data isn't available yet, it falls back to interactive prompts where you type each team name manually.
 
-For the `GOOGLE_AUTH_JSON` contents, you can generate a new private key for the service account here: 
+Annual Selection Sunday checklist:
+
+1. Update tournament constants in two files:
+   * `tournamentConfig.js`: update `FIREBASE_TOURNAMENT_ID` (e.g. `MarchMadness2027`), `FIREBASE_TOURNAMENT_NAME`, `TOURNAMENT_START_TIME` (first game of Round 1, NOT the play-in round), and `TOURNAMENT_END_TIME` (day after the championship game)
+   * `client/js/config.js`: update the year in the `FIREBASE_TOURNAMENT_ID` default fallback, and update `FINAL_FOUR_PAIRINGS` if the NCAA changes region names or pairings
+   * Google "march madness first round tv schedule with times" to find the exact start time
+   * Example commit: https://github.com/skingsland/pick-100-pool/commit/859e191bad4bb243e76bed6b9514bb868b75cbbe
+2. Deploy to Heroku so `theScore.js` starts pulling teams: `git push heroku master`
+3. Verify the 60 non-play-in teams appear in Firebase (usually by ~10pm ET on Selection Sunday)
+4. Create pools: "Delta Phis", "Opower", "XP", "Ashlawn"
+5. Run the admin script to add the play-in game opponents (the 1-seeds and 6-seeds that face play-in winners). This can run as soon as the bracket is announced on Selection Sunday; if the NCAA API doesn't have the data yet, the script falls back to interactive prompts.
+   * `GOOGLE_AUTH_JSON='...' node addPlayInOpponents.js --dry-run` (preview)
+   * `GOOGLE_AUTH_JSON='...' node addPlayInOpponents.js` (write to production)
+   * Verify all 60 non-play-in teams now appear (56 from theScore.js + 4 play-in opponents from this script)
+
+For the `GOOGLE_AUTH_JSON` contents, you can generate a new private key for the service account here:
 https://console.firebase.google.com/project/pick100pool/settings/serviceaccounts/adminsdk
 
 https://devcenter.heroku.com/articles/git

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('CreateEditBracketController',
-           ['$scope', '$routeParams', '$location', '$q', '$timeout', 'poolService', 'bracketService', 'teamService', 'userService', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET',
-    function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   userService,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET) {
+           ['$scope', '$routeParams', '$location', '$q', '$timeout', 'poolService', 'bracketService', 'teamService', 'userService', 'NUMBER_OF_TEAMS_PER_BRACKET', 'SUM_OF_TEAM_SEEDS_PER_BRACKET', 'ceilingCalculator', 'FINAL_FOUR_PAIRINGS', 'CEILING_PERCENTILES',
+    function($scope,   $routeParams,   $location,   $q,   $timeout,   poolService,   bracketService,   teamService,   userService,   NUMBER_OF_TEAMS_PER_BRACKET,   SUM_OF_TEAM_SEEDS_PER_BRACKET,   ceilingCalculator,   FINAL_FOUR_PAIRINGS,   CEILING_PERCENTILES) {
         $scope.requiredNumTeams = NUMBER_OF_TEAMS_PER_BRACKET;
         $scope.requiredSumOfSeeds = SUM_OF_TEAM_SEEDS_PER_BRACKET;
         $scope.sumOfSeeds = 0;
@@ -56,6 +56,37 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 return 'danger';
             }
             $scope.seedsProgressBarType = calculateSeedsProgressBarType($scope.sumOfSeeds);
+
+            // Live ceiling: compute max possible points for the current selection
+            if (selectedTeamsNewValue.length === 0) {
+                $scope.bracketCeiling = null;
+                $scope.ceilingPercentile = null;
+                $scope.ceilingColorClass = '';
+            } else {
+                var bracketTeams = selectedTeamsNewValue.map(function(team) {
+                    return ceilingCalculator.buildTeamData(team);
+                });
+                $scope.bracketCeiling = ceilingCalculator.computeBracketCeiling(bracketTeams, FINAL_FOUR_PAIRINGS);
+
+                // Compute percentile from historical distribution
+                // CEILING_PERCENTILES = [min, P5, P10, P25, P50, P75, P90, P95, max]
+                var pctThresholds = [0, 5, 10, 25, 50, 75, 90, 95, 100];
+                var percentile = 0;
+                for (var i = CEILING_PERCENTILES.length - 1; i >= 0; i--) {
+                    if ($scope.bracketCeiling >= CEILING_PERCENTILES[i]) {
+                        percentile = pctThresholds[i];
+                        break;
+                    }
+                }
+                // Clamp to 0-99 range for display
+                $scope.ceilingPercentile = Math.min(percentile, 99);
+
+                // Color class based on quartile
+                if (percentile >= 75) $scope.ceilingColorClass = 'ceiling-color-great';
+                else if (percentile >= 50) $scope.ceilingColorClass = 'ceiling-color-good';
+                else if (percentile >= 25) $scope.ceilingColorClass = 'ceiling-color-fair';
+                else $scope.ceilingColorClass = 'ceiling-color-low';
+            }
         });
         $scope.getBracketForEditing = function () {
             // are we editing an existing bracket? If so, we will have a bracketId.

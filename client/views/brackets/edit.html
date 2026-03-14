@@ -23,6 +23,7 @@
             <progressbar value="sumOfSeeds" max="requiredSumOfSeeds" type="{{seedsProgressBarType}}">
               <b>Seeds: {{sumOfSeeds}} / {{requiredSumOfSeeds}}</b>
             </progressbar>
+            <h4 ng-if="bracketCeiling" class="bracketCeiling">Max possible points: <span class="{{ceilingColorClass}}">{{ bracketCeiling }}</span> <small>(better than {{ceilingPercentile}}% of brackets)</small></h4>
           </div>
         </div>
         <br/>
