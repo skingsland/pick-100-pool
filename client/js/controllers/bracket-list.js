@@ -9,6 +9,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         $scope.allBracketsInPool = [];
         $scope.model = {};
         $scope.model.showOwners = false;
+        var bracketWatchDeregisters = [];
 
         function getCellTemplateForBracketNameColumn() {
             var finishedSpan = '<span ng-class="{\'eliminated\': model.tourneyInProgress && row.getProperty(\'num_teams_remaining\') === 0, \'current-user-bracket\': row.getProperty(\'isCurrentUser\')}">';
@@ -111,9 +112,25 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         });
 
         var recomputeDebounceTimer = null;
+        var resortDebounceTimer = null;
+
+        // When a bracket's data changes in Firebase (e.g. totalPoints), ng-grid doesn't
+        // re-sort because $watchCollection only detects array membership changes, not
+        // property changes on existing items. Force a re-sort by reassigning the array.
+        function scheduleResort() {
+            if (resortDebounceTimer) clearTimeout(resortDebounceTimer);
+            resortDebounceTimer = setTimeout(function() {
+                $scope.$evalAsync(function() {
+                    $scope.allBracketsInPool = $scope.allBracketsInPool.slice();
+                });
+            }, 200);
+        }
+
         $scope.$on('$destroy', function() {
             allTeams.$destroy();
+            bracketWatchDeregisters.forEach(function(deregister) { deregister(); });
             if (recomputeDebounceTimer) clearTimeout(recomputeDebounceTimer);
+            if (resortDebounceTimer) clearTimeout(resortDebounceTimer);
         });
 
         function scheduleRecomputeCeilings() {
@@ -207,6 +224,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 }
 
                 $scope.allBracketsInPool.push(bracket);
+                bracketWatchDeregisters.push(bracket.$watch(scheduleResort));
                 scheduleRecomputeCeilings();
             });
         });
