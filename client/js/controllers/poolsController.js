@@ -21,13 +21,9 @@ angular.module('myApp.controllers').controller('PoolsController',
                         $scope.pools = pools.sort(function(poolA, poolB) {
                             return poolSortPriority(poolA, currentUserId) - poolSortPriority(poolB, currentUserId);
                         });
-                        $scope.tablePools = $scope.pools.slice();
                     });
                 } else {
                     $scope.pools = poolService.findAll();
-                    $scope.pools.$loaded().then(function() {
-                        $scope.tablePools = $scope.pools.slice();
-                    });
                 }
             });
         };
@@ -45,38 +41,11 @@ angular.module('myApp.controllers').controller('PoolsController',
                    (pool.brackets && ($scope.currentUserId in pool.brackets));
         };
 
-        $scope.bracketCount = function(pool) {
-            return pool.brackets ? Object.keys(pool.brackets).length : 0;
-        };
-
         $scope.scrollToPool = function(poolId) {
             var old = $location.hash();
             $location.hash('pool-' + poolId);
             $anchorScroll();
             $location.hash(old);
-        };
-
-        // Summary table column sorting. Clicking a header sorts by that field,
-        // clicking again reverses direction.
-        $scope.model.sortField = null;
-        $scope.model.sortAsc = true;
-
-        $scope.sortPoolsBy = function(field) {
-            if ($scope.model.sortField === field) {
-                $scope.model.sortAsc = !$scope.model.sortAsc;
-            } else {
-                $scope.model.sortField = field;
-                // name ascending, brackets descending by default
-                $scope.model.sortAsc = (field === 'name');
-            }
-            var dir = $scope.model.sortAsc ? 1 : -1;
-            $scope.tablePools.sort(function(a, b) {
-                if (field === 'name') {
-                    return dir * a.name.localeCompare(b.name);
-                } else {
-                    return dir * ($scope.bracketCount(a) - $scope.bracketCount(b));
-                }
-            });
         };
 
         $scope.findOnePool = function () {

@@ -22,27 +22,15 @@ test('pools list shows Test Pool A', async ({ page }) => {
     await expect(poolLink).toBeVisible();
 });
 
-test('pools list shows summary table with pool names and bracket counts', async ({ page }) => {
+test('pools list shows jump-to navigation with pool names', async ({ page }) => {
     await page.goto('#/pools');
 
-    const table = page.locator('.poolSummaryTable');
-    await expect(table).toBeVisible({ timeout: 10000 });
+    const jumpTo = page.locator('.poolJumpTo');
+    await expect(jumpTo).toBeVisible({ timeout: 10000 });
 
-    // Should have 2 rows (Test Pool A and Test Pool B)
-    const rows = table.locator('tbody tr');
-    await expect(rows).toHaveCount(2);
-
-    // Verify pool names appear in the table
-    await expect(table).toContainText('Test Pool A');
-    await expect(table).toContainText('Test Pool B');
-
-    // Pool A has at least 3 brackets (fixtures); Pool B has 0
-    const poolARow = rows.filter({ hasText: 'Test Pool A' });
-    const poolACount = Number(await poolARow.locator('td').nth(1).textContent());
-    expect(poolACount).toBeGreaterThanOrEqual(3);
-
-    const poolBRow = rows.filter({ hasText: 'Test Pool B' });
-    await expect(poolBRow.locator('td').nth(1)).toHaveText('0');
+    // Should contain both pool names as links
+    await expect(jumpTo.locator('a', { hasText: 'Test Pool A' })).toBeVisible();
+    await expect(jumpTo.locator('a', { hasText: 'Test Pool B' })).toBeVisible();
 });
 
 test('pool view shows brackets table with data', async ({ page }) => {

@@ -45,14 +45,16 @@ Running just the web server, without the back-end to fetch scores:
 * Visit `http://localhost:5001` (loads the current production tournament)
 * Add `?tournament=Testing` to load the E2E test tournament instead
 
-Viewing different tournament scenarios locally (useful for testing the ceiling feature):
+Viewing different tournament scenarios locally:
 
-* One-time setup: `GOOGLE_AUTH_JSON='...' node e2e/fixtures/setup-scenario-tournaments.js`
-* Pre-tourney (no ceiling): `http://localhost:5001/?tournament=Testing_PreTourney#/pools/e2eTestPoolA`
-* Day 1, no games played (max ceiling): `http://localhost:5001/?tournament=Testing_Day1#/pools/e2eTestPoolA`
-* After Round 2 (mid-tournament): `http://localhost:5001/?tournament=Testing#/pools/e2eTestPoolA`
-* After Round 5 (championship pending, one bracket with 0 teams): `http://localhost:5001/?tournament=Testing_Round5#/pools/e2eTestPoolA`
-* Tournament over (no ceiling): `http://localhost:5001/?tournament=Testing_Final#/pools/e2eTestPoolA`
+One-time setup: `GOOGLE_AUTH_JSON='...' node e2e/fixtures/setup-scenario-tournaments.js`
+
+* A copy of the 2025 tournament (17 pools, 104 brackets): `http://localhost:5001/?tournament=Testing_2025#/pools`
+* Pre-tourney (no ceiling): `http://localhost:5001/?tournament=Testing_PreTourney#/pools`
+* Day 1, no games played (max ceiling): `http://localhost:5001/?tournament=Testing_Day1#/pools`
+* After Round 2 (mid-tournament): `http://localhost:5001/?tournament=Testing#/pools`
+* After Round 5 (championship pending, one bracket with 0 teams): `http://localhost:5001/?tournament=Testing_Round5#/pools`
+* Tournament over (no ceiling): `http://localhost:5001/?tournament=Testing_Final#/pools`
 
 Running just the backend program to fetch scores, teams, etc.:
 

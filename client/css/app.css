@@ -48,41 +48,24 @@ body {
     text-align: left;
 }
 
-.poolSummaryTable {
-    width: auto;
-    border: 1px solid rgb(212,212,212);
-    border-collapse: collapse;
+.poolJumpTo {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 15px;
 }
-.poolSummaryTable thead {
-    background-color: #eaeaea;
-}
-.poolSummaryTable th {
+.poolJumpTo .jump-to-label {
     font-weight: bold;
-    cursor: pointer;
+    margin-right: 14px;
 }
-.poolSummaryTable td,
-.poolSummaryTable th {
-    height: 25px;
-    line-height: 25px;
-    padding: 2px 8px;
-    border-right: 1px solid #d4d4d4;
+.poolJumpTo .sep {
+    color: #999;
+    margin: 0 7px;
 }
-.poolSummaryTable td:last-child,
-.poolSummaryTable th:last-child {
-    border-right: none;
+.poolJumpTo a {
+    text-decoration: none;
 }
-.poolSummaryTable {
-    margin-bottom: 35px;
-}
-.poolSummaryTable tbody tr:nth-of-type(odd) {
-    background-color: #fdfdfd;
-}
-.poolSummaryTable tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-}
-.poolSummaryTable td:nth-child(2),
-.poolSummaryTable th:nth-child(2) {
-    text-align: right;
+.poolJumpTo a:hover {
+    text-decoration: underline;
 }
 .font-bold {
     font-weight: bold;
