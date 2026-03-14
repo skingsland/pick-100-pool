@@ -15,28 +15,66 @@ angular.module('myApp.controllers').controller('PoolsController',
 
         $scope.findPools = function () {
             userService.getCurrentUserId().then(function(currentUserId) {
+                $scope.currentUserId = currentUserId;
                 if (currentUserId) {
                     poolService.findAll().$loaded().then(function (pools) {
-                        $scope.pools = pools.sort((poolA, poolB) => {
-                            // Checks to see if either pool has any brackets owned by currentUserId
-                            const poolAHasUserBracket = poolA.brackets && (currentUserId in poolA.brackets);
-                            const poolBHasUserBracket = poolB.brackets && (currentUserId in poolB.brackets);
-
-                            // If poolA has user's bracket but poolB doesn't, poolA comes first
-                            if (poolAHasUserBracket && !poolBHasUserBracket) {
-                                return -1;
-                            }
-                            // If poolB has user's bracket but poolA doesn't, poolB comes first
-                            if (!poolAHasUserBracket && poolBHasUserBracket) {
-                                return 1;
-                            }
-
-                            // If both or neither have user's brackets, maintain original order
-                            return 0;
+                        $scope.pools = pools.sort(function(poolA, poolB) {
+                            return poolSortPriority(poolA, currentUserId) - poolSortPriority(poolB, currentUserId);
                         });
+                        $scope.tablePools = $scope.pools.slice();
                     });
                 } else {
                     $scope.pools = poolService.findAll();
+                    $scope.pools.$loaded().then(function() {
+                        $scope.tablePools = $scope.pools.slice();
+                    });
+                }
+            });
+        };
+
+        // Sort priority: 0 = user manages, 1 = user has bracket, 2 = neither
+        function poolSortPriority(pool, currentUserId) {
+            if (pool.managerId === currentUserId) return 0;
+            if (pool.brackets && (currentUserId in pool.brackets)) return 1;
+            return 2;
+        }
+
+        $scope.isUserPool = function(pool) {
+            if (!$scope.currentUserId) return false;
+            return pool.managerId === $scope.currentUserId ||
+                   (pool.brackets && ($scope.currentUserId in pool.brackets));
+        };
+
+        $scope.bracketCount = function(pool) {
+            return pool.brackets ? Object.keys(pool.brackets).length : 0;
+        };
+
+        $scope.scrollToPool = function(poolId) {
+            var old = $location.hash();
+            $location.hash('pool-' + poolId);
+            $anchorScroll();
+            $location.hash(old);
+        };
+
+        // Summary table column sorting. Clicking a header sorts by that field,
+        // clicking again reverses direction.
+        $scope.model.sortField = null;
+        $scope.model.sortAsc = true;
+
+        $scope.sortPoolsBy = function(field) {
+            if ($scope.model.sortField === field) {
+                $scope.model.sortAsc = !$scope.model.sortAsc;
+            } else {
+                $scope.model.sortField = field;
+                // name ascending, brackets descending by default
+                $scope.model.sortAsc = (field === 'name');
+            }
+            var dir = $scope.model.sortAsc ? 1 : -1;
+            $scope.tablePools.sort(function(a, b) {
+                if (field === 'name') {
+                    return dir * a.name.localeCompare(b.name);
+                } else {
+                    return dir * ($scope.bracketCount(a) - $scope.bracketCount(b));
                 }
             });
         };

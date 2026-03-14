@@ -1,7 +1,27 @@
 <div data-ng-init="findPools()" class="poolsList">
   <h3>March Madness Pools</h3>
   Select a pool<span ng-show="isLoggedIn">, or create a new one</span>:<br><br>
-    <div data-ng-repeat="pool in pools">
+
+  <table class="poolSummaryTable" ng-show="pools.length > 1">
+    <thead>
+      <tr>
+        <th ng-click="sortPoolsBy('name')" class="sortable"
+            ng-class="{'st-sort-ascent': model.sortField === 'name' && model.sortAsc, 'st-sort-descent': model.sortField === 'name' && !model.sortAsc}">Pool</th>
+        <th ng-click="sortPoolsBy('brackets')" class="sortable"
+            ng-class="{'st-sort-ascent': model.sortField === 'brackets' && model.sortAsc, 'st-sort-descent': model.sortField === 'brackets' && !model.sortAsc}">Brackets</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-ng-repeat="pool in tablePools">
+        <td ng-class="{'font-bold': isUserPool(pool)}">
+          <a href="" ng-click="scrollToPool(pool.$id)">{{pool.name}}</a>
+        </td>
+        <td>{{ bracketCount(pool) }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+    <div data-ng-repeat="pool in pools" id="pool-{{ pool.$id }}">
       <h4>
         <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
         <span ng-show="isLoggedIn && currentUserId === pool.managerId">
