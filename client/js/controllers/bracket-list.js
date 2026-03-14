@@ -67,8 +67,15 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         }
 
         $scope.scrollTo = function(id) {
-            // saving the old hash and resetting it after scrolling to the anchor prevents the page from reloading,
-            // while keeping the route clean
+            var currentPoolPath = '/pools/' + $scope.poolId;
+            if ($location.path() !== currentPoolPath) {
+                // On a different page (e.g. pools list) — navigate to the pool page with bracket ID as hash
+                $location.path(currentPoolPath).hash(id);
+                return;
+            }
+            // Already on the pool page — scroll in place.
+            // Saving the old hash and resetting it after scrolling prevents the page from reloading,
+            // while keeping the route clean.
             var old = $location.hash();
             $location.hash(id);
 

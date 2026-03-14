@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('myApp.controllers').controller('PoolsController',
-           ['$scope', '$routeParams', '$location', '$q', 'userService', 'poolService', 'bracketService', '$firebaseObject', '$firebaseArray', 'firebaseRef',
-    function($scope,   $routeParams,   $location,   $q,   userService,   poolService,   bracketService,   $firebaseObject,   $firebaseArray,   firebaseRef) {
+           ['$scope', '$routeParams', '$location', '$q', 'userService', 'poolService', 'bracketService', '$firebaseObject', '$firebaseArray', 'firebaseRef', '$anchorScroll', '$timeout',
+    function($scope,   $routeParams,   $location,   $q,   userService,   poolService,   bracketService,   $firebaseObject,   $firebaseArray,   firebaseRef,   $anchorScroll,   $timeout) {
         // the only reason I'm creating this object is so that I've got an object on the $scope to bind primitives to, since
         // prototypical inheritance doesn't work with primitives. Not sure if this matters though, since I'm not using ng-model.
         $scope.model = {};
@@ -98,6 +98,26 @@ angular.module('myApp.controllers').controller('PoolsController',
                         $scope.sortedBracketIds = loadedBrackets.map(function(b) { return b.$id; });
                     });
                 });
+
+                // Auto-scroll to a bracket if the URL hash is set (e.g. navigated from the pools list page).
+                // Must wait for both showBrackets and sortedBracketIds since the bracket detail ng-if requires both.
+                var scrollTarget = $location.hash();
+                if (scrollTarget) {
+                    var unwatch = $scope.$watch(function() {
+                        return $scope.model.showBrackets && $scope.sortedBracketIds && $scope.sortedBracketIds.length > 0;
+                    }, function(ready) {
+                        if (!ready) return;
+                        unwatch();
+                        // Poll for the bracket element since ng-include fetches the template asynchronously
+                        $timeout(function scrollWhenReady() {
+                            if (document.getElementById(scrollTarget)) {
+                                $anchorScroll();
+                            } else {
+                                $timeout(scrollWhenReady, 50);
+                            }
+                        });
+                    });
+                }
             }
         };
         $scope.createPool = function () {
