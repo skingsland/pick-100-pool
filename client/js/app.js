@@ -12,9 +12,12 @@ angular.module('myApp',
      'smart-table',
      'timer'
     ])
-    .run(['firebase', '$rootScope', '$firebaseAuth', '$templateCache', '$window', function(firebase, $rootScope, $firebaseAuth, $templateCache, $window) {
+    .run(['firebase', '$rootScope', '$firebaseAuth', '$templateCache', '$window', '$anchorScroll', function(firebase, $rootScope, $firebaseAuth, $templateCache, $window, $anchorScroll) {
         // https://github.com/firebase/angularfire/blob/master/docs/reference.md#firebaseauth
         $rootScope.auth = $firebaseAuth();
+
+        // Offset anchor scrolling by the fixed navbar height so scrolled-to elements aren't hidden behind it
+        $anchorScroll.yOffset = 50;
 
         // Hash routing doesn't reset scroll position on navigation, so do it manually.
         $rootScope.$on('$routeChangeSuccess', function() {
