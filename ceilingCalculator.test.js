@@ -539,4 +539,133 @@ describe('ceilingCalculator', function() {
             assertCeilingFloor(teams, result);
         });
     });
+
+    describe('findCollisions', function() {
+        function team(seed, region, name) {
+            return { seed: seed, region: region, full_name: name || ('Team ' + seed) };
+        }
+
+        test('is exported as a function', function() {
+            expect(typeof calc.findCollisions).toBe('function');
+        });
+
+        test('empty array returns no collisions', function() {
+            expect(calc.findCollisions([])).toEqual([]);
+        });
+
+        test('single team returns no collisions', function() {
+            expect(calc.findCollisions([team(1, 'East')])).toEqual([]);
+        });
+
+        test('two teams in different regions with matching seed matchup: no collision', function() {
+            // seeds 1 and 16 are R1 opponents, but in different regions
+            var result = calc.findCollisions([team(1, 'East'), team(16, 'West')]);
+            expect(result).toEqual([]);
+        });
+
+        test('R1 collision: seeds 1 and 16 in same region', function() {
+            var result = calc.findCollisions([
+                team(1, 'East', 'UConn'),
+                team(16, 'East', 'Wagner')
+            ]);
+            expect(result).toEqual([{
+                round: 1,
+                region: 'East',
+                team1Name: 'UConn',
+                team2Name: 'Wagner'
+            }]);
+        });
+
+        test('R1 collision: seeds 5 and 12 in same region', function() {
+            var result = calc.findCollisions([
+                team(5, 'South', 'Iowa State'),
+                team(12, 'South', 'James Madison')
+            ]);
+            expect(result).toEqual([{
+                round: 1,
+                region: 'South',
+                team1Name: 'Iowa State',
+                team2Name: 'James Madison'
+            }]);
+        });
+
+        test('R2 collision: seeds 1 and 8 in same region (meet in R2 if both win)', function() {
+            // [1,16] and [8,9] are in the same R2 subtree [[1,16],[8,9]]
+            var result = calc.findCollisions([
+                team(1, 'East', 'UConn'),
+                team(8, 'East', 'FAU')
+            ]);
+            expect(result).toEqual([{
+                round: 2,
+                region: 'East',
+                team1Name: 'UConn',
+                team2Name: 'FAU'
+            }]);
+        });
+
+        test('R2 collision: seeds 5 and 4 in same region', function() {
+            // [5,12] and [4,13] are in the same R2 subtree [[5,12],[4,13]]
+            var result = calc.findCollisions([
+                team(5, 'Midwest', 'San Diego St'),
+                team(4, 'Midwest', 'Auburn')
+            ]);
+            expect(result).toEqual([{
+                round: 2,
+                region: 'Midwest',
+                team1Name: 'San Diego St',
+                team2Name: 'Auburn'
+            }]);
+        });
+
+        test('seeds from different R2 subtrees: no collision', function() {
+            // seed 1 is in [[1,16],[8,9]], seed 5 is in [[5,12],[4,13]]
+            var result = calc.findCollisions([
+                team(1, 'East', 'UConn'),
+                team(5, 'East', 'San Diego St')
+            ]);
+            expect(result).toEqual([]);
+        });
+
+        test('multiple R1 collisions across regions', function() {
+            var result = calc.findCollisions([
+                team(1, 'East', 'UConn'), team(16, 'East', 'Wagner'),
+                team(6, 'South', 'BYU'), team(11, 'South', 'VCU')
+            ]);
+            expect(result).toHaveLength(2);
+            expect(result[0]).toEqual({ round: 1, region: 'East', team1Name: 'UConn', team2Name: 'Wagner' });
+            expect(result[1]).toEqual({ round: 1, region: 'South', team1Name: 'BYU', team2Name: 'VCU' });
+        });
+
+        test('mixed R1 and R2 collisions: R1 listed first', function() {
+            var result = calc.findCollisions([
+                team(1, 'East', 'UConn'),
+                team(8, 'East', 'FAU'),     // R2 with UConn: [[1,16],[8,9]]
+                team(5, 'South', 'Iowa St'),
+                team(12, 'South', 'JMU')    // R1 with Iowa St: [5,12]
+            ]);
+            expect(result).toHaveLength(2);
+            expect(result[0].round).toBe(1); // R1 first
+            expect(result[1].round).toBe(2); // R2 second
+        });
+
+        test('R1 collision supersedes R2: two teams in same R1 matchup do not also report R2', function() {
+            // seeds 1 and 16 are R1 opponents. They are also in the same R2 subtree.
+            // Should only report R1, not both.
+            var result = calc.findCollisions([
+                team(1, 'East', 'UConn'),
+                team(16, 'East', 'Wagner')
+            ]);
+            expect(result).toHaveLength(1);
+            expect(result[0].round).toBe(1);
+        });
+
+        test('string seeds are parsed correctly', function() {
+            var result = calc.findCollisions([
+                { seed: '5', region: 'South', full_name: 'Iowa St' },
+                { seed: '12', region: 'South', full_name: 'JMU' }
+            ]);
+            expect(result).toHaveLength(1);
+            expect(result[0].round).toBe(1);
+        });
+    });
 });

@@ -40,6 +40,81 @@ function buildTeamData(team) {
 }
 
 
+function findCollisions(teams) {
+    if (!teams || teams.length < 2) return [];
+
+    // Group teams by region: { region -> { seed -> team } }
+    var byRegion = {};
+    teams.forEach(function(t) {
+        var seed = parseInt(t.seed, 10) || 0;
+        if (!t.region || seed === 0) return;
+        if (!byRegion[t.region]) byRegion[t.region] = {};
+        byRegion[t.region][seed] = t;
+    });
+
+    var r1Collisions = [];
+    var r2Collisions = [];
+
+    // R1 leaf nodes: [a, b]. R2 subtrees: [[a,b],[c,d]].
+    // Walk REGION_BRACKET to find both levels.
+    function walkR2Subtrees(subtree) {
+        if (isLeaf(subtree)) return; // single leaf, handled below
+        // Check if this is an R2 subtree (both children are leaves)
+        if (isLeaf(subtree[0]) && isLeaf(subtree[1])) {
+            checkR2Subtree(subtree);
+            return;
+        }
+        walkR2Subtrees(subtree[0]);
+        walkR2Subtrees(subtree[1]);
+    }
+
+    function checkR2Subtree(subtree) {
+        var leafA = subtree[0]; // [seed1, seed2]
+        var leafB = subtree[1]; // [seed3, seed4]
+
+        for (var region in byRegion) {
+            if (!byRegion.hasOwnProperty(region)) continue;
+            var regionTeams = byRegion[region];
+
+            // Check R1 collisions within each leaf
+            if (regionTeams[leafA[0]] && regionTeams[leafA[1]]) {
+                r1Collisions.push({
+                    round: 1, region: region,
+                    team1Name: regionTeams[leafA[0]].full_name,
+                    team2Name: regionTeams[leafA[1]].full_name
+                });
+            }
+            if (regionTeams[leafB[0]] && regionTeams[leafB[1]]) {
+                r1Collisions.push({
+                    round: 1, region: region,
+                    team1Name: regionTeams[leafB[0]].full_name,
+                    team2Name: regionTeams[leafB[1]].full_name
+                });
+            }
+
+            // Check R2 collisions: one team from each leaf, but skip if R1 already covers it
+            var leafATeams = [leafA[0], leafA[1]].filter(function(s) { return !!regionTeams[s]; });
+            var leafBTeams = [leafB[0], leafB[1]].filter(function(s) { return !!regionTeams[s]; });
+            if (leafATeams.length > 0 && leafBTeams.length > 0) {
+                // At least one team in each R1 matchup within this R2 subtree
+                leafATeams.forEach(function(sA) {
+                    leafBTeams.forEach(function(sB) {
+                        r2Collisions.push({
+                            round: 2, region: region,
+                            team1Name: regionTeams[sA].full_name,
+                            team2Name: regionTeams[sB].full_name
+                        });
+                    });
+                });
+            }
+        }
+    }
+
+    walkR2Subtrees(REGION_BRACKET);
+
+    return r1Collisions.concat(r2Collisions);
+}
+
 function pointsForRound(team, round) {
     if (round <= 0) return 0;
     var seed = parseInt(team.seed, 10) || 0;
@@ -182,6 +257,7 @@ if (typeof angular !== 'undefined') {
     angular.module('myApp.services').service('ceilingCalculator', [function() {
         this.buildTeamData = buildTeamData;
         this.computeBracketCeiling = computeBracketCeiling;
+        this.findCollisions = findCollisions;
     }]);
 }
 
@@ -189,6 +265,7 @@ if (typeof angular !== 'undefined') {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         computeBracketCeiling: computeBracketCeiling,
+        findCollisions: findCollisions,
         computeRegionCeiling: computeRegionCeiling,
         computeFinalFourCeiling: computeFinalFourCeiling,
         getHighestRoundWon: getHighestRoundWon,

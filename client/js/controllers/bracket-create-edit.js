@@ -62,11 +62,13 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 $scope.bracketCeiling = null;
                 $scope.ceilingPercentile = null;
                 $scope.ceilingColorClass = '';
+                $scope.collisions = [];
             } else {
                 var bracketTeams = selectedTeamsNewValue.map(function(team) {
                     return ceilingCalculator.buildTeamData(team);
                 });
                 $scope.bracketCeiling = ceilingCalculator.computeBracketCeiling(bracketTeams, FINAL_FOUR_PAIRINGS);
+                $scope.collisions = ceilingCalculator.findCollisions(selectedTeamsNewValue);
 
                 // Compute percentile from historical distribution
                 // CEILING_PERCENTILES = [min, P5, P10, P25, P50, P75, P90, P95, max]

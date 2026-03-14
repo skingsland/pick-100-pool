@@ -351,9 +351,23 @@ test('edit bracket page: live ceiling with percentile and color', async ({ page 
     const coloredValue = ceilingDisplay.locator('[class*="ceiling-color"]');
     await expect(coloredValue).toBeVisible();
 
-    // Clear all picks — ceiling should disappear
+    // Collision warnings: bracket 1 has two R1 collisions
+    const warnings = page.locator('.collision-warning');
+    await expect(warnings).toHaveCount(2);
+    const warningTexts = await page.locator('.collision-warnings').textContent();
+    expect(warningTexts).toContain('Duke');
+    expect(warningTexts).toContain('Yale');
+    expect(warningTexts).toContain('meet in Round 1');
+    expect(warningTexts).toContain('Iowa State');
+    expect(warningTexts).toContain('James Madison');
+    // Both should have red R1 styling
+    await expect(warnings.nth(0)).toHaveClass(/collision-r1/);
+    await expect(warnings.nth(1)).toHaveClass(/collision-r1/);
+
+    // Clear all picks — ceiling and collision warnings should disappear
     await page.locator('button', { hasText: 'Clear' }).click();
     await expect(ceilingDisplay).toBeHidden();
+    await expect(warnings).toHaveCount(0);
 });
 
 test('create bracket page: ceiling appears after "Pick for me"', async ({ page }) => {

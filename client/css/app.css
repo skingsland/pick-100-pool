@@ -218,6 +218,13 @@ fieldset {
 .ceiling-color-fair { color: #f57f17; }
 .ceiling-color-low { color: #c62828; }
 
+/* Collision warnings on create/edit bracket page */
+.collision-warnings { margin-top: 5px; }
+.collision-warning { margin-bottom: 2px; font-size: 13px; }
+.collision-warning .glyphicon { margin-right: 4px; }
+.collision-r1 { color: #c62828; }
+.collision-r2 { color: #f57f17; }
+
 /* Smart-Table styles */
 .st-sort-ascent:before {
     content: '\25B2  '; /* up arrow */
