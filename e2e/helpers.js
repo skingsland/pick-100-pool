@@ -31,6 +31,15 @@ async function login(page) {
     await expect(page.locator('.navbar')).toContainText('E2E Test User', { timeout: 10000 });
 }
 
+// Like login(), but doesn't navigate — fills the login form already on screen
+async function loginOnCurrentPage(page) {
+    const form = page.locator('[ng-view] form');
+    await form.locator('input[ng-model="email"]').fill(TEST_EMAIL);
+    await form.locator('input[ng-model="pass"]').fill(TEST_PASSWORD);
+    await form.locator('button', { hasText: 'Log In' }).click();
+    await expect(page.locator('.navbar')).toContainText('E2E Test User', { timeout: 10000 });
+}
+
 module.exports = {
     TEST_EMAIL,
     TEST_PASSWORD,
@@ -39,4 +48,5 @@ module.exports = {
     BRACKET_1_ID,
     ensureLoggedOut,
     login,
+    loginOnCurrentPage,
 };

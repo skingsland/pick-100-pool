@@ -45,15 +45,20 @@ angular.module('myApp.security', ['ngRoute', 'firebase', 'myApp.config'])
       // this redirects to the login page whenever that is encountered
       $rootScope.$on("$routeChangeError", function (e, next, prev, err) {
         if (err === "AUTH_REQUIRED") {
-          $location.path(loginRedirectPath);
+          redirectToLogin();
         }
       });
 
       function check(user) {
         if (!user && authRequired($location.path())) {
           // console.log('auth check failed', user, $location.path()); //debug
-          $location.path(loginRedirectPath);
+          redirectToLogin();
         }
+      }
+
+      function redirectToLogin() {
+        var returnUrl = $location.path();
+        $location.path(loginRedirectPath).search('returnUrl', returnUrl);
       }
 
       function authRequired(path) {

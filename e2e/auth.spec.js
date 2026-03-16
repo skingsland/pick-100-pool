@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { ensureLoggedOut, login, POOL_A_ID, BRACKET_1_ID } = require('./helpers');
+const { ensureLoggedOut, login, loginOnCurrentPage, POOL_A_ID, BRACKET_1_ID } = require('./helpers');
 
 test('login shows user name in navbar', async ({ page }) => {
     await ensureLoggedOut(page);
@@ -36,6 +36,20 @@ test('protected route redirects to login when not authenticated', async ({ page 
 
     // Should redirect to login page
     await expect(page).toHaveURL(/.*#\/login/, { timeout: 10000 });
+});
+
+test('login redirects back to the originally requested protected route', async ({ page }) => {
+    // Cold start: navigate directly to protected route (no ensureLoggedOut)
+    await page.goto(`#/pools/${POOL_A_ID}/brackets/create`);
+
+    // Should redirect to login with the return URL preserved in the query string
+    await expect(page).toHaveURL(/.*#\/login\?returnUrl=/, { timeout: 10000 });
+
+    // Log in from the login page we were redirected to
+    await loginOnCurrentPage(page);
+
+    // Should redirect back to the originally requested page, preserving the pool ID
+    await expect(page).toHaveURL(new RegExp(`.*#/pools/${POOL_A_ID}/brackets/create`), { timeout: 10000 });
 });
 
 test('logout returns to unauthenticated state', async ({ page }) => {

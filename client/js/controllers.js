@@ -3,8 +3,8 @@
 /* Controllers */
 
 angular.module('myApp.controllers', ['firebase', 'ui.bootstrap'])
-   .controller('LoginCtrl', ['$scope', '$location', '$route', 'firebaseRef',
-                     function($scope,   $location,   $route,   firebaseRef) {
+   .controller('LoginCtrl', ['$scope', '$location', 'firebaseRef',
+                     function($scope,   $location,   firebaseRef) {
       $scope.email = null;
       $scope.pass = null;
       $scope.confirm = null;
@@ -23,14 +23,8 @@ angular.module('myApp.controllers', ['firebase', 'ui.bootstrap'])
             $scope.auth.$signInWithEmailAndPassword($scope.email, $scope.pass).then(function(firebaseUser) {
                console.log("Logged in as:", firebaseUser.uid);
 
-               // TODO: should I set isLoggedIn and currentUserId here on the $rootScope,
-               //  and in createAccount() and other auth controller methods? Or is it sufficient to rely on the
-               //  $onAuthStateChanged() callback in app.js?
-               // $scope.isLoggedIn = true;
-               // $scope.currentUserId = firebaseUser.uid;
-
-               // reload the current page, so the parts that should be displayed or hidden based on isLoggedIn will be rendered correctly
-               $route.reload();
+               var returnUrl = $location.search().returnUrl;
+               $location.path(returnUrl || '/pools').search('returnUrl', null);
             }).catch(function(error) {
                console.error("Authentication failed:", error);
 
@@ -60,7 +54,8 @@ angular.module('myApp.controllers', ['firebase', 'ui.bootstrap'])
                      console.error(error);
                      $scope.err = error;
                   } else {
-                     $location.path('/pools');
+                     var returnUrl = $location.search().returnUrl;
+                     $location.path(returnUrl || '/pools').search('returnUrl', null);
                   }
                });
             }).catch(function(error) {

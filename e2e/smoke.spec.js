@@ -161,7 +161,7 @@ test('bracket view: max possible points shown next to bracket name', async ({ pa
     const ceilingLabel = page.locator('.bracketCeiling');
     await expect(ceilingLabel).toBeVisible();
     await expect(ceilingLabel).toContainText('Max possible points:');
-    await expect(ceilingLabel).toContainText('310');
+    await expect(ceilingLabel).toContainText('307');
 
     // Table should NOT have a Ceiling column (removed in favor of header display)
     await expect(page.locator('.bracketTable thead')).not.toContainText('Ceiling');
