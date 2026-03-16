@@ -1,21 +1,21 @@
 <div id="{{ bracketId }}" class="viewBracket" data-ng-controller="ViewBracketController" data-ng-init="findAllTeams().then(getBracketWithScores);">
   <h3>{{ bracket.name }}</h3>
-  <span class="text-nowrap bracketOwner">by {{ owner.name }}</span>
-  <span ng-if="tourneyStarted" class="text-nowrap bracketCeiling">Max possible points: {{ bracketCeiling }}</span>
+  <span class="text-nowrap bracketOwner">Owner: {{ owner.name }}</span>
+  <span ng-if="tourneyStarted" class="text-nowrap bracketCeiling">Ceiling: {{ bracketCeiling }}</span>
 
   <div class="table-responsive">
     <table st-table="displayedCollection" st-safe-src="teamsWithScores" class="bracketTable table table-striped table-bordered table-condensed">
       <thead>
         <tr>
-           <th st-skip-natural="true" st-sort="full_name">Picks</th>
+           <th st-skip-natural="true" st-sort="full_name">Pick</th>
            <th st-skip-natural="true" st-sort="seed" st-sort-default="true">Seed</th>
-           <th st-skip-natural="true" st-sort="rounds[1]">Round 1<br/><small>Seed # + 1 point</small></th>
-           <th st-skip-natural="true" st-sort="rounds[2]">Round 2<br/><small>Seed # + 2 points</small></th>
-           <th st-skip-natural="true" st-sort="rounds[3]">Round 3<br/><small>Seed # + 4 points</small></th>
-           <th st-skip-natural="true" st-sort="rounds[4]">Round 4<br/><small>Seed # + 8 points</small></th>
-           <th st-skip-natural="true" st-sort="rounds[5]">Round 5<br/><small>Seed # + 16 points</small></th>
-           <th st-skip-natural="true" st-sort="rounds[6]">Round 6<br/><small>Seed # + 32 points</small></th>
-           <th st-skip-natural="true" st-sort="totalPoints" class="team-total">Team Total</th>
+           <th st-skip-natural="true" st-sort="rounds[1]">R64<br/><small>Seed # + 1 point</small></th>
+           <th st-skip-natural="true" st-sort="rounds[2]">R32<br/><small>Seed # + 2 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[3]">S16<br/><small>Seed # + 4 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[4]">E8<br/><small>Seed # + 8 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[5]">F4<br/><small>Seed # + 16 points</small></th>
+           <th st-skip-natural="true" st-sort="rounds[6]">Finals<br/><small>Seed # + 32 points</small></th>
+           <th st-skip-natural="true" st-sort="totalPoints" class="team-total">Total</th>
         </tr>
       </thead>
       <tbody>
@@ -29,7 +29,7 @@
           <td>{{team.rounds[4] || ''}}</td>
           <td>{{team.rounds[5] || ''}}</td>
           <td>{{team.rounds[6] || ''}}</td>
-          <td>{{team.totalPoints}}</td>
+          <td ng-class="{'team-total-alive': !team.is_eliminated && team.totalPoints}">{{team.totalPoints}}</td>
         </tr>
      </tbody>
      <tfoot>

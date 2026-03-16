@@ -66,7 +66,8 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             rowHeight: 25,
             columnDefs: 'myColumnDefs',
             sortInfo: {fields: ['totalPoints', 'num_teams_remaining'], directions: ['desc', 'desc']},
-            plugins: [new ngGridFlexibleHeightPlugin()]
+            plugins: [new ngGridFlexibleHeightPlugin()],
+            rowTemplate: '<div ng-style="{ \'cursor\': row.cursor }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}} {{row.entity.isCurrentUser ? \'current-user-cell\' : \'\'}}"><div class="ngVerticalBar" ng-style="{height: rowHeight}" ng-class="{ ngVerticalBarVisible: !$last }">&nbsp;</div><div ng-cell></div></div>'
         };
 
         if (!$scope.poolId) {

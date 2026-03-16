@@ -2,79 +2,27 @@
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu:300,400,500,700,300italic,400italic,500italic,700italic">
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,300,400,600,700,800">
 
-<style type="text/css">
-  /* Large desktop */
-  @media (min-width: 980px) {
-    body {
-     padding-top: 60px;
-    }
-  }
-
-  /* Landscape phones and down */
-  @media (max-width: 480px) {
-   .copy {
-     padding: 2.5% 10%;
-   }
-  }
-
-  /* All form factors */
-
-  /* Main body and headings */
-  body{
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  }
-  .heading, .subheading {
-    font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
-    text-align: center;
-  }
-  p.lead {
-    padding-top: 1.5%;
-    font-size: 24px;
-    line-height: 30px;
-  }
-  p {
-    font-size: 18px;
-    line-height: 24px;
-  }
-
-  /* Marketing Copy and Footer */
-  .copy {
-    padding-top: 2.5%;
-    padding-bottom: 2.5%;
-    text-align: justify;
-  }
-  .footer p {
-    font-size: 11px;
-  }
-  .footer a {
-    color: #ccccff;
-  }
-</style>
-
-<!-- We use row-fluid inside containers to achieve a resizable layout. -->
-<!-- blogs.endjin.com/2013/04/tips-for-implementing-responsive-designs-using-bootstrap/ -->
-<!-- http://stackoverflow.com/a/12270322 -->
 <div class="container">
-  <!-- Font and paired font of .heading/.subheading and body from Google Fonts -->
-  <!-- www.google.com/fonts/specimen/Ubuntu -->
-  <!-- www.google.com/fonts/specimen/Ubuntu#pairings -->
-  <div class="row-fluid heading">
-    <h1>March Madness Pick 100 Tournament Pool</h1>
-  </div>
-  <div class="row-fluid subheading">
-    <div class="span12">
-      <!-- Special typography from Bootstrap for lead paragraph. -->
-      <!-- http://twitter.github.io/bootstrap/base-css.html#typography -->
-      <p class="lead">An exciting twist on the typical March Madness Pool, where you only pick <strong>13</strong> teams.</p>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="heading">
+          <h1>March Madness <span>Pick 100</span> Tournament Pool</h1>
+        </div>
+        <div class="subheading">
+          <p class="lead">An exciting twist on the typical March Madness Pool, where you only pick <strong>13</strong> teams.</p>
+        </div>
+        <a href="#/pools" class="btn-retro">Select Your Teams</a>
+      </div>
+      <div class="hero-basketball">
+        <img src="img/basketball.svg" alt="Bouncing basketball"/>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <a href="#/pools">
-    <img src="img/BracketBackground.jpg" class="center-block"/>
-  </a>
+  <hr class="divider">
 
-  <div class="row-fluid section2">
-    <div class="span5 offset1 copy copy-right">
+  <section class="rules-section">
       <p>
 The rules for the game are simple: you pick 13 teams whose seeds add up to 100. For example, if UNC is a # 1 seed and VCU is a #13 seed and you pick them, they combine to make 14, and you need to select 11 other teams whose seeds add up to 86.
       </p>
@@ -85,18 +33,16 @@ So, if you picked VCU as a #13 seed and they win games in the first three rounds
       </p>
       <br>
       <p>To get started now, <a href="#/pools">select a March Madness pool</a>, and pick your 13 teams!</p>
-        <br>
-          <p style="text-decoration: underline">Some more notes:</p>
-        <br>
+
+      <div class="rules-notes">
+          <p class="rules-notes-heading">Some more notes:</p>
           <ol>
               <li>Up until the start of the first game in the "round of 64", only you can see your bracket, when you're logged in.</li>
-              <br>
               <li>After that, everyone else can see your bracket, and all brackets are unchangeable.</li>
-              <br>
               <li>The website doesn't have a way to let you select the winner of a play-in game in advance.
                   So if you want to pick one of the play-in teams, you'll have to do it after they've won their play-in game
                   but before the start of the tourney.</li>
           </ol>
       </div>
-    </div>
+  </section>
 </div>

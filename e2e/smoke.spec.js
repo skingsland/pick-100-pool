@@ -8,7 +8,7 @@ test('home page loads with heading and rules, no console errors', async ({ page 
     await page.goto('#/home');
 
     await expect(page.locator('h1')).toContainText('Pick 100 Tournament Pool');
-    await expect(page.locator('.copy')).toContainText('rules for the game are simple');
+    await expect(page.locator('.rules-section')).toContainText('rules for the game are simple');
     expect(errors).toEqual([]);
 });
 
@@ -67,9 +67,9 @@ test('bracket view shows team table with scores', async ({ page }) => {
 
     // Column headers should include round labels and team total
     await expect(page.locator('.bracketTable thead')).toContainText('Seed');
-    await expect(page.locator('.bracketTable thead')).toContainText('Round 1');
-    await expect(page.locator('.bracketTable thead')).toContainText('Round 6');
-    await expect(page.locator('.bracketTable thead')).toContainText('Team Total');
+    await expect(page.locator('.bracketTable thead')).toContainText('R64');
+    await expect(page.locator('.bracketTable thead')).toContainText('Finals');
+    await expect(page.locator('.bracketTable thead')).toContainText('Total');
 
     // Footer should show totals
     const footer = page.locator('.bracketTable tfoot');
@@ -97,14 +97,14 @@ test('bracket view: column sorting works', async ({ page }) => {
     const firstSeed = page.locator('.bracketTable tbody tr').first().locator('td').nth(1);
     await expect(firstSeed).toHaveText('1');
 
-    // Click "Team Total" header to sort descending — highest-scoring team first
-    await page.locator('.bracketTable th', { hasText: 'Team Total' }).click();
+    // Click "Total" header to sort descending — highest-scoring team first
+    await page.locator('.bracketTable th', { hasText: 'Total' }).click();
     const firstTotal = page.locator('.bracketTable tbody tr').first().locator('td:last-child');
     const firstTotalValue = Number(await firstTotal.textContent());
     expect(firstTotalValue).toBeGreaterThan(0);
 
     // Click again to reverse — lowest-scoring team first
-    await page.locator('.bracketTable th', { hasText: 'Team Total' }).click();
+    await page.locator('.bracketTable th', { hasText: 'Total' }).click();
     const newFirstTotal = Number(await page.locator('.bracketTable tbody tr').first().locator('td:last-child').textContent());
     expect(newFirstTotal).toBeLessThanOrEqual(firstTotalValue);
 });
@@ -157,10 +157,10 @@ test('bracket view: max possible points shown next to bracket name', async ({ pa
     // Wait for team data to load
     await expect(page.locator('.bracketTable tbody tr')).toHaveCount(13, { timeout: 10000 });
 
-    // "Max possible points" label should be visible with correct value
+    // "Ceiling" label should be visible with correct value
     const ceilingLabel = page.locator('.bracketCeiling');
     await expect(ceilingLabel).toBeVisible();
-    await expect(ceilingLabel).toContainText('Max possible points:');
+    await expect(ceilingLabel).toContainText('Ceiling:');
     await expect(ceilingLabel).toContainText('307');
 
     // Table should NOT have a Ceiling column (removed in favor of header display)
@@ -281,7 +281,7 @@ test('day 1: ceiling visible, all teams alive, max upside', async ({ page }) => 
         expect(Number(teamsText.trim())).toBe(13);
     }
 
-    // Bracket view should show "Max possible points"
+    // Bracket view should show ceiling
     await page.goto('/?tournament=Testing_Day1#/pools/e2eTestPoolA/brackets/e2eBracket1');
     await expect(page.locator('.bracketTable tbody tr')).toHaveCount(13, { timeout: 10000 });
     const ceilingLabel = page.locator('.bracketCeiling');
@@ -419,8 +419,8 @@ test('create bracket page: ceiling appears after "Pick for me"', async ({ page }
 test('header has navigation links', async ({ page }) => {
     await page.goto('#/home');
 
-    // Rules (brand) link and Play Now (pools) link
-    await expect(page.locator('.navbar-brand')).toContainText('Rules');
+    // Brand and navigation links
+    await expect(page.locator('.navbar-brand')).toContainText('PICK 100');
     await expect(page.locator('.navbar-nav a', { hasText: 'Play Now' })).toBeVisible();
 
     // Log in / Register dropdowns visible when not logged in
@@ -495,10 +495,10 @@ test('mobile: bracket view renders ceiling without errors', async ({ browser }) 
     // Team table loads
     await expect(page.locator('.bracketTable tbody tr')).toHaveCount(13, { timeout: 10000 });
 
-    // "Max possible points" visible (not hidden or overflowing)
+    // "Ceiling" visible (not hidden or overflowing)
     const ceilingLabel = page.locator('.bracketCeiling');
     await expect(ceilingLabel).toBeVisible();
-    await expect(ceilingLabel).toContainText('Max possible points:');
+    await expect(ceilingLabel).toContainText('Ceiling:');
 
     expect(errors).toEqual([]);
     await context.close();

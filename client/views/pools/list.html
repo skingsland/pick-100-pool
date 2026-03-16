@@ -1,5 +1,5 @@
 <div data-ng-init="findPools()" class="poolsList">
-  <h3>March Madness Pools</h3>
+  <h2>March Madness Pools</h2>
 
   <div class="poolJumpTo" ng-show="pools.length > 1">
     <span class="jump-to-label">Jump to:</span>
@@ -11,17 +11,41 @@
     <a class="btn btn-primary" ng-href="#/pools/create">Create a Pool</a>
   </div>
 
-    <div data-ng-repeat="pool in pools" id="pool-{{ pool.$id }}">
+  <!-- Your Pools section (pools user manages or has a bracket in) -->
+  <div ng-if="isLoggedIn">
+    <h3 class="pools-section-header" ng-show="(pools | filter:isUserPool).length > 0">
+      {{ (pools | filter:isUserPool).length === 1 ? 'Your Pool' : 'Your Pools' }}
+    </h3>
+    <div data-ng-repeat="pool in pools | filter:isUserPool" id="pool-{{ pool.$id }}" class="pool-card">
       <h4>
         <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
-        <span ng-show="isLoggedIn && currentUserId === pool.managerId">
+        <span ng-show="currentUserId === pool.managerId">
           (<a href="#/pools/{{ pool.$id }}/edit">Edit</a>)
           (<a href="" data-ng-click="removePool(pool.$id)" >Delete</a>)
         </span>
       </h4>
+      <div class="pool-manager" ng-if="managerNames[pool.managerId]">Managed by {{ managerNames[pool.managerId] }}</div>
       <div ng-if="pool.brackets">
         <div ng-init="poolId = pool.$id; displayShowOwner=false; enableBracketNameLink=true" ng-include="'views/brackets/list.html'"></div>
       </div>
-      <br/>
     </div>
+  </div>
+
+  <!-- Other Pools section (pools user is not involved in) -->
+  <h3 class="pools-section-header" ng-show="isLoggedIn && (pools | filter:isUserPool).length > 0 && (pools | filter:isUserPool).length < pools.length">
+    Other Pools
+  </h3>
+  <div data-ng-repeat="pool in pools" ng-if="!isLoggedIn || !isUserPool(pool)" id="pool-{{ pool.$id }}" class="pool-card-other">
+    <h4>
+      <a href="#/pools/{{ pool.$id }}">{{pool.name}}</a>
+      <span ng-show="isLoggedIn && currentUserId === pool.managerId">
+        (<a href="#/pools/{{ pool.$id }}/edit">Edit</a>)
+        (<a href="" data-ng-click="removePool(pool.$id)" >Delete</a>)
+      </span>
+    </h4>
+    <div class="pool-manager" ng-if="managerNames[pool.managerId]">Managed by {{ managerNames[pool.managerId] }}</div>
+    <div ng-if="pool.brackets">
+      <div ng-init="poolId = pool.$id; displayShowOwner=false; enableBracketNameLink=true" ng-include="'views/brackets/list.html'"></div>
+    </div>
+  </div>
 </div>

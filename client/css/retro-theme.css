@@ -1,0 +1,1339 @@
+/* ============================================================================
+   RETRO VECTOR THEME - Pick 100 Pool
+   Late 80s orange vector graphic / synthwave aesthetic
+   Loads AFTER bootstrap.min.css and app.css
+   ============================================================================ */
+
+/* ── 1. CSS Custom Properties ── */
+
+:root {
+  --bg-deep:    #0a0a12;
+  --bg-surface: #12121f;
+  --bg-raised:  #1a1a2e;
+  --orange:     #FF6600;
+  --orange-dim: rgba(255, 102, 0, 0.3);
+  --orange-glow: rgba(255, 102, 0, 0.6);
+  --text:       #e0e0e0;
+  --text-bright:#ffffff;
+  --text-muted: #777790;
+  --green:      #2e7d32;
+  --amber:      #f57f17;
+  --red:        #c62828;
+}
+
+/* ── 2. Body & Background ── */
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Perspective grid at bottom of viewport */
+body::before {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45vh;
+  background:
+    linear-gradient(to bottom, transparent 0%, rgba(255,102,0,0.06) 100%),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 79px,
+      rgba(255,102,0,0.12) 79px,
+      rgba(255,102,0,0.12) 80px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(255,102,0,0.12) 39px,
+      rgba(255,102,0,0.12) 40px
+    );
+  transform: perspective(400px) rotateX(45deg);
+  transform-origin: bottom center;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Keep all content above the perspective grid */
+.content {
+  position: relative;
+  z-index: 1;
+}
+/* Navbar must be above .content so dropdowns aren't covered.
+   Don't override position — Bootstrap's navbar-fixed-top needs position:fixed. */
+.navbar-fixed-top {
+  z-index: 1030;
+}
+.navbar-inverse {
+  z-index: 10;
+}
+
+/* ── 3. General Typography ── */
+
+#bootstrap-overrides {
+  color: var(--text);
+}
+
+/* Links default to bright text; orange is reserved for accent contexts */
+a {
+  color: var(--text-bright);
+}
+a:hover,
+a:focus {
+  color: var(--orange);
+  text-shadow: 0 0 8px var(--orange-dim);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-bright);
+}
+h2,
+legend,
+.viewBracket h3 {
+  font-family: 'Orbitron', 'Ubuntu', sans-serif;
+  font-weight: 700;
+}
+
+p {
+  color: var(--text);
+}
+
+strong {
+  color: var(--text-bright);
+}
+
+em {
+  color: var(--text);
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange-dim), transparent);
+  margin: 30px 0;
+}
+
+/* ── 4. Navbar Overrides ── */
+
+.navbar-inverse {
+  background-color: var(--bg-surface);
+  border-color: var(--orange-dim);
+  box-shadow: 0 2px 20px rgba(255, 102, 0, 0.1);
+  min-width: 100%;
+}
+
+.navbar-inverse .navbar-brand {
+  font-family: 'Orbitron', 'Ubuntu', sans-serif;
+  font-weight: 700;
+  color: var(--orange);
+  text-shadow: 0 0 10px var(--orange-glow);
+  letter-spacing: 1px;
+}
+.navbar-inverse .navbar-brand:hover,
+.navbar-inverse .navbar-brand:focus {
+  color: var(--orange);
+  text-shadow: 0 0 15px var(--orange-glow);
+}
+
+/* Nav links (pool names in header) */
+.navbar-inverse .navbar-nav > li > a {
+  color: var(--text-muted);
+  transition: color 0.2s, text-shadow 0.2s;
+}
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus {
+  color: var(--orange);
+  text-shadow: 0 0 8px var(--orange-dim);
+}
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:hover,
+.navbar-inverse .navbar-nav > .active > a:focus {
+  color: var(--orange);
+  background-color: transparent;
+  text-shadow: 0 0 8px var(--orange-dim);
+}
+
+/* Remove default list bullets from header navbar-nav (missing Bootstrap .nav class) */
+.navbar-header .navbar-nav {
+  list-style: none;
+}
+
+/* Header nav links styled like navbar-brand */
+.navbar-header .navbar-nav a {
+  color: var(--text-muted);
+}
+.navbar-header .navbar-nav a:hover,
+.navbar-header .navbar-nav a:focus {
+  color: var(--orange);
+  text-shadow: 0 0 8px var(--orange-dim);
+}
+.navbar-header .navbar-nav .active a {
+  color: var(--orange);
+}
+
+/* Register / Log in dropdown toggles styled as bordered buttons */
+.navbar-inverse .navbar-nav.navbar-right > .dropdown > .dropdown-toggle {
+  color: var(--text);
+  border: 1px solid var(--orange-dim);
+  border-radius: 3px;
+  padding: 6px 14px;
+  margin: 7px 4px;
+  line-height: 1.4;
+  transition: all 0.2s;
+}
+.navbar-inverse .navbar-nav.navbar-right > .dropdown > .dropdown-toggle:hover,
+.navbar-inverse .navbar-nav.navbar-right > .dropdown > .dropdown-toggle:focus {
+  color: var(--orange);
+  border-color: var(--orange);
+  box-shadow: 0 0 10px var(--orange-dim);
+  background-color: transparent;
+}
+.navbar-inverse .navbar-nav.navbar-right > .open > .dropdown-toggle,
+.navbar-inverse .navbar-nav.navbar-right > .open > .dropdown-toggle:hover,
+.navbar-inverse .navbar-nav.navbar-right > .open > .dropdown-toggle:focus {
+  color: var(--orange);
+  border-color: var(--orange);
+  background-color: var(--bg-raised);
+}
+
+/* Countdown timer text */
+.navbar-inverse .navbar-text,
+.navbar-text.tourney-countdown {
+  color: var(--text-muted);
+}
+
+/* Mobile toggle bars */
+.navbar-inverse .navbar-toggle {
+  border-color: var(--orange-dim);
+}
+.navbar-inverse .navbar-toggle:hover,
+.navbar-inverse .navbar-toggle:focus {
+  background-color: var(--bg-raised);
+}
+.navbar-inverse .navbar-toggle .icon-bar {
+  background-color: var(--orange);
+}
+
+/* Collapsed navbar background */
+.navbar-inverse .navbar-collapse {
+  border-color: var(--orange-dim);
+  background-color: var(--bg-surface);
+}
+
+/* ── 5. Dropdown Menus ── */
+
+.dropdown-menu,
+.navbar-inverse .navbar-nav .open .dropdown-menu {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--orange-dim);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+.dropdown-menu > li > a,
+.navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+  color: var(--text);
+}
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:hover,
+.navbar-inverse .navbar-nav .open .dropdown-menu > li > a:focus {
+  color: var(--orange);
+  background-color: var(--bg-raised);
+}
+.dropdown-menu .divider {
+  background-color: var(--bg-raised);
+}
+
+/* Dropdown toggle caret */
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  color: var(--orange);
+  background-color: var(--bg-raised);
+}
+
+/* Login/register forms inside dropdown menus */
+.dropdown-menu .form-control {
+  background-color: var(--bg-deep);
+  border-color: var(--bg-raised);
+  color: var(--text-bright);
+}
+.dropdown-menu .form-control:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 10px var(--orange-dim);
+}
+.dropdown-menu .form-control::placeholder {
+  color: var(--text-muted);
+}
+.dropdown-menu .btn-success {
+  background-color: transparent;
+  border-color: var(--green);
+  color: #4caf50;
+}
+.dropdown-menu .btn-success:hover,
+.dropdown-menu .btn-success:focus {
+  background-color: var(--green);
+  color: var(--text-bright);
+}
+.dropdown-menu .btn-danger {
+  background-color: transparent;
+  border-color: var(--red);
+  color: var(--red);
+}
+.dropdown-menu .btn-danger:hover,
+.dropdown-menu .btn-danger:focus {
+  background-color: var(--red);
+  color: var(--text-bright);
+}
+.dropdown-menu .error {
+  color: var(--red);
+}
+
+/* ── 6. Bootstrap Button Overrides ── */
+
+/* Button base refinements */
+.btn {
+  font-weight: 600;
+  transition: all 0.2s;
+  border-radius: 3px;
+}
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background-color: var(--orange);
+  border-color: var(--orange);
+  color: var(--bg-deep);
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+  background-color: var(--orange);
+  border-color: var(--orange);
+  color: var(--bg-deep);
+  box-shadow: 0 0 20px var(--orange-glow);
+}
+
+.btn-success {
+  background-color: var(--green);
+  border-color: var(--green);
+  color: var(--text-bright);
+}
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active,
+.btn-success.active {
+  background-color: var(--green);
+  border-color: var(--green);
+  color: var(--text-bright);
+  box-shadow: 0 0 15px rgba(46, 125, 50, 0.4);
+}
+
+.btn-danger {
+  background-color: transparent;
+  border-color: var(--red);
+  color: var(--red);
+}
+.btn-danger:focus {
+  background-color: transparent;
+  border-color: var(--red);
+  color: var(--red);
+}
+.btn-danger:hover,
+.btn-danger:active,
+.btn-danger.active {
+  background-color: var(--red);
+  border-color: var(--red);
+  color: var(--text-bright);
+  box-shadow: 0 0 15px rgba(198, 40, 40, 0.4);
+}
+
+.btn-default {
+  background-color: transparent;
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+.btn-default:focus {
+  background-color: transparent;
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+.btn-default:hover,
+.btn-default:active,
+.btn-default.active {
+  background-color: transparent;
+  border-color: var(--text-muted);
+  color: var(--text-bright);
+  box-shadow: 0 0 10px rgba(119, 119, 144, 0.2);
+}
+
+/* "Pick for me" button */
+.btn-info {
+  background-color: transparent;
+  border-color: var(--orange-dim);
+  color: var(--orange);
+}
+.btn-info:focus {
+  background-color: transparent;
+  border-color: var(--orange-dim);
+  color: var(--orange);
+}
+.btn-info:hover,
+.btn-info:active,
+.btn-info.active {
+  background-color: rgba(255, 102, 0, 0.1);
+  border-color: var(--orange);
+  color: var(--orange);
+  box-shadow: 0 0 15px var(--orange-dim);
+}
+
+/* ── 7. Form Overrides ── */
+
+.form-control {
+  background-color: var(--bg-deep);
+  border-color: var(--bg-raised);
+  color: var(--text-bright);
+}
+.form-control:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 10px var(--orange-dim);
+}
+.form-control::placeholder {
+  color: var(--text-muted);
+}
+/* Autofill override for webkit browsers */
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text-bright);
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-deep) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+label,
+.control-label {
+  color: var(--text);
+}
+/* Visible form labels get uppercase treatment (except checkbox labels) */
+.form-group label:not(.sr-only) {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-group .checkbox label {
+  text-transform: none !important;
+  letter-spacing: normal;
+  font-size: 14px;
+  font-weight: normal;
+  color: var(--text);
+}
+legend {
+  color: var(--text-bright);
+  border-bottom: none;
+  font-size: 28px;
+  padding-top: 20px;
+  padding-bottom: 15px;
+  position: relative;
+  width: 100%;
+}
+legend::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange-dim), transparent);
+}
+.form-group .checkbox label,
+.checkbox label {
+  color: var(--text);
+}
+
+/* Validation state - has-error */
+.has-error .form-control {
+  border-color: var(--red);
+}
+.has-error .form-control:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 10px rgba(198, 40, 40, 0.3);
+}
+
+/* ── 8. Alert Overrides ── */
+
+.alert-info {
+  background-color: rgba(0, 204, 255, 0.08);
+  border-color: rgba(0, 204, 255, 0.3);
+  color: #7dd3fc;
+}
+
+.alert-danger {
+  background-color: rgba(198, 40, 40, 0.1);
+  border-color: rgba(198, 40, 40, 0.3);
+  color: #ef9a9a;
+}
+
+.alert-success {
+  background-color: rgba(46, 125, 50, 0.1);
+  border-color: rgba(46, 125, 50, 0.3);
+  color: #81c784;
+}
+
+/* Header login form uses alert classes directly on <p> tags without .alert */
+p.alert-info {
+  padding: 8px;
+  border-radius: 3px;
+  margin-top: 8px;
+}
+p.alert-danger {
+  padding: 8px;
+  border-radius: 3px;
+  margin-top: 8px;
+}
+
+/* ── 9. Home Page ── */
+
+/* Hero section wrapper */
+.hero {
+  text-align: center;
+  padding: 40px 0 30px;
+}
+
+/* Hero content flex container for SVG + text side by side */
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+.hero-text {
+  flex: 1;
+  min-width: 300px;
+}
+.hero-basketball {
+  width: 180px;
+  height: 225px;
+  flex-shrink: 0;
+}
+.hero-basketball img {
+  width: 100%;
+  height: 100%;
+}
+
+.heading h1 {
+  font-family: 'Orbitron', 'Ubuntu', sans-serif;
+  font-weight: 900;
+  font-size: 32px;
+  color: var(--text-bright);
+  text-shadow: 0 0 30px var(--orange-dim);
+  letter-spacing: 2px;
+  line-height: 1.3;
+  margin-bottom: 15px;
+}
+/* Orange accent on "Pick 100" */
+.heading h1 span {
+  color: var(--orange);
+  text-shadow: 0 0 20px var(--orange-glow);
+}
+
+.heading,
+.subheading {
+  color: var(--text);
+}
+
+p.lead {
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1.5;
+}
+p.lead strong {
+  color: var(--orange);
+}
+
+/* Outline CTA button (transparent with orange border, matching mockup) */
+.btn-retro {
+  display: inline-block;
+  margin-top: 25px;
+  padding: 12px 30px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-bright);
+  background: transparent;
+  border: 2px solid var(--orange);
+  text-decoration: none;
+  transition: all 0.3s;
+  box-shadow: 0 0 15px var(--orange-dim), inset 0 0 15px rgba(255,102,0,0.05);
+}
+.btn-retro:hover {
+  background: var(--orange);
+  color: var(--bg-deep);
+  box-shadow: 0 0 30px var(--orange-glow);
+  text-decoration: none;
+}
+
+/* Gradient divider line */
+.divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange-dim), transparent);
+  margin: 40px 0;
+}
+
+/* Rules section (max-width for readability, left-aligned to match heading edge) */
+.rules-section {
+  padding: 30px 0;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: left;
+}
+.rules-section p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 15px;
+}
+.rules-section a {
+  color: var(--orange);
+  text-decoration: none;
+  border-bottom: 1px solid var(--orange-dim);
+}
+.rules-section a:hover {
+  border-color: var(--orange);
+}
+.rules-section ol li {
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+/* Notes card within rules section */
+.rules-notes {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--orange-dim);
+  border-radius: 6px;
+  padding: 20px 28px;
+  margin: 30px auto 0;
+  max-width: 650px;
+  text-align: left;
+}
+.rules-notes-heading {
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 12px;
+  text-decoration: underline;
+}
+.rules-notes ol {
+  padding-left: 20px;
+  margin: 0;
+}
+.rules-notes ol li {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* Legacy copy classes (kept for any remaining usage) */
+.copy {
+  color: var(--text);
+}
+.copy p {
+  color: var(--text);
+}
+.copy a {
+  color: var(--orange);
+  text-decoration: none;
+  border-bottom: 1px solid var(--orange-dim);
+}
+.copy a:hover {
+  border-color: var(--orange);
+}
+.copy ol li {
+  color: var(--text);
+}
+
+/* ── 10. Pool List ── */
+
+.poolsList h3 {
+  color: var(--text-bright);
+  font-family: 'Orbitron', 'Ubuntu', sans-serif;
+  font-weight: 700;
+}
+.poolsList h4 {
+  color: var(--text-bright);
+  font-family: 'Orbitron', 'Ubuntu', sans-serif;
+  font-weight: 700;
+}
+.poolsList h4 a {
+  color: var(--text-bright);
+  font-weight: 700;
+}
+.poolsList h4 a:hover {
+  color: var(--orange);
+  text-shadow: 0 0 8px var(--orange-dim);
+}
+
+.poolJumpTo .jump-to-label {
+  color: var(--text-bright);
+}
+.poolJumpTo .sep {
+  color: var(--text-muted);
+}
+.poolJumpTo a {
+  color: var(--orange);
+}
+
+/* Section headers for "Your Pools" / "Other Pools" */
+.pools-section-header {
+  font-family: 'Orbitron', 'Ubuntu', sans-serif;
+  color: var(--text-bright);
+  font-weight: 700;
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+/* Remove the bracket grid indentation from app.css */
+.poolsList .allBracketsGrid {
+  margin-left: 0;
+}
+
+/* Pool card styling (user's pools — emphasized) */
+.pool-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--orange-dim);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 15px rgba(255, 102, 0, 0.03);
+  width: fit-content;
+}
+
+/* Other pools — de-emphasized (no background, no border, no indent) */
+.pool-card-other {
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+
+/* Manager line under pool name */
+.pool-manager {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+/* ── 11. Bracket Table ── */
+
+/* Rounded wrapper — no border here, table handles its own border */
+.poolBracket {
+  margin-bottom: 40px;
+}
+
+.viewBracket .table-responsive {
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 102, 0, 0.05);
+}
+
+.bracketTable {
+  background-color: var(--bg-deep);
+  border: 1px solid var(--orange-dim) !important;
+  border-collapse: separate !important;
+  border-spacing: 0;
+  border-radius: 4px;
+  height: auto;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.bracketTable thead {
+  background-color: var(--bg-raised);
+  border-bottom-color: var(--orange-dim);
+}
+
+.bracketTable th {
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.3;
+  vertical-align: middle;
+  text-align: left;
+  border-color: var(--orange-dim) !important;
+}
+.bracketTable th small {
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 11px;
+}
+
+#bootstrap-overrides .bracketTable th {
+  vertical-align: middle;
+}
+
+/* Striping and hover */
+.bracketTable tr:nth-of-type(even),
+.bracketTable tbody tr:nth-of-type(even) {
+  background-color: rgba(255, 102, 0, 0.02);
+}
+.bracketTable tbody tr:hover {
+  background-color: rgba(255, 102, 0, 0.06);
+}
+.bracketTable tbody tr {
+  border-bottom: 1px solid rgba(255, 102, 0, 0.08);
+  transition: background-color 0.15s;
+}
+/* Override bootstrap striped table default */
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: transparent;
+}
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: rgba(255, 102, 0, 0.02);
+}
+
+.bracketTable td {
+  color: var(--text);
+  border-color: rgba(255, 102, 0, 0.08) !important;
+}
+/* Team name column - bright text */
+.bracketTable tbody td:nth-child(1) {
+  color: var(--text-bright);
+}
+/* Seed column - muted */
+.bracketTable tbody td:nth-child(2) {
+  color: var(--text-muted);
+}
+
+.bracketTable td {
+  height: 28px;
+  line-height: 28px;
+  padding: 0 12px;
+}
+
+.bracketTable tfoot {
+  background-color: var(--bg-raised);
+  border-top: 1px solid var(--orange-dim);
+}
+.bracketTable tfoot td {
+  color: var(--orange);
+  font-weight: bold;
+  height: 35px;
+  line-height: 35px;
+  border-color: var(--orange-dim) !important;
+}
+
+/* Orange total for teams still alive */
+.team-total-alive {
+  color: var(--orange) !important;
+  font-weight: bold;
+}
+
+/* Eliminated teams — dark gray, clearly de-emphasized */
+.eliminated,
+.eliminated a {
+  color: #555568;
+}
+.bracketTable .eliminated td,
+.bracketTable .eliminated td:nth-child(1),
+.bracketTable .eliminated td:nth-child(2) {
+  color: #555568;
+}
+
+/* Bootstrap .table-bordered override */
+/* Internal cell borders: subtle. Outer edge cells: keep visible border on the outside. */
+.table-bordered > thead > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > th,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > tfoot > tr > td {
+  border-color: rgba(255, 102, 0, 0.08);
+}
+.table-bordered > tbody > tr > th,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > th,
+.table-bordered > tfoot > tr > td {
+  border-left: none !important;
+  border-right: none !important;
+}
+/* Wrapper handles outside border; no extra cell edge borders needed */
+
+/* Bracket owner / ceiling spans next to bracket heading */
+/* Owner name: always muted gray regardless of bracket state */
+.viewBracket .bracketOwner,
+.viewBracket .bracketOwner a {
+  color: var(--text-muted) !important;
+}
+/* Owner name in ng-grid bracket list: always muted, even when bracket is eliminated */
+#bootstrap-overrides .ngCellText .eliminated span[ng-show="model.showOwners"],
+#bootstrap-overrides .ngCellText span[ng-show="model.showOwners"] {
+  color: var(--text-muted) !important;
+}
+.viewBracket .bracketCeiling {
+  color: #4caf50;
+}
+
+/* ── 12. ng-grid Overrides ── */
+/* ng-grid uses high specificity; prefix with #bootstrap-overrides for body id */
+
+#bootstrap-overrides .ngGrid {
+  background-color: var(--bg-deep);
+  border-color: var(--orange-dim);
+}
+#bootstrap-overrides .ngHeaderContainer {
+  background-color: var(--bg-raised);
+  border-bottom: 1px solid var(--orange-dim) !important;
+}
+#bootstrap-overrides .ngTopPanel {
+  background-color: var(--bg-raised);
+  border-bottom: 1px solid var(--orange-dim);
+}
+#bootstrap-overrides .ngHeaderCell {
+  background-color: var(--bg-raised);
+  border-right: 1px solid var(--orange-dim) !important;
+  color: var(--orange);
+}
+#bootstrap-overrides .ngHeaderText {
+  color: var(--orange);
+}
+#bootstrap-overrides .ngCell {
+  background-color: transparent;
+  border-right: 1px solid rgba(255, 102, 0, 0.08) !important;
+  color: var(--text);
+}
+#bootstrap-overrides .ngCellText {
+  color: var(--text);
+}
+#bootstrap-overrides .ngRow {
+  border-bottom: 1px solid rgba(255, 102, 0, 0.06);
+}
+#bootstrap-overrides .ngRow.even {
+  background-color: rgba(255, 102, 0, 0.02);
+}
+#bootstrap-overrides .ngRow.odd {
+  background-color: transparent;
+}
+#bootstrap-overrides .ngRow:hover {
+  background-color: rgba(255, 102, 0, 0.06);
+}
+#bootstrap-overrides .ngViewport {
+  background-color: var(--bg-deep);
+}
+#bootstrap-overrides .ngCanvas {
+  background-color: transparent;
+}
+/* Sort arrow triangles: Down arrow = bottom border, Up arrow = top border */
+#bootstrap-overrides .ngHeaderSortColumn .ngSortButtonDown {
+  border-color: transparent transparent var(--orange) transparent;
+}
+#bootstrap-overrides .ngHeaderSortColumn .ngSortButtonUp {
+  border-color: var(--orange) transparent transparent transparent;
+}
+/* The row for current user's bracket in allBracketsGrid */
+#bootstrap-overrides .ngRow.selected {
+  background-color: rgba(255, 102, 0, 0.18);
+}
+/* Highlight current user's bracket row in allBracketsGrid */
+#bootstrap-overrides .ngCell.current-user-cell {
+  background-color: rgba(255, 102, 0, 0.10);
+}
+/* ng-grid cell links — bright text, orange on hover */
+#bootstrap-overrides .ngCellText a {
+  color: var(--text-bright);
+}
+#bootstrap-overrides .ngCellText a:hover {
+  color: var(--orange);
+}
+
+/* selectTeamsGrid specific */
+.selectTeamsGrid {
+  border-color: var(--orange-dim);
+}
+
+/* allBracketsGrid: match bracket table style */
+.allBracketsGrid {
+  border: 1px solid var(--orange-dim) !important;
+  border-radius: 4px;
+  overflow: hidden;
+}
+#bootstrap-overrides .ngRow {
+  border-bottom: 1px solid rgba(255, 102, 0, 0.08);
+}
+
+/* ng-grid vertical bar dividers between columns */
+#bootstrap-overrides .ngHeaderCell .ngVerticalBar {
+  background-color: var(--orange-dim) !important;
+}
+#bootstrap-overrides .ngRow .ngVerticalBar {
+  background-color: rgba(255, 102, 0, 0.08) !important;
+}
+
+/* ng-grid checkbox cells */
+#bootstrap-overrides .ngSelectionCell {
+  background-color: transparent;
+}
+#bootstrap-overrides .ngSelectionHeader {
+  background-color: var(--bg-raised);
+}
+
+/* ── 13. Progress Bars ── */
+
+.progress {
+  background-color: var(--bg-raised);
+  border-radius: 3px;
+  height: 22px;
+  margin: 8px 0;
+}
+.progress-bar {
+  background-color: var(--orange);
+  box-shadow: 0 0 10px var(--orange-glow);
+  color: var(--bg-deep);
+  font-weight: bold;
+  line-height: 22px;
+  font-size: 12px;
+  text-align: center;
+}
+.progress-bar-success {
+  background-color: var(--green);
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.4);
+}
+.progress-bar-danger {
+  background-color: #d32f2f;
+  box-shadow: 0 0 10px rgba(211, 47, 47, 0.4);
+}
+
+/* ── 14. Ceiling Color Adjustments ── */
+/* Boost brightness for dark background */
+
+.ceiling-color-great {
+  color: #4caf50;
+  font-weight: bold;
+  text-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+}
+.ceiling-color-good {
+  color: #8bc34a;
+}
+.ceiling-color-fair {
+  color: var(--amber);
+  text-shadow: 0 0 6px rgba(245, 127, 23, 0.3);
+}
+.ceiling-color-low {
+  color: #ef5350;
+}
+
+/* ── 15. Collision Warnings ── */
+
+.collision-r1 {
+  color: #ef5350;
+}
+.collision-r2 {
+  color: var(--amber);
+}
+.collision-r1 .glyphicon,
+.collision-warning.collision-r1 .glyphicon {
+  color: #ef5350;
+}
+.collision-r2 .glyphicon,
+.collision-warning.collision-r2 .glyphicon {
+  color: var(--amber);
+}
+
+/* ── 16. Smart-Table Sort Arrows ── */
+
+.st-sort-ascent:before {
+  color: var(--orange);
+}
+.st-sort-descent:before {
+  color: var(--orange);
+}
+
+/* ── 17. Responsive ── */
+
+@media (max-width: 980px) {
+  body {
+    padding-top: 0;
+  }
+
+  /* Ensure perspective grid doesn't cause scroll on mobile */
+  body::before {
+    overflow: hidden;
+  }
+
+  .navbar-inverse .navbar-collapse {
+    background-color: var(--bg-surface);
+    border-color: var(--orange-dim);
+  }
+
+  /* Show Register / Log in side by side in collapsed navbar */
+  .navbar-inverse .navbar-nav.navbar-right {
+    display: flex;
+    flex-direction: row;
+    padding: 4px 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .navbar-inverse .navbar-nav.navbar-right > .dropdown {
+    flex: 0 0 auto;
+  }
+  .navbar-inverse .navbar-nav.navbar-right > .dropdown > .dropdown-toggle {
+    display: inline-block;
+    width: auto;
+  }
+
+  /* Hero section stacks vertically on small screens */
+  .hero-content {
+    flex-direction: column-reverse;
+  }
+}
+
+/* Don't let the edit pool fieldset or team grid overflow on small screens */
+@media (max-width: 768px) {
+  .editPool fieldset {
+    width: auto;
+  }
+
+  .selectTeamsGrid {
+    width: 100%;
+  }
+
+  /* Remove column padding indent on mobile for bracket create/edit */
+  .selectTeamsGrid,
+  .selectedItems,
+  .selectTeamsGrid.col-md-6,
+  .col-md-6:has(.selectTeamsGrid),
+  .selectedItems.col-md-5 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .heading h1 {
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+
+  /* Prevent allBracketsGrid left margin from causing overflow */
+  .poolsList .allBracketsGrid {
+    margin-left: 0;
+  }
+
+  /* Reduce team grid height on small screens */
+  .selectTeamsGrid {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading h1 {
+    font-size: 18px;
+  }
+
+  .hero-basketball {
+    width: 120px;
+    height: 150px;
+  }
+
+  .btn-retro {
+    padding: 10px 20px;
+    letter-spacing: 1px;
+    font-size: 13px;
+  }
+
+  /* Fix "Play Now" vertical alignment in navbar */
+  .navbar-header .navbar-nav {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 8px;
+  }
+
+  /* Reduce navbar link padding for narrow screens */
+  .navbar-header .navbar-nav a {
+    padding: 10px 8px;
+    font-size: 15px;
+  }
+
+  /* On small screens, let .container be fluid (no fixed max-width) */
+  .container, .container-fluid {
+    padding-left: 10px;
+    padding-right: 10px;
+    max-width: none;
+    width: auto;
+  }
+
+  /* Remove fieldset padding/margin that wastes space on mobile */
+  fieldset {
+    padding: 0 10px;
+    margin: 0;
+  }
+
+  /* Reduce top spacing on page headings */
+  h2:first-child, legend:first-child {
+    margin-top: 10px;
+  }
+
+  /* Reduce whitespace above legend on bracket create/edit */
+  legend {
+    padding-top: 5px;
+  }
+
+
+  /* More padding above selected teams section */
+  .selectedItems {
+    margin-top: 15px;
+  }
+
+  /* Reduce CTA button padding and spacing for narrow screens */
+  .btn-cta {
+    padding: 10px 20px;
+    letter-spacing: 1px;
+    font-size: 13px;
+  }
+
+  /* Make account form inputs full-width */
+  .accountManagement input {
+    width: 100%;
+  }
+}
+
+/* ── 18. Misc Bootstrap Overrides ── */
+
+.well {
+  background-color: var(--bg-surface);
+  border-color: var(--orange-dim);
+  color: var(--text);
+}
+
+.panel {
+  background-color: var(--bg-surface);
+  border-color: var(--orange-dim);
+}
+.panel-default > .panel-heading {
+  background-color: var(--bg-raised);
+  border-color: var(--orange-dim);
+  color: var(--text-bright);
+}
+.panel-body {
+  color: var(--text);
+}
+
+fieldset {
+  border-color: var(--bg-raised);
+}
+
+/* Table condensed - subtle internal borders */
+.table-condensed > thead > tr > th,
+.table-condensed > tbody > tr > td {
+  border-color: rgba(255, 102, 0, 0.08);
+}
+
+/* Bootstrap container */
+.container,
+.container-fluid {
+  position: relative;
+  z-index: 1;
+}
+
+/* Tooltip override */
+.tooltip-inner {
+  background-color: var(--bg-raised);
+  color: var(--text);
+  border: 1px solid var(--orange-dim);
+}
+.tooltip.top .tooltip-arrow {
+  border-top-color: var(--orange-dim);
+}
+.tooltip.bottom .tooltip-arrow {
+  border-bottom-color: var(--orange-dim);
+}
+
+/* Text utilities */
+.text-muted {
+  color: var(--text-muted) !important;
+}
+.text-primary {
+  color: var(--orange) !important;
+}
+
+/* Pool view page heading and manager line */
+.editPool legend {
+  color: var(--text-bright);
+  border-bottom-color: var(--bg-raised);
+}
+
+/* Account management page */
+.accountManagement label {
+  color: var(--text);
+}
+
+/* Error class (used in header forms) */
+.error {
+  color: #ef5350;
+}
+
+/* Section 2 (home page copy area) */
+.section2 p {
+  color: var(--text);
+}
+
+/* The "current user bracket" row styling */
+.current-user-bracket {
+  color: var(--text-bright);
+}
+
+/* Bracket edit page - selected items list */
+.selectedItems h4 {
+  color: var(--text-bright);
+}
+.selectedItems li {
+  color: var(--text);
+}
+.selectedItems .bracketCeiling {
+  color: var(--text);
+}
+
+/* btn-toolbar spacing inherits fine, just ensure visibility */
+.btn-toolbar .btn {
+  margin-bottom: 5px;
+}
+
+/* Caret in dropdown toggles */
+.navbar-inverse .navbar-nav > li > a .caret {
+  border-top-color: var(--text-muted);
+}
+.navbar-inverse .navbar-nav > li > a:hover .caret,
+.navbar-inverse .navbar-nav > .open > a .caret {
+  border-top-color: var(--orange);
+}
+
+/* img on home page - subtle glow treatment */
+.center-block {
+  border-radius: 4px;
+}
+
+/* The note on the bracket edit page */
+.form-horizontal h4 em {
+  color: var(--text-muted);
+}
+
+/* Ensure ordered list items on home page read well */
+ol li {
+  color: var(--text);
+}

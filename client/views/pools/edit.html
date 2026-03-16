@@ -1,7 +1,8 @@
 <div ng-init="findOnePool()" class="editPool">
   <form class="form-horizontal" role="form">
     <fieldset>
-      <legend>Your pool</legend>
+      <legend ng-show="!model.poolId">Create Your Pool</legend>
+      <legend ng-show="model.poolId">Edit Your Pool</legend>
 
       <div class="form-group">
         <label class="col-md-1 control-label" for="name">Name</label>
@@ -38,7 +39,7 @@
                so "save" button just needs to take user back to the pools page: -->
           <a class="btn btn-success" href="#/pools" ng-show="model.poolId">Save</a>
           <!-- else the user is creating a new pool: -->
-          <button class="btn btn-success" id="createpool" name="createpool" ng-click="createPool()" ng-show="!model.poolId">Create Pool</button>
+          <button class="btn btn-success" id="createpool" name="createpool" ng-click="createPool()" ng-show="!model.poolId" ng-disabled="!pool.name">Create Pool</button>
         </div>
       </div>
     </fieldset>

@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <!-- Glow filter for arcade vector look -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glowStrong" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feFlood flood-color="#FF6600" flood-opacity="0.4" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="colorBlur"/>
+      <feMerge>
+        <feMergeNode in="colorBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="400" height="500" fill="#0a0a12"/>
+
+  <!-- Floor line -->
+  <line x1="40" y1="430" x2="360" y2="430" stroke="#FF6600" stroke-width="1.5" opacity="0.4" filter="url(#glow)"/>
+
+  <!-- Shadow on floor -->
+  <ellipse cx="200" cy="432" rx="45" ry="5" fill="none" stroke="#FF6600" stroke-width="1" opacity="0.25" filter="url(#glow)">
+    <animate attributeName="rx" dur="1.4s" values="30;45;30" keyTimes="0;0.5;1" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" repeatCount="indefinite"/>
+    <animate attributeName="opacity" dur="1.4s" values="0.12;0.35;0.12" keyTimes="0;0.5;1" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" repeatCount="indefinite"/>
+  </ellipse>
+
+  <!-- Basketball group -->
+  <g filter="url(#glowStrong)">
+    <!-- Bounce translation -->
+    <animateTransform attributeName="transform" type="translate" dur="1.4s"
+      values="0 0; 0 0; 0 0; 0 0; 0 0; 0 0; 0 0"
+      keyTimes="0; 0.08; 0.45; 0.5; 0.55; 0.92; 1"
+      calcMode="spline"
+      keySplines="0.33 0 0.67 1; 0.55 0 1 0.45; 0.42 0 0.58 1; 0 0.55 0.45 1; 0.33 0 0.67 1; 0.42 0 0.58 1"
+      repeatCount="indefinite"/>
+
+    <!-- Squash/stretch via scale around ball center -->
+    <g>
+      <!-- Ball outer circle -->
+      <ellipse cx="200" cy="200" fill="none" stroke="#FF6600" stroke-width="2.2">
+        <!-- Vertical bounce position -->
+        <animate attributeName="cy" dur="1.4s"
+          values="120; 120; 375; 385; 375; 120; 120"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.45 0 1 0.45; 0.25 0 0.75 1; 0 0.55 0.45 1; 0 0.55 0.45 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <!-- Squash rx -->
+        <animate attributeName="rx" dur="1.4s"
+          values="42; 42; 42; 52; 42; 42; 42"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <!-- Squash ry -->
+        <animate attributeName="ry" dur="1.4s"
+          values="42; 42; 42; 32; 42; 42; 42"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+      </ellipse>
+
+      <!-- Horizontal seam (equator) -->
+      <ellipse cx="200" cy="200" fill="none" stroke="#FF6600" stroke-width="1.4" opacity="0.85">
+        <animate attributeName="cy" dur="1.4s"
+          values="120; 120; 375; 385; 375; 120; 120"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.45 0 1 0.45; 0.25 0 0.75 1; 0 0.55 0.45 1; 0 0.55 0.45 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <animate attributeName="rx" dur="1.4s"
+          values="42; 42; 42; 52; 42; 42; 42"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <animate attributeName="ry" dur="1.4s"
+          values="8; 8; 8; 6; 8; 8; 8"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+      </ellipse>
+
+      <!-- Vertical seam (center line) -->
+      <line x1="200" x2="200" stroke="#FF6600" stroke-width="1.4" opacity="0.85">
+        <animate attributeName="y1" dur="1.4s"
+          values="78; 78; 333; 353; 333; 78; 78"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.45 0 1 0.45; 0.25 0 0.75 1; 0 0.55 0.45 1; 0 0.55 0.45 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <animate attributeName="y2" dur="1.4s"
+          values="162; 162; 417; 417; 417; 162; 162"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.45 0 1 0.45; 0.25 0 0.75 1; 0 0.55 0.45 1; 0 0.55 0.45 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+      </line>
+
+      <!-- Left curved seam - using a path with animated d isn't well supported, so use an ellipse tilted -->
+      <!-- Left seam arc -->
+      <ellipse cx="180" cy="200" fill="none" stroke="#FF6600" stroke-width="1.2" opacity="0.7">
+        <animate attributeName="cy" dur="1.4s"
+          values="120; 120; 375; 385; 375; 120; 120"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.45 0 1 0.45; 0.25 0 0.75 1; 0 0.55 0.45 1; 0 0.55 0.45 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <animate attributeName="rx" dur="1.4s"
+          values="12; 12; 12; 15; 12; 12; 12"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <animate attributeName="ry" dur="1.4s"
+          values="38; 38; 38; 29; 38; 38; 38"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+      </ellipse>
+
+      <!-- Right seam arc -->
+      <ellipse cx="220" cy="200" fill="none" stroke="#FF6600" stroke-width="1.2" opacity="0.7">
+        <animate attributeName="cy" dur="1.4s"
+          values="120; 120; 375; 385; 375; 120; 120"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.45 0 1 0.45; 0.25 0 0.75 1; 0 0.55 0.45 1; 0 0.55 0.45 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <animate attributeName="rx" dur="1.4s"
+          values="12; 12; 12; 15; 12; 12; 12"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+        <animate attributeName="ry" dur="1.4s"
+          values="38; 38; 38; 29; 38; 38; 38"
+          keyTimes="0; 0.05; 0.46; 0.5; 0.54; 0.95; 1"
+          calcMode="spline"
+          keySplines="0.33 0 0.67 1; 0.42 0 0.58 1; 0.25 0 0.75 1; 0.42 0 0.58 1; 0.42 0 0.58 1; 0.33 0 0.67 1"
+          repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+  </g>
+
+  <!-- Impact flash lines -->
+  <g opacity="0" stroke="#FF6600" stroke-width="1.2" filter="url(#glow)">
+    <animate attributeName="opacity" dur="1.4s"
+      values="0;0;0;0.8;0;0;0"
+      keyTimes="0;0.05;0.48;0.5;0.56;0.95;1"
+      repeatCount="indefinite"/>
+    <!-- Burst lines radiating from impact point -->
+    <line x1="160" y1="428" x2="140" y2="438"/>
+    <line x1="175" y1="430" x2="160" y2="445"/>
+    <line x1="200" y1="432" x2="200" y2="450"/>
+    <line x1="225" y1="430" x2="240" y2="445"/>
+    <line x1="240" y1="428" x2="260" y2="438"/>
+  </g>
+
+  <!-- Small particles on bounce -->
+  <g opacity="0" fill="#FF6600" filter="url(#glow)">
+    <animate attributeName="opacity" dur="1.4s"
+      values="0;0;0;0.9;0;0;0"
+      keyTimes="0;0.05;0.48;0.5;0.58;0.95;1"
+      repeatCount="indefinite"/>
+    <circle cx="155" cy="430" r="1.5"/>
+    <circle cx="245" cy="430" r="1.5"/>
+    <circle cx="178" cy="435" r="1"/>
+    <circle cx="222" cy="435" r="1"/>
+  </g>
+</svg>

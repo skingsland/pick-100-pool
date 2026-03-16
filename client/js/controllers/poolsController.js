@@ -21,9 +21,13 @@ angular.module('myApp.controllers').controller('PoolsController',
                         $scope.pools = pools.sort(function(poolA, poolB) {
                             return poolSortPriority(poolA, currentUserId) - poolSortPriority(poolB, currentUserId);
                         });
+                        $scope.resolveManagerNames(pools);
                     });
                 } else {
-                    $scope.pools = poolService.findAll();
+                    poolService.findAll().$loaded().then(function (pools) {
+                        $scope.pools = pools;
+                        $scope.resolveManagerNames(pools);
+                    });
                 }
             });
         };
@@ -39,6 +43,20 @@ angular.module('myApp.controllers').controller('PoolsController',
             if (!$scope.currentUserId) return false;
             return pool.managerId === $scope.currentUserId ||
                    (pool.brackets && ($scope.currentUserId in pool.brackets));
+        };
+
+        // Resolve manager display names for all pools
+        $scope.managerNames = {};
+        $scope.resolveManagerNames = function(pools) {
+            var seen = {};
+            pools.forEach(function(pool) {
+                if (pool.managerId && !seen[pool.managerId]) {
+                    seen[pool.managerId] = true;
+                    userService.findById(pool.managerId).$loaded().then(function(user) {
+                        $scope.managerNames[pool.managerId] = user.name || 'Unknown';
+                    });
+                }
+            });
         };
 
         $scope.scrollToPool = function(poolId) {

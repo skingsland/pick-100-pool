@@ -15,10 +15,10 @@ test('login shows user name in navbar', async ({ page }) => {
 });
 
 test('bracket view shows owner name from user profile', async ({ page }) => {
-    // This reads /users/{ownerId}/name to display "by {name}" — verifies cross-user profile reads work
+    // This reads /users/{ownerId}/name to display "Owner: {name}" — verifies cross-user profile reads work
     await page.goto(`#/pools/${POOL_A_ID}/brackets/${BRACKET_1_ID}`);
 
-    await expect(page.locator('.bracketOwner')).toContainText('by E2E Test User', { timeout: 10000 });
+    await expect(page.locator('.bracketOwner')).toContainText('Owner: E2E Test User', { timeout: 10000 });
 });
 
 test('pool view shows manager name from user profile', async ({ page }) => {

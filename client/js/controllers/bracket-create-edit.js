@@ -18,16 +18,22 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
         $scope.isNewBracket = !$scope.bracketId;
 
         $scope.selectedTeams = [];
+        var screenWidth = window.innerWidth;
+        var isNarrow = screenWidth < 375; // smaller than iPhone SE
+        var isMid = !isNarrow && screenWidth <= 768;
+        var teamColumns = [
+            {field:'seed', displayName:'Seed', width: (isNarrow || isMid) ? 45 : 60},
+            {field:'full_name', displayName:'Name'},
+            {field:'region', displayName:'Region', width: isNarrow ? 70 : 85}
+        ];
+        if (!isNarrow) {
+            teamColumns.push({field:'conference', displayName:'Conference', width: isMid ? 100 : 220});
+        }
         $scope.selectTeamsGridOptions = {
             data: 'teams',
             selectedItems: $scope.selectedTeams,
             rowHeight: 25,
-            columnDefs: [
-                {field:'seed', displayName:'Seed', width:60},
-                {field:'full_name', displayName:'Name'},
-                {field:'region', displayName:'Region', width:85},
-                {field:'conference', displayName:'Conference', width:220}
-            ],
+            columnDefs: teamColumns,
             sortInfo: {fields: ['seed'], directions: ['asc']}
         };
 
