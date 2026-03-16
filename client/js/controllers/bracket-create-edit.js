@@ -136,20 +136,18 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
         $scope.randomPicks = function () {
             $scope.clearPicks();
 
-            $scope.teams.$loaded().then(function() {
-                let randomPicks = randomlyPickTeams($scope.teams);
+            let randomPicks = randomlyPickTeams($scope.teams);
 
-                while (randomPicks.length !== 13) {
-                    randomPicks = randomlyPickTeams($scope.teams);
+            while (randomPicks.length !== 13) {
+                randomPicks = randomlyPickTeams($scope.teams);
+            }
+
+            angular.forEach($scope.teams, function (team, index) {
+                if (randomPicks.indexOf(team.id) >= 0) {
+                    // need to use the ng-grid API to directly select the row for each team in the bracket, because
+                    // ng-grid doesn't support auto-updating the grid if we were to update $scope.selectedTeams manually
+                    $scope.selectTeamsGridOptions.selectItem(index, true);
                 }
-
-                angular.forEach($scope.teams, function (team, index) {
-                    if (randomPicks.indexOf(team.id) >= 0) {
-                        // need to use the ng-grid API to directly select the row for each team in the bracket, because
-                        // ng-grid doesn't support auto-updating the grid if we were to update $scope.selectedTeams manually
-                        $scope.selectTeamsGridOptions.selectItem(index, true);
-                    }
-                });
             });
         }
 
