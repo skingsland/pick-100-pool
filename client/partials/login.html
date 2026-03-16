@@ -1,22 +1,29 @@
-<h2>Login Page</h2>
+<h2>Log In</h2>
 
-<form>
-    <label>
-        <span>email</span>
-        <input type="text" ng-model="email" />
-    </label>
-    <label>
-        <span>password</span>
-        <input type="password" ng-model="pass" />
-    </label>
-    <label ng-cloak ng-show="createMode">
-        <span>confirm pass</span>
-        <input type="password" ng-model="confirm" />
-    </label>
-    <button ng-click="login()" ng-hide="createMode">Log In</button>
-    <button ng-click="createMode = true" ng-hide="createMode">Register</button>
-    <button ng-cloak ng-show="createMode" ng-click="createAccount()">Create Account</button>
-    <button ng-cloak ng-show="createMode" ng-click="createMode = false">Cancel</button>
+<form class="form" role="form" style="max-width: 400px;">
+    <div class="form-group">
+        <label for="loginPageEmail">Email address</label>
+        <input ng-model="email" type="email" class="form-control" id="loginPageEmail" placeholder="Email address" required>
+    </div>
+    <div class="form-group">
+        <label for="loginPagePassword">Password</label>
+        <input ng-model="pass" type="password" class="form-control" id="loginPagePassword" placeholder="Password" required autocomplete="off">
+    </div>
+    <div class="form-group" ng-cloak ng-show="createMode">
+        <label for="loginPageConfirm">Confirm password</label>
+        <input ng-model="confirm" type="password" class="form-control" id="loginPageConfirm" placeholder="Confirm password" required autocomplete="off">
+    </div>
+    <div class="form-group">
+        <button ng-click="login()" ng-hide="createMode" class="btn btn-success">Log In</button>
+        <button ng-click="createMode = true" ng-hide="createMode" class="btn btn-default">Register</button>
+        <button ng-cloak ng-show="createMode" ng-click="createAccount()" class="btn btn-success">Create Account</button>
+        <button ng-cloak ng-show="createMode" ng-click="createMode = false" class="btn btn-default">Cancel</button>
+        <button ng-click="resetPassword(); $event.stopPropagation();" ng-hide="createMode" class="btn btn-danger pull-right"
+                data-toggle="tooltip" data-placement="bottom" title="Sends you a password-reset email, containing a link that may be used to change your password">
+            Reset Password
+        </button>
+    </div>
 
-    <p ng-show="err" class="error">{{err}}</p>
+    <p ng-show="msg" class="alert alert-info">{{msg}}</p>
+    <p ng-show="err" class="alert alert-danger">{{err}}</p>
 </form>
