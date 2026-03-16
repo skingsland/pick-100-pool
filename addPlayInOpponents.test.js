@@ -18,6 +18,8 @@ const {
     firstRoundOpponentSeed,
     parsePlayInGames,
     findTeamInEvents,
+    findTeamByName,
+    parseESPNPlayInOpponents,
     buildFirebaseEntry,
     findFirstRoundOpponents,
     run,
@@ -175,6 +177,106 @@ describe('findTeamInEvents', () => {
             home_conference: 'Conf', away_conference: 'Conf',
         }];
         expect(findTeamInEvents('Test', eventsWithNulls).id).toBe(1);
+    });
+});
+
+describe('findTeamByName', () => {
+    const teams = [
+        { id: 659, short_name: 'MICH', medium_name: 'Michigan', name: 'Michigan', conference: 'Big Ten' },
+        { id: 660, short_name: 'MSU', medium_name: 'Michigan State', name: 'Michigan State', conference: 'Big Ten' },
+        { id: 380, short_name: 'FLA', medium_name: 'Florida', name: 'Florida', conference: 'Southeastern' },
+        { id: 388, short_name: 'FSU', medium_name: 'Florida State', name: 'Florida State', conference: 'Atlantic Coast' },
+        { id: 155, short_name: 'BYU', medium_name: 'BYU', name: 'BYU', conference: 'Big 12' },
+        { id: 1063, short_name: 'TENN', medium_name: 'Tennessee', name: 'Tennessee', conference: 'Southeastern' },
+    ];
+
+    test('finds team by exact medium_name match (case-insensitive)', () => {
+        const result = findTeamByName('Michigan', teams);
+        expect(result).toEqual({
+            id: 659, short_name: 'MICH', medium_name: 'Michigan', conference: 'Big Ten',
+        });
+    });
+
+    test('prefers exact match over substring match', () => {
+        const result = findTeamByName('Florida', teams);
+        expect(result.id).toBe(380);
+    });
+
+    test('matches against short_name', () => {
+        expect(findTeamByName('BYU', teams).id).toBe(155);
+    });
+
+    test('returns null when no team matches', () => {
+        expect(findTeamByName('Kentucky', teams)).toBeNull();
+    });
+
+    test('case-insensitive matching', () => {
+        expect(findTeamByName('tennessee', teams).id).toBe(1063);
+    });
+});
+
+describe('parseESPNPlayInOpponents', () => {
+    function makeESPNEvent({ region = 'Midwest', homeName = 'Michigan Wolverines', homeShort = 'Michigan',
+                             homeSeed = 1, awayName = 'TBD', awayShort = 'TBD', awaySeed = 99 } = {}) {
+        return {
+            competitions: [{
+                notes: [{ headline: `NCAA Men's Basketball Championship - ${region} Region - 1st Round` }],
+                competitors: [
+                    {
+                        homeAway: 'home',
+                        curatedRank: { current: homeSeed },
+                        team: { displayName: homeName, shortDisplayName: homeShort },
+                    },
+                    {
+                        homeAway: 'away',
+                        curatedRank: { current: awaySeed },
+                        team: { displayName: awayName, shortDisplayName: awayShort },
+                    },
+                ],
+            }],
+        };
+    }
+
+    test('extracts opponent name, seed, and region from TBD games', () => {
+        const events = [makeESPNEvent({ region: 'Midwest', homeShort: 'Michigan', homeSeed: 1 })];
+        const result = parseESPNPlayInOpponents(events);
+        expect(result).toEqual([{ name: 'Michigan', seed: 1, region: 'Midwest' }]);
+    });
+
+    test('ignores games where neither team is TBD', () => {
+        const events = [makeESPNEvent({ awayName: 'Siena Saints', awayShort: 'Siena', awaySeed: 16 })];
+        expect(parseESPNPlayInOpponents(events)).toEqual([]);
+    });
+
+    test('handles TBD as home team (opponent is away)', () => {
+        const events = [makeESPNEvent({
+            region: 'South', homeName: 'TBD', homeShort: 'TBD', homeSeed: 99,
+            awayName: 'Florida Gators', awayShort: 'Florida', awaySeed: 1,
+        })];
+        const result = parseESPNPlayInOpponents(events);
+        expect(result).toEqual([{ name: 'Florida', seed: 1, region: 'South' }]);
+    });
+
+    test('finds multiple TBD games across events', () => {
+        const events = [
+            makeESPNEvent({ region: 'Midwest', homeShort: 'Michigan', homeSeed: 1 }),
+            makeESPNEvent({ region: 'West', homeShort: 'BYU', homeSeed: 6 }),
+            makeESPNEvent({ region: 'East', homeName: 'Duke Blue Devils', homeShort: 'Duke', homeSeed: 1,
+                            awayName: 'Siena Saints', awayShort: 'Siena', awaySeed: 16 }),
+        ];
+        const result = parseESPNPlayInOpponents(events);
+        expect(result).toHaveLength(2);
+        expect(result[0].name).toBe('Michigan');
+        expect(result[1].name).toBe('BYU');
+    });
+
+    test('extracts region from notes headline', () => {
+        const events = [makeESPNEvent({ region: 'West' })];
+        expect(parseESPNPlayInOpponents(events)[0].region).toBe('West');
+    });
+
+    test('returns empty array when no events provided', () => {
+        expect(parseESPNPlayInOpponents([])).toEqual([]);
     });
 });
 

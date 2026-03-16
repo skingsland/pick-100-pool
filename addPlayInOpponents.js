@@ -60,6 +60,34 @@ function findTeamInEvents(teamName, events) {
     return substringMatch;
 }
 
+function parseESPNPlayInOpponents(events) {
+    const opponents = [];
+
+    for (const event of events) {
+        for (const comp of event.competitions || []) {
+            const competitors = comp.competitors || [];
+            const tbdTeam = competitors.find(c => c.team.displayName === 'TBD');
+            if (!tbdTeam) continue;
+
+            const opponent = competitors.find(c => c.team.displayName !== 'TBD');
+            if (!opponent) continue;
+
+            // Extract region from notes headline: "NCAA Men's Basketball Championship - West Region - 1st Round"
+            const headline = (comp.notes || []).find(n => n.headline)?.headline || '';
+            const regionMatch = headline.match(/- (\w+) Region/);
+            const region = regionMatch ? regionMatch[1] : '';
+
+            opponents.push({
+                name: opponent.team.shortDisplayName,
+                seed: opponent.curatedRank.current,
+                region,
+            });
+        }
+    }
+
+    return opponents;
+}
+
 function buildFirebaseEntry(team, seed, region) {
     return {
         id: getTeamID(team),
@@ -261,4 +289,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { firstRoundOpponentSeed, parsePlayInGames, findTeamInEvents, buildFirebaseEntry, findFirstRoundOpponents, run };
+module.exports = { firstRoundOpponentSeed, parsePlayInGames, findTeamInEvents, parseESPNPlayInOpponents, buildFirebaseEntry, findFirstRoundOpponents, run };
