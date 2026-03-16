@@ -60,6 +60,34 @@ function findTeamInEvents(teamName, events) {
     return substringMatch;
 }
 
+function findTeamByName(teamName, teams) {
+    const needle = teamName.toLowerCase();
+
+    let substringMatch = null;
+    for (const team of teams) {
+        const fields = [team.medium_name, team.short_name, team.name].filter(Boolean);
+
+        if (fields.some(f => f.toLowerCase() === needle)) {
+            return {
+                id: team.id,
+                short_name: team.short_name,
+                medium_name: team.medium_name,
+                conference: team.conference,
+            };
+        }
+        if (!substringMatch && fields.some(f => f.toLowerCase().includes(needle))) {
+            substringMatch = {
+                id: team.id,
+                short_name: team.short_name,
+                medium_name: team.medium_name,
+                conference: team.conference,
+            };
+        }
+    }
+
+    return substringMatch;
+}
+
 function parseESPNPlayInOpponents(events) {
     const opponents = [];
 
@@ -289,4 +317,4 @@ if (require.main === module) {
     });
 }
 
-module.exports = { firstRoundOpponentSeed, parsePlayInGames, findTeamInEvents, parseESPNPlayInOpponents, buildFirebaseEntry, findFirstRoundOpponents, run };
+module.exports = { firstRoundOpponentSeed, parsePlayInGames, findTeamInEvents, findTeamByName, parseESPNPlayInOpponents, buildFirebaseEntry, findFirstRoundOpponents, run };
