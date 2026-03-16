@@ -1,6 +1,6 @@
 var calc = require('./client/js/services/ceilingCalculator');
 
-var FINAL_FOUR_PAIRINGS = [['South', 'West'], ['East', 'Midwest']];
+var FINAL_FOUR_PAIRINGS = [['East', 'South'], ['Midwest', 'West']];
 var REGIONS = ['East', 'South', 'West', 'Midwest'];
 
 // Bracket slot order from flattening REGION_BRACKET leaves.

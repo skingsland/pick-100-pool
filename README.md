@@ -74,10 +74,12 @@ Annual Selection Sunday checklist:
 
 1. Update tournament constants in two files:
    * `tournamentConfig.js`: update `FIREBASE_TOURNAMENT_ID` (e.g. `MarchMadness2026`), `FIREBASE_TOURNAMENT_NAME`, `TOURNAMENT_START_TIME` (first game of Round 1, NOT the play-in round), and `TOURNAMENT_END_TIME` (day after the championship game)
-   * `client/js/config.js`: update the year in the `FIREBASE_TOURNAMENT_ID` default fallback, and update `FINAL_FOUR_PAIRINGS` if the NCAA changes region names or pairings
+   * `client/js/config.js`:
+     * update the year in the `FIREBASE_TOURNAMENT_ID` default fallback
+     * update `FINAL_FOUR_PAIRINGS` based on which regions play each other in the final four
    * Google "march madness first round tv schedule with times" to find the exact start time
 2. Deploy to Heroku so `theScore.js` starts pulling teams: `git push heroku master`
-3. Verify the 60 non-play-in teams appear in Firebase (usually by ~10pm ET on Selection Sunday)
+3. Verify the 56 non-play-in teams appear in Firebase (usually by ~10pm ET on Selection Sunday)
 4. Create pools: "Delta Phis", "Opower", "XP", "Ashlawn"
 5. Run the admin script to add the play-in game opponents (the 1-seeds and 6-seeds that face play-in winners). This can run as soon as the bracket is announced on Selection Sunday; if the NCAA API doesn't have the data yet, the script falls back to interactive prompts.
    * `GOOGLE_AUTH_JSON='...' node addPlayInOpponents.js --dry-run` (preview)

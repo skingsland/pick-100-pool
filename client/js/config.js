@@ -12,8 +12,8 @@ angular.module('myApp.config', ['firebase'])
    })())
    .constant('NUMBER_OF_TEAMS_PER_BRACKET', 13)
    .constant('SUM_OF_TEAM_SEEDS_PER_BRACKET', 100)
-   // NOTE: Update alongside FIREBASE_TOURNAMENT_ID each year on Selection Sunday
-   .constant('FINAL_FOUR_PAIRINGS', [['South', 'West'], ['East', 'Midwest']])
+   // NOTE: Update each year on Selection Sunday. Each inner pair is a Final Four semifinal: [['SemiA1', 'SemiA2'], ['SemiB1', 'SemiB2']]
+   .constant('FINAL_FOUR_PAIRINGS', [['East', 'South'], ['Midwest', 'West']])
    // Historical ceiling distribution from 488 brackets across 2013-2025 tournaments.
    // Used to show percentile context on the team-picking page.
    // Recompute with: GOOGLE_AUTH_JSON='...' node /tmp/historical-ceilings.js
