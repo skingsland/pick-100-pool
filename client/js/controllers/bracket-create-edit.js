@@ -92,6 +92,10 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 else $scope.ceilingColorClass = 'ceiling-color-low';
             }
         });
+        // Set to true when the user clicks "Pick for me" or "Clear", preventing the
+        // deferred bracket-loading callback from adding stale teams on top.
+        var userOverrodePicks = false;
+
         $scope.getBracketForEditing = function () {
             // are we editing an existing bracket? If so, we will have a bracketId.
             if ($scope.bracketId) {
@@ -100,12 +104,11 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
 
                 // need to use a timeout, with a 0 sec delay, to ensure that ng-grid has finished loading the grid before we select rows
                 $timeout(function() {
-                    // get an array of all teams in the bracket, so we can select them in the grid
-
-                    // TODO: does the $loaded() call need to be on the 'teams' child instead?
-                    // bracket.$ref().child('teams').once('value', function (bracketTeamsSnapshot) {
-
                     bracket.$loaded().then(function() {
+                        // If the user already clicked "Pick for me" or "Clear" while bracket
+                        // data was loading, don't overwrite their selection.
+                        if (userOverrodePicks) return;
+
                         var bracketTeamsArray = bracket.teams;
 
                         angular.forEach($scope.teams, function (team, index) {
@@ -145,9 +148,13 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
         }
 
         $scope.clearPicks = function () {
+            // Prevent the deferred bracket-loading callback from adding stale teams
+            // on top of the user's new selection (race condition on slow mobile networks).
+            userOverrodePicks = true;
+
             // unselect all items
             $scope.selectedTeams.length = 0;
-            $scope.selectTeamsGridOptions.selectAll();
+            $scope.selectTeamsGridOptions.selectAll(false);
         }
 
         $scope.saveBracket = function () {
