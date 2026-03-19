@@ -121,10 +121,9 @@ test('mash buttons then manual picks then Pick for me selects exactly 13 (iPhone
             scope.clearPicks();
             scope.$apply();
 
-            // Step 2: Wait for async callbacks to settle, then manually pick 2 teams
+            // Step 2: Let digest settle, then manually pick 2 teams
             setTimeout(() => {
-                // Stale randomPicks callbacks should have been discarded by the
-                // generation counter, so selection should still be empty.
+                // randomPicks is synchronous and clearPicks was last, so 0 selected.
                 const afterMashing = scope.selectedTeams.length;
 
                 // Manually select rows 0 and 1 via ng-grid API
@@ -138,7 +137,7 @@ test('mash buttons then manual picks then Pick for me selects exactly 13 (iPhone
                 scope.randomPicks();
                 scope.$apply();
 
-                // Wait for async callback
+                // Let digest settle
                 setTimeout(() => {
                     scope.$apply();
                     resolve({
@@ -172,27 +171,24 @@ test('double-tap Pick for me does not select more than 13 teams', async ({ page 
     await page.locator('a', { hasText: 'Select Your Teams' }).click();
     await expect(page.locator('.selectTeamsGrid .ngRow')).toHaveCount(16, { timeout: 10000 });
 
-    // Simulate rapid double-invocation of randomPicks() — the race condition that
-    // occurs on mobile Safari when the user double-taps the "Pick for me" button.
-    // Both calls queue async callbacks that each select 13 teams; without a fix,
-    // the second callback adds its picks on top of the first's, exceeding 13.
+    // Simulate rapid double-invocation of randomPicks(). Both calls are synchronous
+    // and each sets all 16 teams to the correct state, so the second overwrites the
+    // first. Result should be exactly 13.
     const teamCount = await page.evaluate(() => {
         return new Promise((resolve) => {
             const el = document.querySelector('[data-ng-controller="CreateEditBracketController"]');
             const scope = angular.element(el).scope();
 
-            scope.teams.$loaded().then(() => {
-                // Call randomPicks twice in rapid succession, just like a double-tap would
-                scope.randomPicks();
-                scope.randomPicks();
-                scope.$apply();
+            // Call randomPicks twice in rapid succession, just like a double-tap would
+            scope.randomPicks();
+            scope.randomPicks();
+            scope.$apply();
 
-                // Wait for both async callbacks to complete
-                setTimeout(() => {
-                    scope.$apply();
-                    resolve(scope.selectedTeams.length);
-                }, 1000);
-            });
+            // Let digest settle
+            setTimeout(() => {
+                scope.$apply();
+                resolve(scope.selectedTeams.length);
+            }, 500);
         });
     });
 

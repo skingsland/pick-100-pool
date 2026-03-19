@@ -134,7 +134,8 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
         };
 
         $scope.randomPicks = function () {
-            $scope.clearPicks();
+            // Prevent the deferred bracket-loading callback from adding stale teams
+            userOverrodePicks = true;
 
             let randomPicks = randomlyPickTeams($scope.teams);
 
@@ -142,12 +143,12 @@ angular.module('myApp.controllers').controller('CreateEditBracketController',
                 randomPicks = randomlyPickTeams($scope.teams);
             }
 
+            // Set each team to the correct state individually, rather than calling
+            // clearPicks() + selectItem(true) for picks only. selectAll(false) followed
+            // by selectItem(true) in the same synchronous block can leave stale items
+            // in ng-grid's selectedItems array.
             angular.forEach($scope.teams, function (team, index) {
-                if (randomPicks.indexOf(team.id) >= 0) {
-                    // need to use the ng-grid API to directly select the row for each team in the bracket, because
-                    // ng-grid doesn't support auto-updating the grid if we were to update $scope.selectedTeams manually
-                    $scope.selectTeamsGridOptions.selectItem(index, true);
-                }
+                $scope.selectTeamsGridOptions.selectItem(index, randomPicks.indexOf(team.id) >= 0);
             });
         }
 

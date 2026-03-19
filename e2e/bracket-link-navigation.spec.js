@@ -6,11 +6,12 @@ test('pools list: clicking bracket name navigates to pool page and scrolls to br
     page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
 
     await page.goto('/?tournament=Testing_Final#/pools');
-    await expect(page.locator('h3')).toContainText('March Madness Pools');
+    await expect(page.locator('h2')).toContainText('March Madness Pools');
     await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
 
-    // Bracket names should be clickable links
-    const aliceLink = page.locator('.ngRow .ngCell a', { hasText: "Alice's Picks" });
+    // Bracket names should be clickable links (scope to Pool A to avoid ng-grid buffer duplicates)
+    const poolACard = page.locator(`#pool-${POOL_A_ID}`);
+    const aliceLink = poolACard.locator('.ngRow .ngCell a', { hasText: "Alice's Picks" });
     await expect(aliceLink).toBeVisible();
 
     await aliceLink.click();
