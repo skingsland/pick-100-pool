@@ -21,26 +21,30 @@ angular.module('myApp.controllers').controller('HeaderController',
         });
 
         // TODO: should this be in app.js, and/or on $rootScope?
+        var currentUserObj = null;
+
         $scope.auth.$onAuthStateChanged(function(firebaseUser) {
+            if (currentUserObj) {
+                currentUserObj.$destroy();
+                currentUserObj = null;
+            }
             $scope.user = {};
 
-            // whenever a new user logs in, bind their user data to the $scope so we can show their username in the view
             if (firebaseUser) {
-                userService.findById(firebaseUser.uid).$bindTo($scope, 'user').then(function (unBind) {
-                    $rootScope.unBindUser = unBind;
+                currentUserObj = userService.findById(firebaseUser.uid);
+                currentUserObj.$loaded().then(function(user) {
+                    $scope.user = { name: user.name };
                 });
-            } else {
-                // otherwise the user logged out; clear their firebase and scope bindings
-                // $rootScope.unBindUser();
-                $scope.user = {};
             }
         });
 
         $scope.logout = function() {
             $scope.auth.$signOut();
 
-            // clear the old user's firebase and scope bindings
-            $rootScope.unBindUser();
+            if (currentUserObj) {
+                currentUserObj.$destroy();
+                currentUserObj = null;
+            }
             $scope.user = {};
         };
 

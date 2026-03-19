@@ -74,9 +74,11 @@ angular.module('myApp.controllers').controller('PoolsController',
                 var $pool = poolService.findById($scope.model.poolId);
                 $pool.$bindTo($scope, 'pool');
 
-                // using the pool's managerId property, look up the user and bind their data to the scope
+                // using the pool's managerId property, look up the user's name for display
                 $pool.$ref().child('managerId').once('value', function(managerId) {
-                    userService.findById(managerId.val()).$bindTo($scope, 'manager');
+                    userService.findById(managerId.val()).$loaded().then(function(manager) {
+                        $scope.manager = { name: manager.name };
+                    });
                 });
 
                 // set the bracketId for the currently-logged-in user, if there is one
