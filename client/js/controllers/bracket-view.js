@@ -49,7 +49,9 @@ angular.module('myApp.controllers').controller('ViewBracketController',
                     return;
                 }
 
-                userService.findById(bracket.ownerId).$bindTo($scope, 'owner');
+                userService.findById(bracket.ownerId).$loaded().then(function(owner) {
+                    $scope.owner = { name: owner.name };
+                });
 
                 var teamsWithScores = [];
 
