@@ -7,6 +7,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
         $scope.poolId = $scope.poolId || $routeParams.poolId;
 
         $scope.allBracketsInPool = [];
+        $scope.ownerNames = {};
         $scope.model = {};
         $scope.model.showOwners = false;
         var bracketWatchDeregisters = [];
@@ -17,12 +18,12 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 return '<div class="ngCellText" ng-class="col.colIndex()">'
                          + finishedSpan
                          + '<a ng-cell-text href="" ng-click="scrollTo(row.getProperty(\'id\'))">{{row.getProperty(col.field)}}</a>' +
-                    '<span ng-show="model.showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
+                    '<span ng-show="model.showOwners" style="font-size: 11px">  by {{ownerNames[row.getProperty("ownerId")]}}</span>' +
                     '</span></div>';
             } else {
                 return '<div class="ngCellText" ng-class="col.colIndex()">'
                     + finishedSpan + '{{row.getProperty(col.field)}}' +
-                    '<span ng-show="model.showOwners" style="font-size: 11px">  by {{row.getProperty("owner")}}</span>' +
+                    '<span ng-show="model.showOwners" style="font-size: 11px">  by {{ownerNames[row.getProperty("ownerId")]}}</span>' +
                     '</span></div>';
             }
         }
@@ -161,8 +162,8 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                     });
 
                     // Store directly on bracket for ng-grid display and sorting.
-                    // trimKeys will wipe it on Firebase sync, but recomputeCeilings
-                    // re-runs after every sync via the debounced watch.
+                    // AngularFire wipes this on every sync, so the bracket $watch
+                    // callback calls scheduleRecomputeCeilings to restore it.
                     bracket.ceilingPoints = ceilingCalculator.computeBracketCeiling(bracketTeams, FINAL_FOUR_PAIRINGS);
                 });
             }).catch(function(err) {
@@ -205,8 +206,9 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                     bracket.isCurrentUser = (bracket.ownerId === $scope.currentUserId);
                     var owner = userService.findById(bracket.ownerId);
                     owner.$loaded().then(function() {
-                        bracket.owner = owner.name;
-                    })
+                        $scope.ownerNames[bracket.ownerId] = owner.name;
+                        owner.$destroy();
+                    });
                 }
 
                 // has the bracket already been added to the scope? If so, remove it before we re-add it
@@ -225,7 +227,10 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                 }
 
                 $scope.allBracketsInPool.push(bracket);
-                bracketWatchDeregisters.push(bracket.$watch(scheduleResort));
+                bracketWatchDeregisters.push(bracket.$watch(function() {
+                    scheduleRecomputeCeilings();
+                    scheduleResort();
+                }));
                 scheduleRecomputeCeilings();
             });
         });
