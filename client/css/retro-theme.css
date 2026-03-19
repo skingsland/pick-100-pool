@@ -1019,26 +1019,7 @@ p.lead strong {
   box-shadow: 0 0 10px rgba(211, 47, 47, 0.4);
 }
 
-/* ── 14. Ceiling Color Adjustments ── */
-/* Boost brightness for dark background */
-
-.ceiling-color-great {
-  color: #4caf50;
-  font-weight: bold;
-  text-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
-}
-.ceiling-color-good {
-  color: #8bc34a;
-}
-.ceiling-color-fair {
-  color: var(--amber);
-  text-shadow: 0 0 6px rgba(245, 127, 23, 0.3);
-}
-.ceiling-color-low {
-  color: #ef5350;
-}
-
-/* ── 15. Collision Warnings ── */
+/* ── 14. Collision Warnings ── */
 
 .collision-r1 {
   color: #ef5350;
@@ -1303,9 +1284,6 @@ fieldset {
   color: var(--text-bright);
 }
 .selectedItems li {
-  color: var(--text);
-}
-.selectedItems .bracketCeiling {
   color: var(--text);
 }
 

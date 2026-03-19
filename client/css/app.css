@@ -235,12 +235,6 @@ fieldset {
    padding: 25px;
 }
 
-/* Ceiling color classes for the team-picking page */
-.ceiling-color-great { color: #2e7d32; font-weight: bold; }
-.ceiling-color-good { color: #558b2f; }
-.ceiling-color-fair { color: #f57f17; }
-.ceiling-color-low { color: #c62828; }
-
 /* Collision warnings on create/edit bracket page */
 .collision-warnings { margin-top: 5px; }
 .collision-warning { margin-bottom: 2px; font-size: 13px; }

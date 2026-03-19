@@ -23,7 +23,6 @@
             <progressbar value="sumOfSeeds" max="requiredSumOfSeeds" type="{{seedsProgressBarType}}">
               <b>Seeds: {{sumOfSeeds}} / {{requiredSumOfSeeds}}</b>
             </progressbar>
-            <h4 ng-if="bracketCeiling" class="bracketCeiling">Max possible points: <span class="{{ceilingColorClass}}">{{ bracketCeiling }}</span> <small>(better than {{ceilingPercentile}}% of brackets)</small></h4>
             <div ng-if="collisions.length > 0" class="collision-warnings">
               <p ng-repeat="c in collisions" class="collision-warning" ng-class="{'collision-r1': c.round === 1, 'collision-r2': c.round === 2}">
                 <span class="glyphicon glyphicon-warning-sign"></span>
