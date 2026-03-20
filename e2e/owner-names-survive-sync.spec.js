@@ -87,7 +87,7 @@ test('ceiling values in bracket table survive bracket data sync from Firebase', 
     // Alice's Picks (e2eBracket2) should have a non-empty ceiling
     const aliceRow = page.locator('.ngRow', { hasText: "Alice's Picks" });
     const aliceCeiling = aliceRow.locator('.ngCell').nth(2);
-    await expect(aliceCeiling).not.toHaveText('', { timeout: 5000 });
+    await expect(aliceCeiling).toHaveText(/\d+/, { timeout: 10000 });
     const ceilingBefore = await aliceCeiling.textContent();
 
     // Update Alice's bracket points via Firebase Admin SDK
