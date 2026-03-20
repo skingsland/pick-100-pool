@@ -12,9 +12,17 @@ const FAKE_USER_3 = 'fakeUser003';
 
 function initAdmin() {
     if (admin.apps.length) return admin;
-    const serviceAccount = require('../pick100pool-firebase-adminsdk-9lo71-395312b33b.json');
+    let credentialJson = process.env.GOOGLE_AUTH_JSON;
+    if (!credentialJson) {
+        const fs = require('fs');
+        const keyFile = 'pick100pool-firebase-adminsdk-9lo71-395312b33b.json';
+        if (fs.existsSync(keyFile)) {
+            credentialJson = fs.readFileSync(keyFile, 'utf8');
+        }
+    }
+    if (!credentialJson) throw new Error('GOOGLE_AUTH_JSON env var or service account key file required');
     admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
+        credential: admin.credential.cert(JSON.parse(credentialJson)),
         databaseURL: FIREBASE_DB_URL,
     });
     return admin;
