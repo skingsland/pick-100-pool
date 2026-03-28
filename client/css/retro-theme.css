@@ -1122,6 +1122,9 @@ p.lead strong {
   }
 }
 
+/* Mobile show/hide helpers — default state (overridden inside 480px query) */
+.mobile-show { display: none; }
+
 @media (max-width: 480px) {
   .heading h1 {
     font-size: 18px;
@@ -1192,6 +1195,58 @@ p.lead strong {
   .accountManagement input {
     width: 100%;
   }
+
+  /* ── Bracket table: compact for mobile ── */
+
+  /* Hide "Seed # + N points" subheaders */
+  .bracketTable th small {
+    display: none;
+  }
+
+  /* Let the table scroll horizontally inside its wrapper */
+  .viewBracket .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Shrink overall font and cell padding */
+  .bracketTable {
+    font-size: 12px;
+  }
+  .bracketTable th {
+    font-size: 11px;
+    letter-spacing: 0;
+    padding: 4px 3px !important;
+    white-space: nowrap;
+  }
+  .bracketTable td {
+    padding: 0 3px !important;
+  }
+
+  /* Narrow the Pick column; truncate long team names */
+  .bracketTable th:nth-child(1) {
+    width: auto;
+    min-width: 0;
+    max-width: 110px;
+  }
+  .bracketTable tbody td:nth-child(1) {
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Seed column */
+  .bracketTable th:nth-child(2) {
+    min-width: 0;
+  }
+  .bracketTable .team-total {
+    min-width: 0;
+  }
+
+  /* Swap long labels → short labels on mobile */
+  .mobile-hide { display: none; }
+  .mobile-show { display: inline; }
 }
 
 /* ── 18. Misc Bootstrap Overrides ── */
