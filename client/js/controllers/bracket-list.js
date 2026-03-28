@@ -197,9 +197,11 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                             bracketData, aliveTeamsList, FINAL_FOUR_PAIRINGS
                         );
 
+                        $scope.hasCannotWin = false;
                         $scope.allBracketsInPool.forEach(function(bracket) {
                             var bid = bracket.$id || bracket.id;
                             bracket.cannotWin = cannotWinSet.has(bid) && bracket.num_teams_remaining > 0;
+                            if (bracket.cannotWin) $scope.hasCannotWin = true;
                         });
                     }
                 }

@@ -852,6 +852,17 @@ p.lead strong {
 #bootstrap-overrides .cannot-win .ngCellText a {
   color: var(--text-muted);
 }
+.cannot-win-legend {
+  margin-left: 15px;
+}
+.cannot-win-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: var(--text-muted);
+  vertical-align: middle;
+  margin-right: 4px;
+}
 
 /* Eliminated teams — dark gray, clearly de-emphasized */
 .eliminated,

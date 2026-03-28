@@ -4,8 +4,8 @@
     <label ng-show="displayShowOwner" style="margin-right: 15px;">
       <input type="checkbox" id="showOwners" name="showOwners" ng-model="model.showOwners">Show owners?
     </label>
-    <label ng-show="displayShowOwner && model.tourneyInProgress">
-      <input type="checkbox" ng-model="model.showCeiling">Show ceiling?
-    </label>
+    <span ng-show="model.tourneyInProgress && hasCannotWin" class="cannot-win-legend">
+      <span class="cannot-win-swatch"></span> = Can't win
+    </span>
   </div>
 </div>

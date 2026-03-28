@@ -167,22 +167,15 @@ test('bracket view: max possible points shown next to bracket name', async ({ pa
     await expect(page.locator('.bracketTable thead')).not.toContainText('Ceiling');
 });
 
-test('pool view: "Show ceiling?" checkbox visible and toggles Ceiling column', async ({ page }) => {
+test('pool view: Ceiling column always visible when tournament in progress', async ({ page }) => {
     await page.goto(`#/pools/${POOL_A_ID}`);
 
     // Wait for brackets to load
     await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
 
-    // "Show ceiling?" checkbox should be visible (tournament has started)
-    const checkbox = page.locator('input[ng-model="model.showCeiling"]');
-    await expect(checkbox).toBeVisible({ timeout: 5000 });
-
-    // Checkbox should be checked by default (auto-enabled when tourney started)
-    await expect(checkbox).toBeChecked();
-
-    // Ceiling column should be visible
+    // Ceiling column should be visible (always-on when tournament in progress)
     const ceilingHeader = page.locator('.ngHeaderText', { hasText: 'Ceiling' });
-    await expect(ceilingHeader).toBeVisible();
+    await expect(ceilingHeader).toBeVisible({ timeout: 5000 });
 
     // Wait for ceiling values to populate (async computation with 200ms debounce)
     const firstCeilingCell = page.locator('.ngRow').first().locator('.ngCell').nth(2);
@@ -200,14 +193,6 @@ test('pool view: "Show ceiling?" checkbox visible and toggles Ceiling column', a
             expect(ceiling).toBeGreaterThanOrEqual(points);
         }
     }
-
-    // Uncheck — Ceiling column should disappear
-    await checkbox.uncheck();
-    await expect(ceilingHeader).toBeHidden();
-
-    // Re-check — Ceiling column should reappear
-    await checkbox.check();
-    await expect(ceilingHeader).toBeVisible();
 });
 
 test('all-pools page shows ceiling column, no checkbox, no console errors', async ({ page }) => {
@@ -220,10 +205,6 @@ test('all-pools page shows ceiling column, no checkbox, no console errors', asyn
     // Ceiling column should be visible (always-on, no checkbox on this page)
     const ceilingHeader = page.locator('.ngHeaderText', { hasText: 'Ceiling' });
     await expect(ceilingHeader.first()).toBeVisible({ timeout: 10000 });
-
-    // "Show ceiling?" checkbox should NOT be visible on the all-pools page
-    const checkbox = page.locator('input[ng-model="model.showCeiling"]');
-    await expect(checkbox.first()).toBeHidden();
 
     expect(errors).toEqual([]);
 });
@@ -247,10 +228,6 @@ test('pre-tourney: no ceiling anywhere', async ({ page }) => {
     // Wait for at least 3 brackets to load (may have extra from previous test runs)
     await expect(page.locator('.ngRow').first()).toBeVisible({ timeout: 10000 });
     await expect(page.locator('.ngHeaderText', { hasText: 'Ceiling' })).toHaveCount(0);
-    const checkbox = page.locator('input[ng-model="model.showCeiling"]');
-    if (await checkbox.count() > 0) {
-        await expect(checkbox.first()).toBeHidden();
-    }
 
     // Bracket view: no "Max possible points" label
     await page.goto('/?tournament=Testing_PreTourney#/pools/e2eTestPoolA/brackets/e2eBracket1');
@@ -328,12 +305,6 @@ test('post-tourney: no ceiling, no gray brackets, no errors', async ({ page }) =
 
     // No ceiling column
     await expect(page.locator('.ngHeaderText', { hasText: 'Ceiling' })).toHaveCount(0);
-
-    // No "Show ceiling?" checkbox visible
-    const checkbox = page.locator('input[ng-model="model.showCeiling"]');
-    if (await checkbox.count() > 0) {
-        await expect(checkbox.first()).toBeHidden();
-    }
 
     // No gray/eliminated bracket names (tournament is over, tourneyInProgress is false)
     const eliminated = page.locator('.ngRow .eliminated');
