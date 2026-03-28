@@ -89,4 +89,6 @@ Annual Selection Sunday checklist:
 For the `GOOGLE_AUTH_JSON` contents, you can generate a new private key for the service account here:
 https://console.firebase.google.com/project/pick100pool/settings/serviceaccounts/adminsdk
 
+Team picking strategy: see [`picking-algorithm.md`](picking-algorithm.md) for the EP-based optimization algorithm.
+
 https://devcenter.heroku.com/articles/git
