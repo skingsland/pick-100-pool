@@ -68,7 +68,7 @@ angular.module('myApp.controllers').controller('ListBracketsController',
             columnDefs: 'myColumnDefs',
             sortInfo: {fields: ['totalPoints', 'num_teams_remaining'], directions: ['desc', 'desc']},
             plugins: [new ngGridFlexibleHeightPlugin()],
-            rowTemplate: '<div ng-style="{ \'cursor\': row.cursor }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}} {{row.entity.isCurrentUser ? \'current-user-cell\' : \'\'}}"><div class="ngVerticalBar" ng-style="{height: rowHeight}" ng-class="{ ngVerticalBarVisible: !$last }">&nbsp;</div><div ng-cell></div></div>'
+            rowTemplate: '<div ng-style="{ \'cursor\': row.cursor }" ng-repeat="col in renderedColumns" ng-class="col.colIndex()" class="ngCell {{col.cellClass}} {{row.entity.isCurrentUser ? \'current-user-cell\' : \'\'}} {{row.entity.cannotWin ? \'cannot-win\' : \'\'}} {{model.tourneyInProgress && row.entity.num_teams_remaining === 0 ? \'eliminated\' : \'\'}}"><div class="ngVerticalBar" ng-style="{height: rowHeight}" ng-class="{ ngVerticalBarVisible: !$last }">&nbsp;</div><div ng-cell></div></div>'
         };
 
         if (!$scope.poolId) {
@@ -166,6 +166,43 @@ angular.module('myApp.controllers').controller('ListBracketsController',
                     // callback calls scheduleRecomputeCeilings to restore it.
                     bracket.ceilingPoints = ceilingCalculator.computeBracketCeiling(bracketTeams, FINAL_FOUR_PAIRINGS);
                 });
+
+                // Compute "cannot win" status: which brackets have no possible
+                // tournament outcome where they finish with the most points?
+                if ($scope.model.tourneyInProgress && $scope.allBracketsInPool.length >= 2) {
+                    var aliveTeamsList = [];
+                    allTeams.forEach(function(team) {
+                        if (team.is_eliminated !== true && team.region && team.seed) {
+                            aliveTeamsList.push({ seed: parseInt(team.seed, 10), region: team.region });
+                        }
+                    });
+
+                    if (aliveTeamsList.length > 0 && aliveTeamsList.length <= 8) {
+                        var bracketData = $scope.allBracketsInPool.map(function(bracket) {
+                            var aliveKeys = (bracket.teams || []).filter(function(teamId) {
+                                var team = allTeams.$getRecord(teamId);
+                                return team && team.is_eliminated !== true;
+                            }).map(function(teamId) {
+                                var team = allTeams.$getRecord(teamId);
+                                return team.region + ':' + parseInt(team.seed, 10);
+                            });
+                            return {
+                                id: bracket.$id || bracket.id,
+                                currentPoints: bracket.totalPoints || 0,
+                                aliveTeamKeys: aliveKeys
+                            };
+                        });
+
+                        var cannotWinSet = ceilingCalculator.findBracketsThatCannotWin(
+                            bracketData, aliveTeamsList, FINAL_FOUR_PAIRINGS
+                        );
+
+                        $scope.allBracketsInPool.forEach(function(bracket) {
+                            var bid = bracket.$id || bracket.id;
+                            bracket.cannotWin = cannotWinSet.has(bid) && bracket.num_teams_remaining > 0;
+                        });
+                    }
+                }
             }).catch(function(err) {
                 console.error('Failed to load teams for ceiling calculation:', err);
             });

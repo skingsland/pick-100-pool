@@ -135,6 +135,10 @@ body {
 .eliminated a {
     color: darkgray;
 }
+.cannot-win,
+.cannot-win a {
+    color: #999;
+}
 .current-user-bracket {
     font-weight: bold;
 }

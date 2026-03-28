@@ -235,7 +235,7 @@ test('bracket with 0 teams remaining is grayed out', async ({ page }) => {
 
     // Dave's Bracket should have the eliminated class (grayed out, 0 teams remaining)
     const daveRow = page.locator('.ngRow', { hasText: "Dave's Bracket" });
-    await expect(daveRow.locator('.eliminated')).toBeVisible();
+    await expect(daveRow.locator('.eliminated').first()).toBeVisible();
 });
 
 test('pre-tourney: no ceiling anywhere', async ({ page }) => {

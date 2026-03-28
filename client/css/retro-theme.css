@@ -845,10 +845,31 @@ p.lead strong {
   font-weight: bold;
 }
 
+/* Statistically cannot win the pool — muted but still alive */
+.cannot-win,
+.cannot-win a,
+#bootstrap-overrides .cannot-win .ngCellText,
+#bootstrap-overrides .cannot-win .ngCellText a {
+  color: var(--text-muted);
+}
+
 /* Eliminated teams — dark gray, clearly de-emphasized */
 .eliminated,
-.eliminated a {
+.eliminated a,
+#bootstrap-overrides .ngCellText .eliminated,
+#bootstrap-overrides .ngCellText .eliminated a,
+#bootstrap-overrides .eliminated .ngCellText,
+#bootstrap-overrides .eliminated .ngCellText a {
   color: #555568;
+}
+/* Strikethrough: applied to leaf text only (not containers, because
+   text-decoration propagates to children and can't be removed).
+   - Bracket name link (inside the .eliminated span in the name column)
+   - Numeric value spans (direct child of ngCellText, excluding the
+     .eliminated wrapper span in the bracket name column) */
+#bootstrap-overrides .ngCellText .eliminated a,
+#bootstrap-overrides .eliminated .ngCellText > span:not(.eliminated) {
+  text-decoration: line-through;
 }
 .bracketTable .eliminated td,
 .bracketTable .eliminated td:nth-child(1),
@@ -881,10 +902,11 @@ p.lead strong {
 .viewBracket .bracketOwner a {
   color: var(--text-muted) !important;
 }
-/* Owner name in ng-grid bracket list: always muted, even when bracket is eliminated */
+/* Owner name in ng-grid bracket list: always muted, never struck through */
 #bootstrap-overrides .ngCellText .eliminated span[ng-show="model.showOwners"],
 #bootstrap-overrides .ngCellText span[ng-show="model.showOwners"] {
   color: var(--text-muted) !important;
+  text-decoration: none;
 }
 .viewBracket .bracketCeiling {
   color: #4caf50;
@@ -1332,6 +1354,11 @@ fieldset {
 /* The "current user bracket" row styling */
 .current-user-bracket {
   color: var(--text-bright);
+}
+/* Cannot-win / eliminated override current-user-bracket color */
+.cannot-win .current-user-bracket,
+.eliminated .current-user-bracket {
+  color: inherit;
 }
 
 /* Bracket edit page - selected items list */

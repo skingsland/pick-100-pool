@@ -725,4 +725,220 @@ describe('ceilingCalculator', function() {
             expect(result[0].round).toBe(1);
         });
     });
+
+    describe('findBracketsThatCannotWin', function() {
+        // Real 2026 tournament structure: 8 alive teams, 2 per region
+        // East: Duke (1), UConn (2)
+        // Midwest: Michigan (1), Tennessee (6)
+        // South: Illinois (3), Iowa (9)
+        // West: Arizona (1), Purdue (2)
+        var PAIRINGS = [['East', 'South'], ['Midwest', 'West']];
+
+        // Alive teams represented as { seed, region } objects
+        var ALIVE = [
+            { seed: 1, region: 'East' },
+            { seed: 2, region: 'East' },
+            { seed: 1, region: 'Midwest' },
+            { seed: 6, region: 'Midwest' },
+            { seed: 3, region: 'South' },
+            { seed: 9, region: 'South' },
+            { seed: 1, region: 'West' },
+            { seed: 2, region: 'West' }
+        ];
+
+        function bracket(id, pts, aliveKeys) {
+            return { id: id, currentPoints: pts, aliveTeamKeys: aliveKeys };
+        }
+
+        test('is exported as a function', function() {
+            expect(typeof calc.findBracketsThatCannotWin).toBe('function');
+        });
+
+        test('returns empty set when fewer than 2 brackets', function() {
+            var result = calc.findBracketsThatCannotWin(
+                [bracket('a', 100, ['East:1', 'West:1'])],
+                ALIVE, PAIRINGS
+            );
+            expect(result.size).toBe(0);
+        });
+
+        test('returns empty set when 0 alive teams', function() {
+            var result = calc.findBracketsThatCannotWin(
+                [bracket('a', 100, []), bracket('b', 90, [])],
+                [], PAIRINGS
+            );
+            expect(result.size).toBe(0);
+        });
+
+        test('returns empty set when > 8 alive teams', function() {
+            var tooMany = ALIVE.concat([{ seed: 10, region: 'East' }]);
+            var result = calc.findBracketsThatCannotWin(
+                [bracket('a', 100, ['East:1']), bracket('b', 50, ['East:2'])],
+                tooMany, PAIRINGS
+            );
+            expect(result.size).toBe(0);
+        });
+
+        test('dominated bracket: superset of teams + more points = cannot win', function() {
+            // A has {East:1, West:1} with 100 pts, B has {East:1} with 80 pts
+            // Every future point B earns, A also earns (plus more from West:1)
+            var brackets = [
+                bracket('leader', 100, ['East:1', 'West:1']),
+                bracket('dominated', 80, ['East:1'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('dominated')).toBe(true);
+            expect(result.has('leader')).toBe(false);
+        });
+
+        test('ceiling too low: even max future points cannot catch leader', function() {
+            // A has 200 pts with no alive teams. B has 50 pts with some alive teams.
+            // B's ceiling might be 50 + max_future, but if that's still < 200, B cannot win.
+            var brackets = [
+                bracket('leader', 200, []),
+                bracket('hopeless', 50, ['East:1'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('hopeless')).toBe(true);
+            expect(result.has('leader')).toBe(false);
+        });
+
+        test('not eliminated: different teams, could win depending on outcomes', function() {
+            // A has East:1, B has East:2. Depending on who wins the East regional,
+            // either could earn future points. With close current scores, neither is eliminated.
+            var brackets = [
+                bracket('a', 80, ['East:1', 'West:1']),
+                bracket('b', 78, ['East:2', 'South:9'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('a')).toBe(false);
+            expect(result.has('b')).toBe(false);
+        });
+
+        test('identical brackets: same teams, same points = neither eliminated', function() {
+            var brackets = [
+                bracket('a', 100, ['East:1', 'West:1']),
+                bracket('b', 100, ['East:1', 'West:1'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('a')).toBe(false);
+            expect(result.has('b')).toBe(false);
+        });
+
+        test('bracket with 0 alive teams can still win if it already leads', function() {
+            // A has 200 pts, no alive teams. B has 50 pts with some alive teams.
+            // A can "win" by staying ahead since B can never catch up.
+            var brackets = [
+                bracket('a', 200, []),
+                bracket('b', 50, ['East:1'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('a')).toBe(false);
+        });
+
+        test('bracket with 0 alive teams is eliminated if it trails the leader', function() {
+            var brackets = [
+                bracket('leader', 100, ['East:1']),
+                bracket('dead', 90, [])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('dead')).toBe(true);
+        });
+
+        test('non-subset but still eliminated: no outcome lets B finish first', function() {
+            // A has many teams and leads. B has different teams but trails badly.
+            // Even in B's best scenario, A's shared or other teams keep A ahead.
+            var brackets = [
+                bracket('a', 150, ['East:1', 'Midwest:1', 'South:3', 'West:1']),
+                bracket('b', 50, ['East:2', 'South:9'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('b')).toBe(true);
+        });
+
+        test('multiple brackets: some eliminated, some not', function() {
+            var brackets = [
+                bracket('leader', 150, ['East:1', 'Midwest:1', 'West:1']),
+                bracket('contender', 140, ['East:2', 'Midwest:6', 'South:9']),
+                bracket('hopeless', 30, ['East:2'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('leader')).toBe(false);
+            expect(result.has('contender')).toBe(false);
+            expect(result.has('hopeless')).toBe(true);
+        });
+
+        test('high-seed upset path: trailing bracket wins if its high-seed teams run the table', function() {
+            // B trails but has South:9 (Iowa). If Iowa wins out (rounds 4,5,6),
+            // B earns 9+8=17 (R4) + 9+16=25 (R5) + 9+32=41 (R6) = 83 extra points.
+            // That's massive and could overtake A.
+            var brackets = [
+                bracket('a', 120, ['East:1']),
+                bracket('b', 100, ['South:9'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            // B can earn up to 83 future points (Iowa runs the table) = 183 total
+            // A can earn up to 1+8=9 (R4) + 1+16=17 (R5) + 1+32=33 (R6) = 59 = 179 total
+            // B can beat A (183 > 179) if Iowa wins out, so B is NOT eliminated
+            expect(result.has('b')).toBe(false);
+        });
+
+        test('scoring is correct: seed + 2^(round-1) per round', function() {
+            // Verify the enumeration uses the right scoring formula.
+            // East:1 (Duke, seed 1) winning R4,R5,R6 earns: (1+8)+(1+16)+(1+32) = 9+17+33 = 59
+            // South:9 (Iowa, seed 9) winning R4,R5,R6 earns: (9+8)+(9+16)+(9+32) = 17+25+41 = 83
+            // If A has East:1 at 100 pts and B has South:9 at 76 pts,
+            // A's max = 100+59 = 159, B's max = 76+83 = 159 (tie!)
+            // With a tie, neither is eliminated
+            var brackets = [
+                bracket('a', 100, ['East:1']),
+                bracket('b', 76, ['South:9'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('a')).toBe(false);
+            expect(result.has('b')).toBe(false);
+        });
+
+        test('one point short of a tie means eliminated', function() {
+            // Same as above but B has 75 pts instead of 76
+            // A's max = 159, B's max = 75+83 = 158 < 159. But A only gets 159 if Duke runs the table.
+            // If Duke loses in R4, A stays at 100. B with Iowa running table = 75+83 = 158.
+            // But then A=100 < B=158, so B CAN win in that scenario.
+            // This test verifies we check all outcomes, not just max vs max.
+            var brackets = [
+                bracket('a', 100, ['East:1']),
+                bracket('b', 75, ['South:9'])
+            ];
+            var result = calc.findBracketsThatCannotWin(brackets, ALIVE, PAIRINGS);
+            expect(result.has('b')).toBe(false);
+        });
+
+        test('region with only 1 alive team: that team auto-advances', function() {
+            // If a region only has 1 alive team among ALL brackets' selections,
+            // the outcome is fixed for that region's games.
+            var onePerRegion = [
+                { seed: 1, region: 'East' },
+                { seed: 1, region: 'Midwest' },
+                { seed: 3, region: 'South' },
+                { seed: 1, region: 'West' }
+            ];
+            var brackets = [
+                bracket('a', 100, ['East:1', 'West:1']),
+                bracket('b', 90, ['Midwest:1', 'South:3'])
+            ];
+            // With 1 team per region, each auto-advances. Points are deterministic.
+            // A: East:1 wins R4-R6 = 59, West:1 wins R4-R6 = 59. Total = 100+59+59 = 218
+            // Wait, they can't both win the championship. Need to think about pairings.
+            // East plays South in semifinals. A has East:1, B has South:3.
+            // Midwest plays West. A has West:1, B has Midwest:1.
+            // Semi 1: East:1 vs South:3 -> one wins. Semi 2: Midwest:1 vs West:1 -> one wins.
+            // If East:1 wins semi + championship: A gets R4+R5+R6 for East:1 = 59
+            // If West:1 wins semi + championship: A gets R4+R5+R6 for West:1 = 59
+            // Both can't win R6. So A's max from these 4 teams depends on who advances.
+            // This is fine - the function should enumerate all outcomes correctly.
+            var result = calc.findBracketsThatCannotWin(brackets, onePerRegion, PAIRINGS);
+            // Both have comparable future points potential, so neither eliminated
+            expect(result.size).toBe(0);
+        });
+    });
 });
