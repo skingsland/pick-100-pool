@@ -1,22 +1,10 @@
 const { test, expect, devices } = require('@playwright/test');
-const { ensureLoggedOut, login, POOL_B_ID } = require('./helpers');
+const { ensureLoggedOut, login, cleanupPoolB, POOL_B_ID } = require('./helpers');
 
 // Use iPhone 13 device profile to emulate mobile iOS Safari
 const iPhone = devices['iPhone 13'];
 test.use({ ...iPhone });
 
-// Helper: ensure Pool B has no bracket for the test user
-async function cleanupPoolB(page) {
-    await page.goto(`#/pools/${POOL_B_ID}`);
-    // Wait for pool page to fully load
-    await expect(page.locator('h2', { hasText: 'Test Pool B' })).toBeVisible({ timeout: 10000 });
-    // If user has an existing bracket, delete it
-    const deleteBtn = page.locator('button', { hasText: 'Delete Your Bracket' });
-    if (await deleteBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
-        await deleteBtn.click();
-        await expect(page.locator('a', { hasText: 'Select Your Teams' })).toBeVisible({ timeout: 10000 });
-    }
-}
 
 test('Pick for me on mobile create page selects exactly 13 teams', async ({ page }) => {
     await ensureLoggedOut(page);

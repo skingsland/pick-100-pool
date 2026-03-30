@@ -40,6 +40,30 @@ async function loginOnCurrentPage(page) {
     await expect(page.locator('.navbar')).toContainText('E2E Test User', { timeout: 10000 });
 }
 
+// Ensure Pool B has no bracket for the test user.
+// Waits for Firebase data to fully load before deciding whether cleanup is needed.
+// Uses Promise.any so we don't silently skip deletion when data loads slowly.
+async function cleanupPoolB(page) {
+    await page.goto(`#/pools/${POOL_B_ID}`);
+    await expect(page.locator('h2', { hasText: 'Test Pool B' })).toBeVisible({ timeout: 10000 });
+
+    const deleteBtn = page.locator('button', { hasText: 'Delete Your Bracket' });
+    const createLink = page.locator('a', { hasText: 'Select Your Teams' });
+
+    // Wait for EITHER button to become visible — both exist in the DOM at all times
+    // (one is ng-hide), so we race two visibility assertions instead of using or().
+    await Promise.any([
+        expect(deleteBtn).toBeVisible({ timeout: 15000 }),
+        expect(createLink).toBeVisible({ timeout: 15000 }),
+    ]);
+
+    // If a bracket exists, delete it
+    if (await deleteBtn.isVisible()) {
+        await deleteBtn.click();
+        await expect(createLink).toBeVisible({ timeout: 10000 });
+    }
+}
+
 module.exports = {
     TEST_EMAIL,
     TEST_PASSWORD,
@@ -49,4 +73,5 @@ module.exports = {
     ensureLoggedOut,
     login,
     loginOnCurrentPage,
+    cleanupPoolB,
 };
